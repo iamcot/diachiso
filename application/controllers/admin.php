@@ -19,12 +19,27 @@ class Admin extends CI_Controller {
 	 */
 	public function index()
 	{
+        $data['title'] = "Admin page";
 		$this->render();
 	}
 	public function render($data = array())
-	{		
+	{
 		$this->load->view('admin/container_v',$data);
 	}
+    public function address(){
+        $data = array();
+        $data['body'] = $this->load->view('admin/address_v',$data,true);
+        $data['title'] = "Quản lý địa chỉ";
+        $this->render($data);
+    }
+    public function province(){
+        $data = array();
+        echo $this->load->view('admin/province_v',$data,true);
+    }
+    public function district(){
+        $data = array();
+        echo $this->load->view('admin/district_v',$data,true);
+    }
 }
 
 /* End of file welcome.php */
