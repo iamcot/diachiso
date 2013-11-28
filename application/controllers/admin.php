@@ -19,7 +19,11 @@ class Admin extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$this->render();
+	}
+	public function render($data = array())
+	{		
+		$this->load->view('admin/container_v',$data);
 	}
 }
 
