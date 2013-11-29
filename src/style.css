@@ -32,13 +32,14 @@ legend{
     color: #245dc1 ;
     font-weight: bold;
 }
-label,input{
+input{
     font-size: .8em;
 }
 
 input[type=text],
 textarea,
-select{
+select
+{
     display: block;
     width:75%;
     margin: 3px;
@@ -53,6 +54,11 @@ select{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     vertical-align: middle;
+}
+label{
+    margin: 5px;
+}
+input[type=checkbox]{
 }
 input[type=button]{
     -webkit-box-shadow: none;
@@ -189,6 +195,14 @@ thead{
 }
 td{
     padding: 5px;
+}
+#inputserviceplace td{
+    width: 50%;
+}
+td input[type=text],
+select,
+textarea{
+    width: 100% !important;
 }
 .odd{
     background: #f5f5f5;

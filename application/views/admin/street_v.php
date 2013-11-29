@@ -60,10 +60,11 @@
                             break;
                         case "1":
                             loadProvince($("input[name=currpage]").val());
+                            addsavegif("#loadstatus");
                             provinceclear();
                             break;
                         default :
-                            alert("Lỗi lưu Tỉnh - không xác định.")
+                            alert("Lỗi lưu - không xác định.")
                             loadProvince($("input[name=currpage]").val());
                             break;
                     }
@@ -77,19 +78,16 @@
     }
     function loadProvince(page) {
         addloadgif("#loadstatus");
-        $("#list_province").load("<?=base_url()?>admin/loadstreet/"+$("select[name=daward_id]").val()+"/"+page);
+        $("#list_province").load("<?=base_url()?>admin/loadstreet/"+$("select[name=daward_id]").val()+"/"+page,function (){removeloadgif("#loadstatus");});
         $("input[name=currpage]").val(page);
-        removeloadgif("#loadstatus");
     }
     function loadDistrict() {
         addloadgif("#loadstatus");
-        $("select[name=dadistrict_id]").load("<?=base_url()?>admin/loadselectdist/"+$("select[name=daprovince_id]").val());
-        removeloadgif("#loadstatus");
+        $("select[name=dadistrict_id]").load("<?=base_url()?>admin/loadselectdist/"+$("select[name=daprovince_id]").val(),function (){removeloadgif("#loadstatus");});
     }
     function loadWard() {
         addloadgif("#loadstatus");
-        $("select[name=daward_id]").load("<?=base_url()?>admin/loadselectward/"+$("select[name=dadistrict_id]").val());
-        removeloadgif("#loadstatus");
+        $("select[name=daward_id]").load("<?=base_url()?>admin/loadselectward/"+$("select[name=dadistrict_id]").val(),function (){removeloadgif("#loadstatus");});
     }
     function provinceclear(){
         $("input[name=dalong_name]").val("");

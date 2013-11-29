@@ -56,6 +56,7 @@
                             break;
                         case "1":
                             loadProvince($("input[name=currpage]").val());
+                            addsavegif("#loadstatus");
                             provinceclear();
                             break;
                         default :
@@ -73,14 +74,12 @@
     }
     function loadProvince(page) {
         addloadgif("#loadstatus");
-        $("#list_province").load("<?=base_url()?>admin/loadward/"+$("select[name=dadistrict_id]").val()+"/"+page);
+        $("#list_province").load("<?=base_url()?>admin/loadward/"+$("select[name=dadistrict_id]").val()+"/"+page,function (){removeloadgif("#loadstatus");});
         $("input[name=currpage]").val(page);
-        removeloadgif("#loadstatus");
     }
     function loadDistrict() {
         addloadgif("#loadstatus");
-        $("select[name=dadistrict_id]").load("<?=base_url()?>admin/loadselectdist/"+$("select[name=daprovince_id]").val());
-        removeloadgif("#loadstatus");
+        $("select[name=dadistrict_id]").load("<?=base_url()?>admin/loadselectdist/"+$("select[name=daprovince_id]").val(),function (){removeloadgif("#loadstatus");});
     }
     function provinceclear(){
         $("input[name=dalong_name]").val("");

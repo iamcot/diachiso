@@ -10,6 +10,9 @@
     <script src="<?= base_url() ?>src/mylib.js"></script>
     <script src="<?= base_url() ?>src/jquery-ui-min.js"></script>
     <script src="<?= base_url() ?>src/jquery.jqpagination.min.js"></script>
+    <script src="<?=base_url()?>src/jupload/vendor/jquery.ui.widget.js"></script>
+    <script src="<?=base_url()?>src/jupload/jquery.iframe-transport.js"></script>
+    <script src="<?=base_url()?>src/jupload/jquery.fileupload.js"></script>
 </head>
 
 <body>

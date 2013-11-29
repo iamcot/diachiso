@@ -9,3 +9,6 @@ application/logs/*
 !application/logs/.htaccess
 
 .idea
+
+images/*
+thumbnails/*

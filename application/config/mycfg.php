@@ -1,2 +1,2 @@
 <?php
-$config['pp'] = 2;
+$config['pp'] = 5;

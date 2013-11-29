@@ -1,7 +1,7 @@
 <? if (isset($province)): ?>
     <table>
         <thead>
-        <tr><td>ID</td><td>Tên tỉnh</td><td>SEO URL</td><td></td></tr>
+        <tr><td>ID</td><td>Tiêu đề</td><td>SEO URL</td><td></td></tr>
         </thead>
         <? $i=1; foreach ($province as $row): ?>
                <tr class="<?=(($i%2==0))?'odd':''?> <?=($row->dadeleted==0?'':'trdelete')?>"

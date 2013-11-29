@@ -2,9 +2,9 @@
     <legend>Thông tin</legend>
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
     <input type="text" name="daurl" placeholder="Seo URL">
-    <input type="text" name="daorder" placeholder="Thứ tự">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>
-    <textarea name="damap" placeholder="Bản đồ"></textarea>
+    <label> Hiển thị trang chủ </label><input type="checkbox" name="dashowhome" >
+    <br>
     <input type="hidden" name="edit" value="">
     <input type="hidden" name="currpage" value="1">
     <input type="button" value="Lưu" onclick="saveProvince()">
@@ -13,31 +13,31 @@
     <div id="loadstatus" style="float:right;"></div>
 </fieldset>
 <fieldset>
-    <legend>Danh sách Tỉnh</legend>
+    <legend>Danh sách Nhóm dịch vụ</legend>
     <div id="list_province"></div>
 </fieldset>
 <script>
     $(function(){
-       loadProvince(1);
+        loadProvince(1);
     });
     function saveProvince() {
+       // alert($("input[name=dashowhome]").prop('checked'));
+
         var dalong_name = $("input[name=dalong_name]").val();
         var daurl = $("input[name=daurl]").val();
         var dainfo = $("textarea[name=dainfo]").val();
-        var damap = $("textarea[name=damap]").val();
-        var daorder = $("input[name=daorder]").val();
         var edit = $("input[name=edit]").val();
+        var dashowhome = (($("input[name=dashowhome]").prop('checked'))?1:0);
 
         if (dalong_name.trim() != "" && daurl.trim() != "") {
             $.ajax({
                 type: "post",
-                url: "<?=base_url()?>admin/saveprovince",
+                url: "<?=base_url()?>admin/saveservicegroup",
                 data: "dalong_name=" + dalong_name
-                          + "&daurl=" + daurl
-                          + "&dainfo=" + dainfo
-                          + "&damap=" + damap
-                          + "&daorder=" + daorder
-                          + "&edit=" + edit,
+                    + "&daurl=" + daurl
+                    + "&dainfo=" + dainfo
+                    + "&dashowhome=" + dashowhome
+                    + "&edit=" + edit,
                 success: function (msg) {
                     switch (msg) {
                         case "0":
@@ -62,24 +62,24 @@
         else {
             alert("Vui lòng nhập tối thiểu Tên đầy đủ và Seo URL");
         }
+
     }
     function loadProvince(page) {
         addloadgif("#loadstatus");
-        $("#list_province").load("<?=base_url()?>admin/loadprovince/"+page,function (){removeloadgif("#loadstatus");});
+        $("#list_province").load("<?=base_url()?>admin/loadservicegroup/"+page,function (){removeloadgif("#loadstatus");});
         $("input[name=currpage]").val(page);
     }
     function provinceclear(){
         $("input[name=dalong_name]").val("");
         $("input[name=daurl]").val("");
-        $("input[name=daorder]").val("");
         $("textarea[name=dainfo]").val("");
-        $("textarea[name=damap]").val("");
+        $("input[name=dashowhome]").prop('checked',false);
         $("input[name=edit]").val("");
     }
     function editProvince(id) {
         $.ajax({
             type: "post",
-            url: "<?=base_url()?>admin/loadeditprovince/" + id,
+            url: "<?=base_url()?>admin/loadeditservicegroup/" + id,
             success: function (msg) {
                 if (msg == "0") alert('<?=lang("NO_DATA")?>');
                 else {
@@ -87,9 +87,8 @@
                     $("input[name=dalong_name]").val(province.dalong_name);
                     $("input[name=edit]").val(province.id);
                     $("input[name=daurl]").val(province.daurl);
-                    $("input[name=daorder]").val(province.daorder);
                     $("textarea[name=dainfo]").val(province.dainfo);
-                    $("textarea[name=damap]").val(province.damap);
+                    $("input[name=dashowhome]").prop('checked',((province.dashowhome==1)?true:false));
                 }
             }
         });
@@ -97,7 +96,7 @@
     function hideprovince(id, status,taga) {
         $.ajax({
             type: "post",
-            url: "<?=base_url()?>admin/hideprovince/" + id + "/" + status,
+            url: "<?=base_url()?>admin/hideservicegroup/" + id + "/" + status,
             success: function (msg) {
                 if (msg == "1") {
                     loadProvince($("input[name=currpage]").val());

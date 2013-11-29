@@ -1,7 +1,8 @@
 <div id="tabs">
     <ul>
-        <li><a href="<?=base_url()?>admin/service_place">Điểm dịch vụ </a></li>
-        <li><a href="<?=base_url()?>admin/service_group">Nhóm dịch vụ </a></li>
+        <li><a href="<?=base_url()?>admin/serviceplace">Điểm dịch vụ </a></li>
+        <li><a href="<?=base_url()?>admin/servicegroup">Nhóm dịch vụ</a></li>
+        <li><a href="<?=base_url()?>admin/serviceitem">Dịch vụ </a></li>
 
     </ul>
 </div>
