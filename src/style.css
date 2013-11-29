@@ -140,6 +140,7 @@ header h2{
 .nav ul li a:hover,
 .nav ul li a.select{
     background: #f5f5f5;
+    font-weight: bold;
 }
 
 .ui-tabs-vertical { width: 100%; }
