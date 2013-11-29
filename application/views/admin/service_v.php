@@ -1,9 +1,7 @@
 <div id="tabs">
     <ul>
-        <li><a href="<?=base_url()?>admin/street">Đường phố</a></li>
-        <li><a href="<?=base_url()?>admin/province">Tỉnh/Thành phố</a></li>
-        <li><a href="<?=base_url()?>admin/district">Quận/Huyện</a></li>
-        <li><a href="<?=base_url()?>admin/ward">Phường/Xã</a></li>
+        <li><a href="<?=base_url()?>admin/service_place">Điểm dịch vụ </a></li>
+        <li><a href="<?=base_url()?>admin/service_group">Nhóm dịch vụ </a></li>
 
     </ul>
 </div>
