@@ -21,18 +21,27 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        if(!$this->session->userdata("darole")){
+            $this->session->set_userdata('referer',base_url()."admin");
+            header("Location: ".base_url()."login");
+        }
+        else if(!$this->mylibs->accessadmin()){
+            header("Location: ".base_url());
+        }
         // Your own constructor code
         if ($this->session->userdata("lang"))
             $this->crrlanglang = $this->session->userdata("lang");
         else $this->crrlang = "vi";
         //default
         $this->lang->load("default", $this->crrlang);
+
     }
 
     public function index()
     {
         $data['title'] = "Admin page";
         $data['cat'] = 'admin';
+        $data['body'] = $this->load->view("admin/adminoverview_v",$data,true);
         $this->render($data);
     }
 
@@ -43,15 +52,21 @@ class Admin extends CI_Controller
     public $tbservice_group = 'daservice_group';
     public $tbservice_item = 'daservice';
     public $tbservice_place = 'daservice_place';
+    public $tbdapic = 'dapic';
+    public $tbuser = 'dauser';
+    public $tbdeal = 'dadeal';
     public $crrlang = '';
 
     public function render($data = array())
     {
+        $data['title'] = $data['title'].' - '.$this->config->item('sufix_title');
         $this->load->view('admin/container_v', $data);
     }
 
     public function address()
     {
+        if(!$this->mylibs->accessaddresspage())
+            header("Location: ".base_url()."admin");
         $data = array();
         $data['body'] = $this->load->view('admin/address_v', $data, true);
         $data['cat'] = 'address';
@@ -59,8 +74,33 @@ class Admin extends CI_Controller
         $this->render($data);
     }
 
+    public function deal($daserviceplace_id="")
+    {
+        if(!$this->mylibs->accessdealpage())
+            header("Location: ".base_url()."admin");
+        $data = array();
+        $data['daserviceplace_id'] = $daserviceplace_id;
+        $data['body'] = $this->load->view('admin/admindeal_v', $data, true);
+        $data['cat'] = 'deal';
+        $data['title'] = lang("ADDR_MANA");
+        $this->render($data);
+    }
+
+    public function user()
+    {
+        if(!$this->mylibs->accessuserpage())
+            header("Location: ".base_url()."admin");
+        $data = array();
+        $data['body'] = $this->load->view('admin/adminuser_v', $data, true);
+        $data['cat'] = 'user';
+        $data['title'] = lang("ADDR_MANA");
+        $this->render($data);
+    }
+
     public function service()
     {
+        if(!$this->mylibs->accessservicepage())
+            header("Location: ".base_url()."admin");
         $data = array();
         $data['body'] = $this->load->view('admin/service_v', $data, true);
         $data['cat'] = 'service';
@@ -72,6 +112,12 @@ class Admin extends CI_Controller
     {
         $data = array();
         echo $this->load->view('admin/servicegroup_v', $data, true);
+    }
+
+    public function listuser()
+    {
+        $data = array();
+        echo $this->load->view('admin/adminuserlist_v', $data, true);
     }
 
     public function serviceitem()
@@ -119,7 +165,30 @@ class Admin extends CI_Controller
         $data['ward'] = $this->getAddress($this->tbward, array('dadistrict_id' => $data['district'][0]->id), -1);
         echo $this->load->view('admin/street_v', $data, true);
     }
+    public  function saveuser(){
+        $param = array(
+            'dafname' => $this->input->post("dafname"),
+            'dalname' => $this->input->post("dalname"),
+            'dausername' => $this->input->post("dausername"),
+            'damobi' =>$this->input->post("damobi"),
+            'daemail' => $this->input->post("daemail"),
+            'daaddr' =>   $this->input->post("daaddr"),
+            'daavatar' => $this->input->post("daavatar"),
+            'darole' => $this->input->post("darole"),
+            'dacreate' => date("Y-m-d H:i:s"),
+        );
+        if(  $this->input->post("dapassword") != "")
+            $param['dapassword'] = md5(md5($this->input->post("dapassword")));
+        if ($this->input->post("edit") != "") //update
+        {
+            $str = $this->db->update_string($this->tbuser, $param, " id = " . $this->input->post("edit"));
+        } else { //insert
+            $str = $this->db->insert_string($this->tbuser, $param);
 
+        }
+        if ($this->db->query($str)) echo 1;
+        else echo 0;
+    }
     public function saveprovince()
     {
         $param = array(
@@ -236,29 +305,43 @@ class Admin extends CI_Controller
             "dastreet_id" => $this->input->post("dastreet_id"),
             "dapic" => $this->input->post("dapic"),
             "datel" => $this->input->post("datel"),
-            "dafax" => $this->input->post("dafax"),
+            "dawebsite" => $this->input->post("dawebsite"),
             "daemail" => $this->input->post("daemail"),
             "daaddr" => $this->input->post("daaddr"),
             "damap" => $this->input->post("damap"),
+            "dalat" => $this->input->post("dalat"),
+            "dalng" => $this->input->post("dalng"),
         );
         if ($this->input->post("edit") != "") //update
         {
             $str = $this->db->update_string($this->tbservice_place, $param, " id = " . $this->input->post("edit"));
         } else { //insert
-            $param["dacreate"]= date("Y-m-d H:i:s");
+            $param["dacreate"] = date("Y-m-d H:i:s");
+            $param["dauser_id"] = $this->session->userdata("dauser_id");
             $str = $this->db->insert_string($this->tbservice_place, $param);
 
         }
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
-    public function loadeditserviceplace($id)
+
+    public function loadeditserviceplace($id, $type = 0, $ob = 0)
     {
-        $sql = "SELECT * FROM " . $this->tbservice_place . " WHERE id=$id";
+        //ob=1: get full address
+        if ($ob == 1) {
+            $sql = "SELECT sp.*, p.dalong_name provincename, si.dalong_name servicename, d.dalong_name districtname, sg.dalong_name servicegroup,
+            ifnull((select st.dalong_name from dastreet st where st.id = sp.dastreet_id),'') streetname,
+            ifnull((select w.dalong_name from daward w where w.id = sp.daward_id),'') wardname
+            FROM " . $this->tbservice_place . " sp, " . $this->tbprovince . " p, " . $this->tbservice_item . " si, " . $this->tbdistrict . " d, " . $this->tbservice_group . " sg
+            WHERE sp.daprovince_id = p.id AND si.id = sp.daservice_id AND sp.dadistrict_id = d.id AND sp.daservicegroup_id = sg.id
+            " . (($type == 0) ? "AND sp.id=" . $id : " ORDER BY sp.ID DESC LIMIT 0,1");
+        } //, ".$this->tbward." w, ".$this->tbstreet." st
+        else
+            $sql = "SELECT * FROM " . $this->tbservice_place . " " . (($type == 0) ? "WHERE id=" . $id : " ORDER BY ID DESC LIMIT 0,1");
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             $row = $qr->row();
-            $this->mylibs->echojson(array(
+            $param = array(
                 'id' => $row->id,
                 'dalong_name' => $row->dalong_name,
                 'daurl' => $row->daurl,
@@ -271,12 +354,50 @@ class Admin extends CI_Controller
                 'dastreet_id' => $row->dastreet_id,
                 'dapic' => $row->dapic,
                 'datel' => $row->datel,
-                'dafax' => $row->dafax,
+                'dawebsite' => $row->dawebsite,
                 'daemail' => $row->daemail,
                 'daaddr' => $row->daaddr,
                 'damap' => $row->damap,
-            ));
+                'dalat' => $row->dalat,
+                'dalng' => $row->dalng,
+            );
+            if ($ob == 1) {
+                $param['provincename'] = $row->provincename;
+                $param['servicename'] = $row->servicename;
+                $param['districtname'] = $row->districtname;
+                $param['servicegroup'] = $row->servicegroup;
+                $param['streetname'] = $row->streetname;
+                $param['wardname'] = $row->wardname;
+            }
+            $this->mylibs->echojson($param);
+
+
         } else echo '0';
+    }
+    public function savedeal(){
+        $param = array(
+            'dalong_name' => $this->input->post("dalong_name"),
+            'daurl' => $this->input->post("daurl"),
+            'datype' => $this->input->post("datype"),
+            'dafrom' => strtotime($this->input->post("dafrom")),
+            'dato' => strtotime($this->input->post("dato")),
+            'daamount' => $this->input->post("daamount"),
+            'daserviceplace_id' => $this->input->post("daserviceplace_id"),
+            'daspecial' => $this->input->post("daspecial"),
+            'dacondition' => $this->input->post("dacondition"),
+            'dacreate' => date("Y-m-d H:i:s"),
+            'dauser_id' => $this->session->userdata('dauser_id'),
+
+        );
+        if ($this->input->post("edit") != "") //update
+        {
+            $str = $this->db->update_string($this->tbdeal, $param, " id = " . $this->input->post("edit"));
+        } else { //insert
+            $str = $this->db->insert_string($this->tbdeal, $param);
+
+        }
+        if ($this->db->query($str)) echo 1;
+        else echo 0;
     }
     public function savestreet()
     {
@@ -299,18 +420,33 @@ class Admin extends CI_Controller
 
     }
 
+    public function hideuser($id, $status)
+    {
+        $str = $this->db->update_string($this->tbuser, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
+        if ($this->db->query($str)) echo 1;
+        else echo 0;
+    }
+    public function hidedeal($id, $status)
+    {
+        $str = $this->db->update_string($this->tbdeal, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
+        if ($this->db->query($str)) echo 1;
+        else echo 0;
+    }
+
     public function hideprovince($id, $status)
     {
         $str = $this->db->update_string($this->tbprovince, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+
     public function hideserviceplace($id, $status)
     {
         $str = $this->db->update_string($this->tbservice_place, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+
     public function hideserviceitem($id, $status)
     {
         $str = $this->db->update_string($this->tbservice_item, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
@@ -358,6 +494,27 @@ class Admin extends CI_Controller
                 'daurl' => $row->daurl,
                 'dainfo' => $row->dainfo,
                 'dashowhome' => $row->dashowhome,
+            ));
+        } else echo '0';
+    }
+    public function loadeditdeal($id)
+    {
+        $sql = "SELECT * FROM " . $this->tbdeal . " WHERE id=$id";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            $row = $qr->row();
+            $this->mylibs->echojson(array(
+                'id' => $row->id,
+                'dalong_name' => $row->dalong_name,
+                'daurl' => $row->daurl,
+                'datype' => $row->datype,
+                'dafrom' => date("Y-m-d H:i:s",$row->dafrom),
+                'dato' => date("Y-m-d H:i:s",$row->dato),
+                'daamount' => $row->daamount,
+                'daserviceplace_id' => $row->daserviceplace_id,
+                'daspecial' => $row->daspecial,
+                'dacondition' => $row->dacondition,
+
             ));
         } else echo '0';
     }
@@ -428,6 +585,29 @@ class Admin extends CI_Controller
         } else echo '0';
     }
 
+    public function loadedituser($id)
+    {
+        $sql = "SELECT * FROM " . $this->tbuser . " WHERE id=$id";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            $row = $qr->row();
+            $this->mylibs->echojson(array(
+                'id' => $row->id,
+                'dafname' => $row->dafname,
+                'dalname' => $row->dalname,
+                'dausername' => $row->dausername,
+                'dapassword' => $row->dapassword,
+                'damobi' => $row->damobi,
+                'daemail' => $row->daemail,
+                'daaddr' => $row->daaddr,
+                'daavatar' => $row->daavatar,
+                'darole' => $row->darole,
+
+            ));
+
+        } else echo '0';
+    }
+
     public function loadeditstreet($id)
     {
         $sql = "SELECT * FROM " . $this->tbstreet . " WHERE id=$id";
@@ -463,7 +643,7 @@ class Admin extends CI_Controller
         } else return null;
     }
 
-    public function getService($table, $parent_id = array(), $page = 0, $order = false)
+    public function getService($table, $parent_id = array(), $page = 0, $order = null)
     {
 
         $where = "";
@@ -474,7 +654,7 @@ class Admin extends CI_Controller
             }
         }
         if ($page >= 0)
-            $sql = "SELECT * FROM " . $table . $where . " ORDER BY  dalong_name LIMIT " . ($page * $this->config->item('pp')) . "," . $this->config->item('pp');
+            $sql = "SELECT * FROM " . $table . $where . " ORDER BY  " . (($order != null) ? $order['field'] . " " . $order["type"] : "dalong_name") . "  LIMIT " . ($page * $this->config->item('pp')) . "," . $this->config->item('pp');
         else $sql = "SELECT * FROM " . $table . $where . " ORDER BY  dalong_name";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
@@ -497,7 +677,14 @@ class Admin extends CI_Controller
             return ceil($qr->row()->numid / $this->config->item("pp"));
         } else return 0;
     }
-
+    public function loaduser($page=1){
+        $page -= 1;
+        if (($rs = $this->getService($this->tbuser, null, $page,array('field'=>'id','type'=>''))) != null) {
+            $data['province'] = $rs;
+            $data['sumpage'] = $this->getSumPageAddress($this->tbuser, null);
+            echo $this->load->view("admin/list_user_v", $data, true);
+        } else echo lang("NO_DATA");
+    }
     public function loadprovince($page = 1)
     {
         $page -= 1;
@@ -508,45 +695,45 @@ class Admin extends CI_Controller
         } else echo lang("NO_DATA");
     }
 
-    public function loadselectdist($daprovince_id = 0,$id=0)
+    public function loadselectdist($daprovince_id = 0, $id = 0)
     {
         $options = "<option value='0'>Chọn Quận</option>";
         if (($rs = $this->getAddress($this->tbdistrict, array("daprovince_id" => $daprovince_id), -1)) != null) {
             foreach ($rs as $row) {
-                $options .= "<option value='" . $row->id . "' ".(($row->id == $id)?'selected=true':'').">" . $row->dalong_name . "</option>";
+                $options .= "<option value='" . $row->id . "' " . (($row->id == $id) ? 'selected=true' : '') . ">" . $row->dalong_name . "</option>";
             }
         }
         echo $options;
     }
 
-    public function loadselectward($daprovince_id = 0,$id = 0)
+    public function loadselectward($daprovince_id = 0, $id = 0)
     {
         $options = "<option value='0'>Chọn Phường</option>";
         if (($rs = $this->getAddress($this->tbward, array("dadistrict_id" => $daprovince_id), -1)) != null) {
             foreach ($rs as $row) {
-                $options .= "<option value='" . $row->id . "' ".(($row->id == $id)?'selected=true':'').">" . $row->dalong_name . "</option>";
+                $options .= "<option value='" . $row->id . "' " . (($row->id == $id) ? 'selected=true' : '') . ">" . $row->dalong_name . "</option>";
             }
         }
         echo $options;
     }
 
-    public function loadselectstreet($daprovince_id = 0,$id = 0)
+    public function loadselectstreet($daprovince_id = 0, $id = 0)
     {
         $options = "<option value='0'>Chọn Đường/Phố</option>";
         if (($rs = $this->getAddress($this->tbstreet, array("daward_id" => $daprovince_id), -1)) != null) {
             foreach ($rs as $row) {
-                $options .= "<option value='" . $row->id . "' ".(($row->id == $id)?'selected=true':'').">" . $row->dalong_name . "</option>";
+                $options .= "<option value='" . $row->id . "' " . (($row->id == $id) ? 'selected=true' : '') . ">" . $row->dalong_name . "</option>";
             }
         }
         echo $options;
     }
 
-    public function loadselectserviceitem($daprovince_id = 0,$id = 0)
+    public function loadselectserviceitem($daprovince_id = 0, $id = 0)
     {
         $options = "<option value='0'>Chọn Dịch vụ</option>";
         if (($rs = $this->getService($this->tbservice_item, array("daservicegroup_id" => $daprovince_id), -1)) != null) {
             foreach ($rs as $row) {
-                $options .= "<option value='" . $row->id . "' ".(($row->id == $id)?'selected=true':'').">" . $row->dalong_name . "</option>";
+                $options .= "<option value='" . $row->id . "' " . (($row->id == $id) ? 'selected=true' : '') . ">" . $row->dalong_name . "</option>";
             }
         }
         echo $options;
@@ -601,7 +788,19 @@ class Admin extends CI_Controller
             echo $this->load->view("admin/list_province_v", $data, true);
         } else echo lang("NO_DATA");
     }
+    public function loadlistdeal( $daserviceplace_id , $page = 1)
+    {
+        $page -= 1;
+        $param = array(
+            "daserviceplace_id" => $daserviceplace_id,
+        );
 
+        if (($rs = $this->getService($this->tbdeal, $param, $page, array("field" => 'id', 'type' => 'DESC'))) != null) {
+            $data['serviceplace'] = $rs;
+            $data['sumpage'] = $this->getSumPageAddress($this->tbdeal, $param);
+            echo $this->load->view("admin/list_deal_v", $data, true);
+        } else echo lang("NO_DATA");
+    }
     public function loadserviceplace($daprovince_id = 0, $dadistrict_id = 0, $daward_id = 0, $dastreet_id = 0, $daservicegroup_id = 0, $daservice_id = 0, $page = 1)
     {
         $page -= 1;
@@ -614,19 +813,21 @@ class Admin extends CI_Controller
             "daservice_id" => $daservice_id,
         );
 
-        if (($rs = $this->getService($this->tbservice_place, $param, $page)) != null) {
+        if (($rs = $this->getService($this->tbservice_place, $param, $page, array("field" => 'id', 'type' => 'DESC'))) != null) {
             $data['serviceplace'] = $rs;
             $data['sumpage'] = $this->getSumPageAddress($this->tbservice_place, $param);
             echo $this->load->view("admin/list_serviceplace_v", $data, true);
         } else echo lang("NO_DATA");
     }
-    public function calljupload(){
+
+    public function calljupload()
+    {
         $this->load->helper("jupload");
-        $configs['upload_dir'] = dirname($_SERVER['SCRIPT_FILENAME']).'/./././images/';
-        $configs['upload_url'] = base_url().'images/';
+        $configs['upload_dir'] = dirname($_SERVER['SCRIPT_FILENAME']) . '/././images/';
+        $configs['upload_url'] = base_url() . 'images/';
         $configs['thumbnail'] = array(
-            'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/./././thumbnails/',
-            'upload_url' => base_url().'thumbnails/',
+            'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']) . '/././thumbnails/',
+            'upload_url' => base_url() . 'thumbnails/',
             'max_width' => 200,
             'max_height' => 200
         );
@@ -660,6 +861,79 @@ class Admin extends CI_Controller
             default:
                 header('HTTP/1.1 405 Method Not Allowed');
         }
+    }
+
+    function delfile($filename, $deldb = 0)
+    {
+        //important!!! need admin permission here
+        try {
+            unlink(dirname($_SERVER['SCRIPT_FILENAME']) . "/././images/" . $filename);
+            unlink(dirname($_SERVER['SCRIPT_FILENAME']) . "/././thumbnails/" . $filename);
+            if ($deldb == 1) {
+                $sql = "DELETE FROM " . $this->tbdapic . " WHERE dapic='$filename'";
+                $this->db->query($sql);
+            }
+            echo 1;
+        } catch (Exception $ex) {
+            echo 0;
+        }
+    }
+
+    public function savemorepic($id)
+    {
+        $sql = "SELECT count(id) numr FROM " . $this->tbservice_place . " WHERE id=$id";
+        $qr = $this->db->query($sql);
+        if ($qr->row()->numr == 1) {
+            $aNewPic = explode(",", $this->input->post("img"));
+            $aNewCaption = explode(",", $this->input->post("caption"));
+            $sVal = "";
+            if (!$this->session->userdata("dauser_id")) $user = 1;
+            else $user = $this->session->userdata("dauser_id");
+            for ($i = 0; $i < count($aNewPic); $i++) {
+                $pic = $aNewPic[$i];
+                if (trim($pic) == "") continue;
+                $cap = $aNewCaption[$i];
+                if ($sVal != "") $sVal .= ",";
+                $sVal .= "('$user','$id','$pic','$cap')";
+            }
+            if ($sVal != "") {
+                $sql = "INSERT INTO " . $this->tbdapic . " (dauser_id,daserviceplace_id,dapic,dacaption) VALUES " . $sVal;
+                echo $this->db->query($sql);
+            } else {
+                return 0;
+            }
+
+        } else {
+            echo -1;
+        }
+    }
+
+    public function loadserviceplacepic($id)
+    {
+        $sql = "SELECT * FROM " . $this->tbdapic . " WHERE daserviceplace_id=$id";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            $arr = $qr->result_array();
+            $this->mylibs->echojson($arr);
+        } else {
+            echo 0;
+        }
+    }
+
+    public function updateoldpic($id)
+    {
+        $aNewPic = explode(",", $this->input->post("img"));
+        $aNewCaption = explode(",", $this->input->post("caption"));
+        $kq = 0;
+        for ($i = 0; $i < count($aNewPic); $i++) {
+            $pic = $aNewPic[$i];
+            if (trim($pic) == "") continue;
+            $cap = $aNewCaption[$i];
+            $sql = "UPDATE " . $this->tbdapic . " SET dacaption='$cap' WHERE dapic='$pic'";
+            $kq += $this->db->query($sql);
+
+        }
+        echo $kq;
     }
 }
 

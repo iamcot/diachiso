@@ -49,7 +49,7 @@
         <tr>
             <td>
                 <label>Seo URL</label>
-                <input type="text" name="daurl" placeholder="Seo URL" title="Seo URL"></td>
+                <input id="daurl" type="text" name="daurl" placeholder="Seo URL" title="Seo URL"></td>
             <td>
                 <label>Số nhà</label>
                 <input type="text" name="daaddr" placeholder="Số nhà" title="Số nhà"></td>
@@ -63,28 +63,40 @@
                 <input type="text" name="daemail" placeholder="Email" title="Email"></td>
         </tr>
         <tr>
-            <td><label>Fax</label>
-                <input type="text" name="dafax" placeholder="Fax" title="Fax"></td>
-            <td id="dapicdemo" rowspan="3" style="padding: 10px 10px 10px 20px"></td>
-        </tr>
-        <tr>
-            <td>
-                <label>Hình đại diện</label>
+            <td> <label>Hình đại diện</label>
                 <input type="text" name="dapic" placeholder="Hình đại diện" title="Hình đại diện">
                 <input id="picupload"  type="file" name="files[]" data-url="<?=base_url()?>admin/calljupload" multiple>
+            </td>
+            <td id="dapicdemo" rowspan="2" style="padding: 10px 10px 10px 20px"></td>
+        </tr>
+        <tr>
+            <td><label>Website</label>
+                <input type="text" name="dawebsite" placeholder="Website" title="Website">
+
             </td>
         </tr>
         <tr>
             <td>
                 <label>Bản đồ</label>
                 <textarea name="damap" placeholder="Bản đồ" title="Bản đồ"></textarea>
-                <a href="#" style="float:right">Lấy map</a></label>
+                    <table class="mapoption">
+                        <tr><td>Dài</td><td><input type="text" name="mapw"  value="<?=$this->config->item("mapw")?>" class="idinput"></td>
+                            <td>Cao</td><td> <input type="text" name="maph"   value="<?=$this->config->item("maph")?>" class="idinput"></td>
+                            <td>Zoom</td><td><input type="text" name="mapz"   value="<?=$this->config->item("mapz")?>" class="idinput"></td></tr>
+                        <tr><td>lat</td><td><input type="text" name="maplat" class="idinput"></td>
+                            <td>lng</td><td><input type="text" name="maplng" class="idinput"></td>
+                            <td colspan="2" style="text-align: right">
+                                <input type="button" value="Load" onclick="loadmap()">
+                                <input type="button" value="F5" onclick="reloadmap()">
+                            </td></tr>
+                    </table>
             </td>
+            <td id="damapdemo" style="padding: 10px 10px 10px 20px"></td>
         </tr>
         <tr>
             <td colspan="2">
                 <label>Thông tin</label>
-                <textarea name="dainfo" placeholder="Thông tin" title="Thông tin"></textarea></td>
+                <textarea class="ckeditor" name="dainfo" placeholder="Thông tin" title="Thông tin"></textarea></td>
         </tr>
         <tr>
             <td>
@@ -94,8 +106,12 @@
                 <input type="button" value="Load" onclick="loadProvince(1)">
                 <input type="button" value="Xóa input" onclick="provinceclear()">
                 <input type="button" value="Xóa tất cả" onclick="clearall()">
+
             </td>
             <td>
+                <input type="button" value="Thêm ảnh" onclick="morepic()">
+                <input type="button" value="Thêm tin" onclick="morenews()">
+                <input type="button" value="Thêm deal" onclick="moredeal()">
                 <div id="loadstatus" style="float:right;"></div>
             </td>
         </tr>
@@ -107,6 +123,30 @@
     <div id="list_province"></div>
 </fieldset>
 <script>
+
+    function morepic(){
+        var id = $("input[name=edit]").val();
+        if(id == "") {
+            alert("Chưa có dịch vụ, xin hãy chọn 1 dịch vụ trước.");
+            return;
+        }
+        $("input[name=picdaserviceplace_id]").val(id);
+        $( "#tabs" ).tabs( "option", "active", 3 );
+    }
+    function moredeal(){
+
+        var id = $("input[name=edit]").val();
+        if(id == "") {
+            alert("Chưa có dịch vụ, xin hãy chọn 1 dịch vụ trước.");
+            return;
+        }
+        if(!confirm("Thao tác này sẽ chuyển sang trang mới, những dữ liệu chưa lưu sẽ bị mất!\nXác nhận chuyển trang?"))
+            return;
+        location.href = "<?=base_url()?>admin/deal/"+id;
+    }
+    function morenews(){
+        $( "#tabs" ).tabs( "option", "active", 4 );
+    }
     function saveProvince() {
         var daservicegroup_id = $("select[name=daservicegroup_id]").val();
         var daservice_id = $("select[name=daserviceitem_id]").val();
@@ -116,11 +156,13 @@
         var dastreet_id = $("select[name=dastreet_id]").val();
         var dapic = $("input[name=dapic]").val();
         var datel = $("input[name=datel]").val();
-        var dafax = $("input[name=dafax]").val();
+        var dawebsite = $("input[name=dawebsite]").val();
         var daemail = $("input[name=daemail]").val();
         var daaddr = $("input[name=daaddr]").val();
         var dalong_name = $("input[name=dalong_name]").val();
         var daurl = $("input[name=daurl]").val();
+        var dalat = $("input[name=maplat]").val();
+        var dalng = $("input[name=maplng]").val();
         var dainfo = $("textarea[name=dainfo]").val();
         var damap = $("textarea[name=damap]").val();
         var edit = $("input[name=edit]").val();
@@ -145,7 +187,7 @@
                 url: "<?=base_url()?>admin/saveserviceplace",
                 data: "dalong_name=" + dalong_name
                     + "&daurl=" + daurl
-                    + "&dainfo=" + dainfo
+                    + "&dainfo=" + encodeURIComponent(dainfo)
                     + "&edit=" + edit
                     + "&daservicegroup_id=" + daservicegroup_id
                     + "&daservice_id=" + daservice_id
@@ -155,10 +197,12 @@
                     + "&dastreet_id=" + dastreet_id
                     + "&dapic=" + dapic
                     + "&datel=" + datel
-                    + "&dafax=" + dafax
+                    + "&dalat=" + dalat
+                    + "&dalng=" + dalng
+                    + "&dawebsite=" + dawebsite
                     + "&daemail=" + daemail
                     + "&daaddr=" + daaddr
-                    + "&damap=" + damap,
+                    + "&damap=" + encodeURIComponent(damap),
                 success: function (msg) {
                     switch (msg) {
                         case "0":
@@ -219,9 +263,11 @@
         $("input[name=edit]").val("");
         $("input[name=dapic]").val("");
         $("input[name=datel]").val("");
-        $("input[name=dafax]").val("");
+        $("input[name=dawebsite]").val("");
         $("input[name=daemail]").val("");
         $("input[name=daaddr]").val("");
+        $("input[name=maplat]").val("");
+        $("input[name=maplng]").val("");
         $("textarea[name=damap]").val("");
         $("#dapicdemo").html("");
     }
@@ -232,6 +278,7 @@
         $("select[name=daserviceitem_id]").html('<option value="0">Chọn Dịch vụ</option>');
         $("select[name=daservicegroup_id]").val(0);
         $("select[name=dadistrict_id]").val(0)
+        $("#damapdemo").html('');
     }
     function editProvince(id) {
 //        $("select[name=daprovince_id]").val(3);
@@ -256,12 +303,15 @@
                     });
                     $("input[name=dapic]").val(province.dapic);
                     $("input[name=datel]").val(province.datel);
-                    $("input[name=dafax]").val(province.dafax);
+                    $("input[name=dawebsite]").val(province.dawebsite);
                     $("input[name=daemail]").val(province.daemail);
                     $("input[name=daaddr]").val(province.daaddr);
+                    $("input[name=maplat]").val(province.dalat);
+                    $("input[name=maplng]").val(province.dalng);
                     $("textarea[name=dainfo]").val(province.dainfo);
                     $("textarea[name=damap]").val(province.damap);
-                    $("#dapicdemo").html('<img src="<?=base_url()?>thumbnails/'+province.dapic+'">')
+                    $("#dapicdemo").html('<img src="<?=base_url()?>thumbnails/'+province.dapic+'">');
+                    $("#damapdemo").html(province.damap);
                 }
             }
         });
@@ -281,6 +331,8 @@
         });
     }
     $(function () {
+        $('input[name=dalong_name]').friendurl({id : 'daurl'});
+        $( '.ckeditor' ).ckeditor();
         $('#picupload').fileupload({
             dataType: 'json',
             done: function (e, data) {

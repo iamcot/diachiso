@@ -1,10 +1,23 @@
 <fieldset>
     <legend>Thông tin</legend>
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
-    <input type="text" name="daurl" placeholder="Seo URL">
+    <input type="text" id="daurl" name="daurl" placeholder="Seo URL">
     <input type="text" name="daorder" placeholder="Thứ tự">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>
     <textarea name="damap" placeholder="Bản đồ"></textarea>
+    <table class="mapoption" style="float:left;width:50%">
+        <tr><td>Dài</td><td><input type="text" name="mapw"  value="<?=$this->config->item("mapw")?>" class="idinput"></td>
+            <td>Cao</td><td> <input type="text" name="maph"   value="<?=$this->config->item("maph")?>" class="idinput"></td>
+            <td>Zoom</td><td><input type="text" name="mapz"   value="<?=$this->config->item("mapz")?>" class="idinput"></td></tr>
+        <tr><td>lat</td><td><input type="text" name="maplat" class="idinput"></td>
+            <td>lng</td><td><input type="text" name="maplng" class="idinput"></td>
+            <td colspan="2" style="text-align: center">
+                <input type="button" value="Load" onclick="getmaplongname(0,-1,-1,-1)">
+                <input type="button" value="F5" onclick="reloadmap()">
+            </td></tr>
+    </table>
+    <div id="damapdemo" style="float:right;width:48%"></div>
+    <div style="clear:both"></div>
     <input type="hidden" name="edit" value="">
     <input type="hidden" name="currpage" value="1">
     <input type="button" value="Lưu" onclick="saveProvince()">
@@ -18,6 +31,7 @@
 </fieldset>
 <script>
     $(function(){
+        $('input[name=dalong_name]').friendurl({id : 'daurl'});
        loadProvince(1);
     });
     function saveProvince() {
@@ -35,7 +49,7 @@
                 data: "dalong_name=" + dalong_name
                           + "&daurl=" + daurl
                           + "&dainfo=" + dainfo
-                          + "&damap=" + damap
+                          + "&damap=" + encodeURIComponent(damap)
                           + "&daorder=" + daorder
                           + "&edit=" + edit,
                 success: function (msg) {
@@ -90,6 +104,8 @@
                     $("input[name=daorder]").val(province.daorder);
                     $("textarea[name=dainfo]").val(province.dainfo);
                     $("textarea[name=damap]").val(province.damap);
+                    $("#damapdemo").html(province.damap);
+
                 }
             }
         });

@@ -142,6 +142,7 @@ class UploadHandler
         if (!$img_width || !$img_height) {
             return false;
         }
+        /*
         $scale = min(
             $options['max_width'] / $img_width,
             $options['max_height'] / $img_height
@@ -152,8 +153,22 @@ class UploadHandler
             }
             return true;
         }
+
         $new_width = $img_width * $scale;
         $new_height = $img_height * $scale;
+        */
+        /* Calculate the New Image Dimensions CoT edit*/
+        $thumbSize = $options['max_width'];
+        if( $img_height > $img_width ){
+            /* Portrait */
+            $new_width = $thumbSize;
+            $new_height = $img_height * ( $thumbSize / $new_width );
+        }else{
+            /* Landscape */
+            $new_height = $thumbSize;
+            $new_width = $img_width * ( $thumbSize / $new_height );
+        }
+
         $new_img = @imagecreatetruecolor($new_width, $new_height);
         switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
             case 'jpg':
@@ -181,15 +196,42 @@ class UploadHandler
             default:
                 $src_img = null;
         }
+        if ($img_height < $img_width)
+        {
+            $offH = 0;
+            $offW = ($img_width-$img_height)/2;
+            $img_width = $img_height;
+        }
+        elseif ($img_height > $img_width)
+        {
+            $offW = 0;
+            $offH = ($img_height-$img_width)/2;
+            $img_height = $img_width;
+        }
+        else
+        {
+            $offW = 0;
+            $offH = 0;
+        }
+        $new_img = imagecreatetruecolor( $thumbSize , $thumbSize );
         $success = $src_img && @imagecopyresampled(
-            $new_img,
-            $src_img,
-            0, 0, 0, 0,
-            $new_width,
-            $new_height,
-            $img_width,
-            $img_height
-        ) && $write_image($new_img, $new_file_path, $image_quality);
+                    $new_img,
+                    $src_img,
+                    0, 0, $offW, $offH,
+                    $thumbSize,
+                    $thumbSize,
+                    $img_width,
+                    $img_height
+                ) && $write_image($new_img, $new_file_path, $image_quality);
+//        $success = $src_img && @imagecopyresampled(
+//            $new_img,
+//            $src_img,
+//            0, 0, 0, 0,
+//            $new_width,
+//            $new_height,
+//            $img_width,
+//            $img_height
+//        ) && $write_image($new_img, $new_file_path, $image_quality);
         // Free up memory (imagedestroy does not delete files):
         @imagedestroy($src_img);
         @imagedestroy($new_img);
@@ -446,8 +488,8 @@ class UploadHandler
     }
 
     /*start here*/
-    private function random_no() {
-        return md5(date("dmYHis"));
+    private function random_no($file) {
+        return md5($file.date("dmYHis"));
     }
     private function new_name($name, $type) {
         $final_value = trim(basename(stripslashes($name)), ".\x00..\x20");
@@ -458,7 +500,7 @@ class UploadHandler
         else {
             $final_value = substr($final_value, $ext);
         }
-        $this->random_number = $this->random_no();
+        $this->random_number = $this->random_no($name);
         // New name
         // New name consists of jointing a random number value - defined in the random_no() function - and the original file extension
         $final_value_b = $this->random_number.$final_value;

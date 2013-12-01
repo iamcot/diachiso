@@ -6,7 +6,7 @@
         <? endforeach;?>
     </select>
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
-    <input type="text" name="daurl" placeholder="Seo URL">
+    <input type="text" id="daurl" name="daurl" placeholder="Seo URL">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>
     <input type="hidden" name="edit" value="">
     <input type="hidden" name="currpage" value="1">
@@ -21,6 +21,7 @@
 </fieldset>
 <script>
     $(function(){
+        $('input[name=dalong_name]').friendurl({id : 'daurl'});
         loadProvince(1);
     });
     function saveProvince() {
