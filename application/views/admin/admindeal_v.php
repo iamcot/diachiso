@@ -144,7 +144,7 @@
                     $("#dlprovince").html(province.daaddr + ((province.daaddr != "") ? ", " : "") + province.streetname + ((province.streetname != "") ? ", " : "") +
                         province.wardname + ((province.wardname != "") ? ", " : "") + province.districtname + ((province.districtname != "") ? ", " : "") + province.provincename);
                     $("#dlservice").html(province.servicegroup + " > " + province.servicename);
-                    $("#dldapic").html("<img src='<?=base_url()?>thumbnails/" + province.dapic + "'>  <img src='" + province.damap + "'>");
+                    $("#dldapic").html("<img src='<?=base_url()?>thumbnails/" + province.dapic + "'>  " + province.damap );
                     $("input[name=dldaserviceplace_id]").val(province.id);
                     loadlistdeal(1);
                 }

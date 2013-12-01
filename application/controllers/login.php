@@ -40,7 +40,7 @@ class Login extends CI_Controller
         $dapassword = $this->input->post("dapassword");
         $daalwayslogin = $this->input->post("dalwayslogin");
         $dapassword = md5(md5($dapassword));
-        $sql = "select * FROM " . $this->tbuser . " WHERE dausername= '$dausername' AND dapassword='$dapassword'";
+        $sql = "select * FROM " . $this->tbuser . " WHERE dausername= '$dausername' AND dapassword='$dapassword' and dadeleted=0";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() == 1) {
             $user = $qr->row();
