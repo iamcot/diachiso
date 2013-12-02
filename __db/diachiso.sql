@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.9
+-- version 4.0.9
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 02, 2013 at 02:58 AM
--- Server version: 5.5.8
--- PHP Version: 5.3.5
+-- Generation Time: Dec 02, 2013 at 06:15 PM
+-- Server version: 5.6.14
+-- PHP Version: 5.3.15
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -33,11 +34,6 @@ CREATE TABLE IF NOT EXISTS `dacomment` (
   `dacreate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `dacomment`
---
-
 
 -- --------------------------------------------------------
 
@@ -71,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `dadeal` (
 --
 
 INSERT INTO `dadeal` (`id`, `daserviceplace_id`, `dalong_name`, `daurl`, `datype`, `daamount`, `daedit`, `dacreate`, `dadeleted`, `dafrom`, `dato`, `daspecial`, `dacondition`, `daview`, `dacomment`, `dalike`, `dauser_id`) VALUES
-(1, 5, 'Khuyến mãi tại cửa hàng bánh Kinh Đô', 'khuyen-mai-tai-cua-hang-banh-kinh-do', 'percent', 50, '2013-12-02 02:37:50', '2013-12-02 02:37:50', 0, 1385859001, 1388496602, '<p>ko co gi</p>\n\n<p>sss</p>\n', '<p>thoai mai<br />\nwwww</p>\n', 0, 0, 0, 1);
+(1, 5, 'Khuyến mãi tại cửa hàng bánh Kinh Đô', 'khuyen-mai-tai-cua-hang-banh-kinh-do', 'percent', 50, '2013-12-02 08:25:47', '2013-12-01 19:37:50', 0, 1385859001, 1388496602, '<p>ko co gi</p>\n\n<p>sss</p>\n', '<p>thoai mai<br />\nwwww</p>\n', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -88,11 +84,6 @@ CREATE TABLE IF NOT EXISTS `dadeal_user` (
   `dacomment` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `dadeal_user`
---
-
 
 -- --------------------------------------------------------
 
@@ -116,14 +107,47 @@ CREATE TABLE IF NOT EXISTS `dadistrict` (
 --
 
 INSERT INTO `dadistrict` (`id`, `dalong_name`, `daurl`, `dainfo`, `damap`, `dadeleted`, `daprovince_id`) VALUES
-(1, 'Bình Thạnh', 'binh-thanh', 'bt2', 'http://maps.google.com/maps/api/staticmap?center=10.8105831,106.7091422&zoom=13&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.8105831,106.7091422', 0, 2),
+(1, 'Bình Thạnh', 'binh-thanh', 'bt2', '<img src=http://maps.google.com/maps/api/staticmap?center=10.8105831,106.7091422&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.8105831,106.7091422>', 0, 2),
 (2, 'Hai Bà Trưng', 'hai-ba-trung', '', '', 0, 1),
 (3, 'Hoàn Kiếm', 'hoan-kiem', '', '', 0, 1),
 (4, 'Tây Hồ', 'tay-ho', '', '', 0, 1),
 (5, 'Quận Tân Bình', 'tan-binh', '', '<img src=http://maps.google.com/maps/api/staticmap?center=10.8084306,106.6468148&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.8084306,106.6468148>', 0, 2),
-(6, 'Phú Nhuận', 'phu-nhuan', '', 'http://maps.google.com/maps/api/staticmap?center=10.7984723,106.67924&zoom=14&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.7984723,106.67924', 0, 2),
+(6, 'Phú Nhuận', 'phu-nhuan', '', '<img src=http://maps.google.com/maps/api/staticmap?center=10.7984723,106.67924&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.7984723,106.67924>', 0, 2),
 (7, 'Quận 1', 'quan-1', '', 'http://maps.google.com/maps/api/staticmap?center=10.7756587,106.7004238&zoom=14&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.7756587,106.7004238', 0, 2),
 (8, 'Quận 2', 'quan-2', '', 'http://maps.google.com/maps/api/staticmap?center=10.7967947,106.7588494&zoom=12&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.7967947,106.7588494', 0, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `danews`
+--
+
+CREATE TABLE IF NOT EXISTS `danews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `daserviceplace_id` int(11) NOT NULL,
+  `dalong_name` text COLLATE utf8_unicode_ci NOT NULL,
+  `daurl` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `daedit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `dacreate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `dacontent` text COLLATE utf8_unicode_ci NOT NULL,
+  `dacontent_short` text COLLATE utf8_unicode_ci NOT NULL,
+  `dadeleted` tinyint(11) NOT NULL,
+  `datype` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `dacat` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `dapic` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `daview` int(11) DEFAULT NULL,
+  `dacomment` int(11) DEFAULT NULL,
+  `dalike` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `danews`
+--
+
+INSERT INTO `danews` (`id`, `daserviceplace_id`, `dalong_name`, `daurl`, `daedit`, `dacreate`, `dacontent`, `dacontent_short`, `dadeleted`, `datype`, `dacat`, `dapic`, `daview`, `dacomment`, `dalike`) VALUES
+(1, 0, 'Huong dan dang nhap', 'huong-dan-dang-nhap', '2013-12-02 10:30:57', '2013-12-02 10:29:26', '<p>noi dung chinh</p>\n', 'tom tat noi dung', 0, 'home', 'help', 'e0d65bd84c8acf715e3180ff4362c94a.jpg', NULL, NULL, NULL),
+(2, 5, 'Huong dan dang nhap', 'huong-dan-dang-nhap', '2013-12-02 10:31:28', '2013-12-02 10:31:28', '<p>noi dung chinh</p>\n', 'tom tat noi dung', 0, 'service', '', 'e0d65bd84c8acf715e3180ff4362c94a.jpg', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -146,13 +170,13 @@ CREATE TABLE IF NOT EXISTS `dapic` (
 --
 
 INSERT INTO `dapic` (`id`, `daserviceplace_id`, `dauser_id`, `dapic`, `dacaption`, `dacreate`) VALUES
-(1, 4, 1, '6de18d19a3bfbf97be78cb18ebc38d95.jpg', 'a', '2013-11-30 21:58:17'),
-(4, 4, 1, '270813b92336465dc7d35b1ce47529ab.jpg', 'váy đỏ', '2013-11-30 22:03:28'),
-(11, 4, 1, '447b643981d88492d486dd498b970232.jpg', 'c', '2013-11-30 22:03:01'),
-(10, 4, 1, '1046713f0787302e4910079c4a468885.jpg', 'd', '2013-11-30 22:03:01'),
-(9, 4, 1, '75485001a75d0b9d44ae6bbf891dc065.jpg', 'e', '2013-11-30 22:03:01'),
-(12, 5, 1, 'beaecd7e9814e3616dcf7e03efa53ffb.jpg', 'váy đỏ thời trang', '2013-12-01 01:57:12'),
-(13, 5, 1, 'cda159a9fdb487e7f5eb7de973ebacc3.jpg', 'hồng lãng xẹt :v', '2013-12-01 01:57:12');
+(1, 4, 1, '6de18d19a3bfbf97be78cb18ebc38d95.jpg', 'a', '2013-11-30 14:58:17'),
+(4, 4, 1, '270813b92336465dc7d35b1ce47529ab.jpg', 'váy đỏ', '2013-11-30 15:03:28'),
+(11, 4, 1, '447b643981d88492d486dd498b970232.jpg', 'c', '2013-11-30 15:03:01'),
+(10, 4, 1, '1046713f0787302e4910079c4a468885.jpg', 'd', '2013-11-30 15:03:01'),
+(9, 4, 1, '75485001a75d0b9d44ae6bbf891dc065.jpg', 'e', '2013-11-30 15:03:01'),
+(12, 5, 1, 'beaecd7e9814e3616dcf7e03efa53ffb.jpg', 'váy đỏ thời trang', '2013-11-30 18:57:12'),
+(13, 5, 1, 'cda159a9fdb487e7f5eb7de973ebacc3.jpg', 'hồng lãng xẹt :v', '2013-11-30 18:57:12');
 
 -- --------------------------------------------------------
 
@@ -177,8 +201,8 @@ CREATE TABLE IF NOT EXISTS `daprovince` (
 
 INSERT INTO `daprovince` (`id`, `dalong_name`, `daurl`, `dainfo`, `damap`, `dadeleted`, `daorder`) VALUES
 (1, 'Hà Nội', 'ha-noi', 'Thủ đô Hà Nội', '<img src=http://maps.google.com/maps/api/staticmap?center=21.0333333,105.85&zoom=13&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|21.0333333,105.85>', 0, 0),
-(2, 'TP Hồ Chí Minh', 'ho-chi-minh', 'Thành phố Hồ Chí Minh', 'http://maps.google.com/maps/api/staticmap?center=10.746903,106.676292&zoom=11&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.746903,106.676292', 0, 1),
-(3, 'Đồng Tháp', 'dong-thap', 'Tỉnh Đồng Tháp', 'http://maps.google.com/maps/api/staticmap?center=10.4937989,105.6881788&zoom=8&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.4937989,105.6881788', 0, 0);
+(2, 'TP Hồ Chí Minh', 'ho-chi-minh', 'Thành phố Hồ Chí Minh', '<img src=http://maps.google.com/maps/api/staticmap?center=10.746903,106.676292&zoom=10&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.746903,106.676292>', 0, 1),
+(3, 'Đồng Tháp', 'dong-thap', 'Tỉnh Đồng Tháp', '<img src=http://maps.google.com/maps/api/staticmap?center=10.4937989,105.6881788&zoom=10&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.4937989,105.6881788>', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -194,11 +218,6 @@ CREATE TABLE IF NOT EXISTS `darate` (
   `dacreate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `darate`
---
-
 
 -- --------------------------------------------------------
 
@@ -256,30 +275,6 @@ INSERT INTO `daservice_group` (`id`, `dalong_name`, `daurl`, `dainfo`, `dashowho
 -- --------------------------------------------------------
 
 --
--- Table structure for table `daservice_news`
---
-
-CREATE TABLE IF NOT EXISTS `daservice_news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `daserviceplace_id` int(11) NOT NULL,
-  `dalong_name` text COLLATE utf8_unicode_ci NOT NULL,
-  `daurl` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `daedit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `dacreate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `dacontent` text COLLATE utf8_unicode_ci NOT NULL,
-  `dacontent_short` text COLLATE utf8_unicode_ci NOT NULL,
-  `dadeleted` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `daservice_news`
---
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `daservice_place`
 --
 
@@ -319,11 +314,11 @@ CREATE TABLE IF NOT EXISTS `daservice_place` (
 --
 
 INSERT INTO `daservice_place` (`id`, `dalong_name`, `daurl`, `dainfo`, `damap`, `dadeleted`, `dastreet_id`, `daservice_id`, `dapic`, `daaddr`, `datel`, `damobi`, `dafax`, `daemail`, `daview`, `dacomment`, `dalike`, `daedit`, `dacreate`, `daprovince_id`, `dadistrict_id`, `daward_id`, `dauser_id`, `daservicegroup_id`, `dawebsite`, `dalat`, `dalng`) VALUES
-(1, 'Truong tieu học', 'tieu-hoc', '<p>erterterterterterterter</p>\n', 'http://maps.google.com/maps/api/staticmap?center=10.8061788,106.7074128&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.8061788,106.7074128', 0, 0, 2, '44dee95c54ce7b509e5ddc89b7460893.jpg', '234', '0123456', '', '012222', 'thang102@gmail.com', 0, 0, 0, '2013-12-02 01:06:02', '0000-00-00 00:00:00', 2, 1, 5, 1, 1, '', '10.8061788', '106.7074128'),
-(2, 'tr', '1', '8', '7', 0, 5, 2, '6', '2', '3', '', '5', '4', 0, 0, 0, '2013-11-30 01:03:09', '0000-00-00 00:00:00', 2, 5, 2, 1, 1, '', '', ''),
-(3, 'truong tieu hoc', '1', '2', '7', 0, 3, 1, '6', '2', '3', '', '5', '4', 0, 0, 0, '2013-11-30 03:07:21', '2013-11-29 19:04:47', 2, 5, 2, 1, 0, '', '', ''),
-(4, 'Trường dạy chó số 1', 'truong-day-cho', '', 'http://maps.google.com/maps/api/staticmap?center=21.0149155,105.8525097&zoom=14&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|21.0149155,105.8525097', 0, 0, 2, '428367ece5a4bf2c820416964fbbae32.jpg', '123', '123', '', '234', 'a@g.c', 0, 0, 0, '2013-12-01 23:51:00', '2013-11-29 21:56:49', 1, 2, 1, 1, 1, '', '', ''),
-(5, 'CoSi Shop', 'cosi-shop', '<h1>Th&ocirc;ng b&aacute;o mời thầu</h1>\n\n<p><em><span style="color:#FF0000"><s><u>Th&ocirc;ng b&aacute;o</u></s> mời thầu &aacute;đ&acirc;s</span></em></p>\n\n<p style="text-align:right"><strong>Th&ocirc;ng b&aacute;o mời thầu</strong></p>\n\n<p style="text-align:center">Th&ocirc;ng b&aacute;o <sup>mời thầu</sup></p>\n', '<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=146+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u,+Ho+Chi+Minh+City,+Vietnam&amp;aq=0&amp;oq=146&amp;sll=37.0625,-95.677068&amp;sspn=63.856965,91.494141&amp;ie=UTF8&amp;hq=&amp;hnear=146+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u,+6,+H%E1%BB%93+Ch%C3%AD+Minh,+Vietnam&amp;t=m&amp;z=14&amp;ll=10.782352,106.693811&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=146+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u,+Ho+Chi+Minh+City,+Vietnam&amp;aq=0&amp;oq=146&amp;sll=37.0625,-95.677068&amp;sspn=63.856965,91.494141&amp;ie=UTF8&amp;hq=&amp;hnear=146+Nguy%E1%BB%85n+%C4%90%C3%ACnh+Chi%E1%BB%83u,+6,+H%E1%BB%93+Ch%C3%AD+Minh,+Vietnam&amp;t=m&amp;z=14&amp;ll=10.782352,106.693811" style="color:#0000FF;text-align:left">View Larger Map</a></small>', 0, 6, 3, '67327ac26ccbbe935d79ffa4c83af6fb.jpg', '146', '0983717098', '', '', 'cosishop@gmail.com', 0, 0, 0, '2013-12-02 02:53:52', '2013-11-30 18:57:39', 2, 5, 6, 1, 4, 'http://cosishop.com', '10.7975048', '106.6542334');
+(1, 'Truong tieu học', 'tieu-hoc', '<p>erterterterterterterter</p>\n', 'http://maps.google.com/maps/api/staticmap?center=10.8061788,106.7074128&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.8061788,106.7074128', 0, 0, 2, '44dee95c54ce7b509e5ddc89b7460893.jpg', '234', '0123456', '', '012222', 'thang102@gmail.com', 0, 0, 0, '2013-12-01 18:06:02', '0000-00-00 00:00:00', 2, 1, 5, 1, 1, '', '10.8061788', '106.7074128'),
+(2, 'tr', '1', '8', '7', 0, 5, 2, '6', '2', '3', '', '5', '4', 0, 0, 0, '2013-11-29 18:03:09', '0000-00-00 00:00:00', 2, 5, 2, 1, 1, '', '', ''),
+(3, 'truong tieu hoc', 'truong-tieu-hoc', '<p>2</p>\n', '7', 0, 3, 2, '6', '2', '3', '', '5', '4', 0, 0, 0, '2013-12-02 05:49:26', '2013-11-29 12:04:47', 2, 5, 2, 1, 1, '', '', ''),
+(4, 'Trường dạy chó số 1', 'truong-day-cho', '', 'http://maps.google.com/maps/api/staticmap?center=21.0149155,105.8525097&zoom=14&size=200x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|21.0149155,105.8525097', 0, 0, 2, '428367ece5a4bf2c820416964fbbae32.jpg', '123', '123', '', '234', 'a@g.c', 0, 0, 0, '2013-12-01 16:51:00', '2013-11-29 14:56:49', 1, 2, 1, 1, 1, '', '', ''),
+(5, 'CoSi Shop', 'cosi-shop', '<h1>Th&ocirc;ng b&aacute;o mời thầu</h1>\n\n<p><em><span style="color:#FF0000"><s><u>Th&ocirc;ng b&aacute;o</u></s> mời thầu &aacute;đ&acirc;s</span></em></p>\n\n<p style="text-align:right"><strong>Th&ocirc;ng b&aacute;o mời thầu</strong></p>\n\n<p style="text-align:center">Th&ocirc;ng b&aacute;o <sup>mời thầu</sup></p>\n', '<img src=http://maps.google.com/maps/api/staticmap?center=10.7975048,106.6542334&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.7975048,106.6542334>', 0, 6, 3, '67327ac26ccbbe935d79ffa4c83af6fb.jpg', '146', '0983717098', '', '', 'cosishop@gmail.com', 0, 0, 0, '2013-12-02 08:22:41', '2013-11-30 11:57:39', 2, 5, 6, 1, 4, 'http://cosishop.com', '10.7975048', '106.6542334');
 
 -- --------------------------------------------------------
 
@@ -386,9 +381,9 @@ CREATE TABLE IF NOT EXISTS `dauser` (
 --
 
 INSERT INTO `dauser` (`id`, `dafname`, `dalname`, `dausername`, `dapassword`, `daavatar`, `darole`, `dadeleted`, `daedit`, `dacreate`, `damobi`, `daemail`, `daaddr`) VALUES
-(1, 'Quản Trị Viên', '', 'admin', '57f231b1ec41dc6641270cb09a56f897', '1f991e31e5e80190054a5d5a64cc77c4.jpg', 'admin', 0, '2013-12-01 16:12:33', '2013-12-01 10:12:33', '012345', 'thang@gm.c', '123 ntb'),
-(2, 'Poster', 'Mr', 'poster', '57f231b1ec41dc6641270cb09a56f897', '72944f19a150b3f628056f299031bbf8.jpg', 'author', 0, '2013-12-01 16:12:40', '2013-12-01 10:12:40', '0123', 'poster@gmail.com', '123'),
-(3, 'Member', 'Mrs', 'member', '57f231b1ec41dc6641270cb09a56f897', '0b2380468f4546e5f3bb0e66e34c36b4.jpg', 'member', 0, '2013-12-01 16:12:47', '2013-12-01 10:12:47', '123', 'member@gmail.com', '12314');
+(1, 'Quản Trị Viên', '', 'admin', '57f231b1ec41dc6641270cb09a56f897', '615b157b56bf813650a17098d9e79ccb.jpg', 'admin', 0, '2013-12-02 05:49:48', '2013-12-02 05:49:48', '012345', 'thang@gm.c', '123 ntb'),
+(2, 'Poster', 'Mr', 'poster', '57f231b1ec41dc6641270cb09a56f897', 'd65ea75a21127bfb7a7fc911ee962e7c.jpg', 'author', 0, '2013-12-02 05:50:31', '2013-12-02 05:50:31', '0123', 'poster@gmail.com', '123'),
+(3, 'Member', 'Mrs', 'member', '57f231b1ec41dc6641270cb09a56f897', '3705356ee21f495f0473c043cb4925a6.JPG', 'member', 0, '2013-12-02 05:51:13', '2013-12-02 05:51:13', '123', 'member@gmail.com', '12314');
 
 -- --------------------------------------------------------
 
@@ -417,5 +412,9 @@ INSERT INTO `daward` (`id`, `dalong_name`, `daurl`, `dainfo`, `damap`, `dadelete
 (2, 'Phuong 1', 'phuong-1', '', '', 0, 5, 0),
 (3, 'Phuong 2', 'phuong-2', '', '', 0, 5, 0),
 (4, 'Phuong 3', 'phuong-3', 'info 4', 'map 3', 0, 5, 0),
-(5, 'phuong 12', 'phuong-12', '', '', 0, 1, 0),
+(5, 'phuong 12', 'phuong-12', '', '<img src=http://maps.google.com/maps/api/staticmap?center=10.8122309,106.7013508&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.8122309,106.7013508>', 0, 1, 0),
 (6, 'Phường 12', 'phuong-12', '', '<img src=http://maps.google.com/maps/api/staticmap?center=10.7986532,106.6512361&zoom=15&size=400x200&maptype=roadmap&sensor=false&language=&markers=color:red|label:none|10.7986532,106.6512361>', 0, 5, 0);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
