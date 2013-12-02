@@ -23,6 +23,7 @@
         <a href="">DigiAddr là gì?</a> | <a href="">Tuyển dụng</a> | <a href="">Hợp tác với DigiAddr</a> | <a href="">Liên hệ</a>
         <div class="headeruser">
             <? if ($this->session->userdata('dauser_id')): ?>
+                <? if($this->session->userdata('daavatar')!="") echo '<img class="navavatar" src="'.base_url().'thumbnails/'.$this->session->userdata('daavatar').'">';?>
                 <?= $this->session->userdata('dalname') . ' ' . $this->session->userdata('dafname') ?> <?= (($this->mylibs->accessadmin()) ? ' | <a href="' . base_url() . 'admin">Trang quản trị</a>' : '') ?> |
                 <a href="<?= base_url() ?>login/logout">Đăng xuất</a>
             <? else: ?>

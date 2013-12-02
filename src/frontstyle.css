@@ -38,7 +38,7 @@ b, strong{
     font-weight: bold;
 }
 .title b{
-    font-weight: 900;
+    font-weight: 500;
 }
 fieldset
 {
@@ -345,6 +345,9 @@ Pagination
 #loginbg{
     background: transparent url(img/html.png) repeat 0 0;
 }
+#loginbg .nav{
+    margin-bottom: 0 !important;
+}
 #loginpage{
 
 }
@@ -433,4 +436,8 @@ footer{
     background: transparent url(img/footer.png) repeat 0 0;
     border-top: 1px solid #000;
     color: #a5a5a5;
+}
+.navavatar{
+    max-height: 20px;
+    vertical-align: middle;
 }

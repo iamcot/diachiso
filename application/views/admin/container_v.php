@@ -24,7 +24,7 @@
 <div id="allpage">
     <header>
         <div class="wrap">
-            <h2>DigiAddr: Trang quản trị</h2>
+            <h2><?=$this->config->item('sitename')?> - Trang quản trị</h2>
         </div>
     </header>
     <div class="nav">
@@ -51,6 +51,7 @@
             </ul>
             <div class="headeruser">
                 <? if ($this->session->userdata('dauser_id')): ?>
+                    <? if($this->session->userdata('daavatar')!="") echo '<img class="navavatar" src="'.base_url().'thumbnails/'.$this->session->userdata('daavatar').'">';?>
                     <?= $this->session->userdata('dalname') . ' ' . $this->session->userdata('dafname') ?> | <a
                         href="<?= base_url() ?>">Trang chủ</a> | <a href="<?= base_url() ?>login/logout">Đăng xuất</a>
                 <? else: ?>

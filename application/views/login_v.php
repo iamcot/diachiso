@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title><?= $title ?></title>
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/frontstyle.css">
-    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/ckeditor/skins/moono/editor.css">
+    <link type="text/css" rel="stylesheet"
+          href="<?= base_url() ?>src/ckeditor/skins/moono/editor.css">
     <link type="text/css" rel="stylesheet"
           href="<?= base_url() ?>src/smoothness/jquery-ui-1.10.3.custom.css">
     <script src="<?= base_url() ?>src/jquery.min.js"></script>
@@ -47,8 +48,6 @@
             color: #333333;
         }
 
-
-
         label {
             display: inline !important;
             font-size: 13px;
@@ -84,155 +83,168 @@
 </head>
 <body id="loginbg">
 <div id="allpage">
-<header>
-    <div class="wrap">
-        <h2><?=$this->config->item('sitename').(($this->lang->line("slogan")!="")?" - ".$this->lang->line("slogan"):'')?></h2>
-    </div>
-</header>
-<div class="nav">
-    <div class="wrap">
-        <ul>
-            <li><a href="<?= base_url() ?>"
-                   class="<?= (($cat == 'home') ? 'select' : '') ?>">Trang chủ</a></li>
+    <header>
+        <div class="wrap">
+            <h2><?= $this->config->item('sitename') . (($this->lang->line("slogan") != "") ? " - " . $this->lang->line("slogan") : '') ?></h2>
+        </div>
+    </header>
+    <div class="nav">
+        <div class="wrap">
+            <ul>
+                <li><a href="<?= base_url() ?>"
+                       class="<?= (($cat == 'home') ? 'select' : '') ?>">Trang chủ</a></li>
 
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
-<div  id="loginpage">
-<div class="wrap" >
-    <div class="bodycontent_head_inner">
+    <div id="content">
+        <div id="loginpage">
+            <div class="wrap">
+                <div class="bodycontent_head_inner">
 
-        <header class="title">
-            <h1>
-                <b>
-                    Đăng nhập <?= $this->config->item('sitename') ?>
-                </b></h1>
-        </header>
-        <div id="" class="dc-login">
-            <div class="contentpanel">
-                <br>
-                <? if(isset($nofi)):?>
-                <div id="nofication"><?=$nofi;?></div>
-                <? endif;?>
-                <table style="width:100%">
-                    <tbody>
-                    <tr valign="top">
-                        <td style="width:380px">
-                            <form action="" method="post">
-                            <table style="width:100%" cellpadding="2">
+                    <header class="title">
+                        <h1>
+                            <b>
+                                Đăng nhập <?= $this->config->item('sitename') ?>
+                            </b></h1>
+                    </header>
+                    <div id="" class="dc-login">
+                        <div class="contentpanel">
+                            <br>
+                            <? if (isset($nofi)): ?>
+                                <div id="nofication"><?= $nofi; ?></div>
+                            <? endif; ?>
+                            <table style="width:100%">
                                 <tbody>
-                                <tr>
-                                    <td colspan="2">
-                                        <h4>Đăng nhập bằng tài khoản <?= $this->config->item('sitename') ?>:</h4>
-                                    </td>
-                                </tr>
-                                <tr>
+                                <tr valign="top">
+                                    <td style="width:380px">
+                                        <form action="" method="post">
+                                            <table style="width:100%" cellpadding="2">
+                                                <tbody>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <h4>Đăng nhập bằng tài
+                                                            khoản <?= $this->config->item('sitename') ?>
+                                                            :</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr>
 
-                                    <td style="width: 70px">
-                                        Tài khoản
-                                    </td>
-                                    <td>
-                                        <input name="dausername" type="text" id="" tabindex="1" class=""  style="width:80%;">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 70px">
-                                        Mật khẩu
-                                    </td>
-                                    <td>
-                                        <input name="dapassword" type="password"
-                                               id="" tabindex="2" class="" style="width:80%;">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                    </td>
-                                    <td>
-                                        <div style="margin-top: 5px">
-                                            <a id="" tabindex="5"
-                                               href="<?=base_url()?>login/forgetpassword">Quên mật khẩu?</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                    </td>
-                                    <td>
-                                        <input type="submit" name="submit" value="Đăng nhập" id="" tabindex="3" style="font-weight:bold;">
+                                                    <td style="width: 70px">
+                                                        Tài khoản
+                                                    </td>
+                                                    <td>
+                                                        <input name="dausername" type="text" id=""
+                                                               tabindex="1" class=""
+                                                               style="width:80%;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 70px">
+                                                        Mật khẩu
+                                                    </td>
+                                                    <td>
+                                                        <input name="dapassword" type="password"
+                                                               id="" tabindex="2" class=""
+                                                               style="width:80%;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 5px">
+                                                            <a id="" tabindex="5"
+                                                               href="<?= base_url() ?>login/forgetpassword">Quên
+                                                                                                            mật
+                                                                                                            khẩu?</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        <input type="submit" name="submit"
+                                                               value="Đăng nhập" id="" tabindex="3"
+                                                               style="font-weight:bold;">
                                                     <span style="padding-left: 7px;">
-                                                        <input id="" type="checkbox" name="daalwayslogin" tabindex="4">
-                                                        <label >Luôn đăng nhập</label></span>
+                                                        <input id="" type="checkbox"
+                                                               name="daalwayslogin" tabindex="4">
+                                                        <label>Luôn đăng nhập</label></span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </form>
                                     </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            </form>
-                        </td>
-                        <td style="line-height: 1.5">
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="vert">
-                                            <em id="loginstatus">Or</em>
-                                        </div>
-                                    </td>
-                                    <td align="center" style="width: 300px; padding-bottom: 20px; text-align: center;
-                padding-left: 50px;">
-                                        <table style="text-align: left">
+                                    <td style="line-height: 1.5">
+                                        <table>
                                             <tbody>
                                             <tr>
                                                 <td>
-                                                    <h4 style="font-size:1em">
-                                                        Đăng nhập bằng Facebook
+                                                    <div class="vert">
+                                                        <em id="loginstatus">Or</em>
+                                                    </div>
+                                                </td>
+                                                <td align="center" style="width: 300px; padding-bottom: 20px; text-align: center;
+                padding-left: 50px;">
+                                                    <table style="text-align: left">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <h4 style="font-size:1em">
+                                                                    Đăng nhập bằng Facebook
 
-                                                    </h4>                 <br>
-                                                    <a id="lnkFacebook" href="#" onclick="login()"
-                                                       class="btn btn-facebook"
-                                                       style="width: 210px; height: auto; font-size: 17px; pointer-events: auto;">
-                                                        Connect with Facebook
-                                                    </a>
+                                                                </h4>                 <br>
+                                                                <a id="lnkFacebook" href="#"
+                                                                   onclick="login()"
+                                                                   class="btn btn-facebook"
+                                                                   style="width: 210px; height: auto; font-size: 17px; pointer-events: auto;">
+                                                                    Connect with Facebook
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="dc-join">
+                                            <p>
+                                                Bạn chưa có tài khoản?
+                                                <a href="<?= base_url() ?>registration"
+                                                   style="text-decoration: underline">
+                                                    Đăng ký
+                                                </a>
+                                                <span>Hoặc liên hệ Quản Trị Viên</span>
+                                            </p>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
 
+                    </div>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div class="dc-join">
-                                <p>
-                                    Bạn chưa có tài khoản?
-                                    <a href="<?=base_url()?>registration"
-                                       style="text-decoration: underline">
-                                        Đăng ký
-                                    </a>
-                                    <span>Hoặc liên hệ Quản Trị Viên</span>
-                                </p>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <br>
+                </div>
             </div>
-
         </div>
-
-        <br>
     </div>
-</div>
-</div>
-<footer>
-    <div class="wrap">
-        <p>Copyright &copy 2013.</p>
-    </div>
-</footer>
+    <footer>
+        <div class="wrap">
+            <p>Copyright &copy 2013.</p>
+        </div>
+    </footer>
 </div>
 </body>
 </html>

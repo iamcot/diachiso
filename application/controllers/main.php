@@ -26,6 +26,7 @@ class Main extends CI_Controller {
         else $this->crrlang = "vi";
         //default
         $this->lang->load("default", $this->crrlang);
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
 
     }
 

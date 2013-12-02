@@ -347,3 +347,8 @@ footer{
     border-top: 1px solid #000;
     color: #a5a5a5;
 }
+
+.navavatar{
+    max-height: 24px;
+    vertical-align: middle;
+}

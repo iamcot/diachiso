@@ -34,7 +34,7 @@ class Admin extends CI_Controller
         else $this->crrlang = "vi";
         //default
         $this->lang->load("default", $this->crrlang);
-
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
     }
 
     public function index()
@@ -55,6 +55,7 @@ class Admin extends CI_Controller
     public $tbdapic = 'dapic';
     public $tbuser = 'dauser';
     public $tbdeal = 'dadeal';
+    public $tbnews = 'danews';
     public $crrlang = '';
 
     public function render($data = array())
@@ -164,6 +165,29 @@ class Admin extends CI_Controller
         $data['district'] = $this->getAddress($this->tbdistrict, array('daprovince_id' => $data['province'][0]->id), -1);
         $data['ward'] = $this->getAddress($this->tbward, array('dadistrict_id' => $data['district'][0]->id), -1);
         echo $this->load->view('admin/street_v', $data, true);
+    }
+
+    public  function savenews(){
+        $param = array(
+            'dalong_name' => $this->input->post("dalong_name"),
+            'daurl' => $this->input->post("daurl"),
+            'dapic' => $this->input->post("dapic"),
+            'dacontent_short' =>$this->input->post("dacontent_short"),
+            'dacontent' => $this->input->post("dacontent"),
+            'daserviceplace_id' =>   $this->input->post("daserviceplace_id"),
+            'dacat' => $this->input->post("dacat"),
+            'datype' => $this->input->post("datype"),
+            'dacreate' => date("Y-m-d H:i:s"),
+        );
+        if ($this->input->post("edit") != "") //update
+        {
+            $str = $this->db->update_string($this->tbnews, $param, " id = " . $this->input->post("edit"));
+        } else { //insert
+            $str = $this->db->insert_string($this->tbnews, $param);
+
+        }
+        if ($this->db->query($str)) echo 1;
+        else echo 0;
     }
     public  function saveuser(){
         $param = array(
@@ -649,8 +673,8 @@ class Admin extends CI_Controller
         $where = "";
         if ($parent_id != null) {
             foreach ($parent_id as $k => $v) {
-                if ($v > 0)
-                    $where .= ($where != "" ? " AND " : " WHERE ") . $k . " = " . $v;
+                if ($v > 0 || $v != "")
+                    $where .= ($where != "" ? " AND " : " WHERE ") . $k . " = " . "'$v'";
             }
         }
         if ($page >= 0)
@@ -799,6 +823,26 @@ class Admin extends CI_Controller
             $data['serviceplace'] = $rs;
             $data['sumpage'] = $this->getSumPageAddress($this->tbdeal, $param);
             echo $this->load->view("admin/list_deal_v", $data, true);
+        } else echo lang("NO_DATA");
+    }
+    public function loadnews($type, $daserviceplace_id , $page = 1)
+    {
+        $page -= 1;
+        if($type=="service"){
+        $param = array(
+            "daserviceplace_id" => $daserviceplace_id,
+        );
+        }
+        else if($type == "home"){
+            $param = array(
+                "dacat" => $daserviceplace_id,
+            );
+        }
+
+        if (($rs = $this->getService($this->tbnews, $param, $page, array("field" => 'id', 'type' => 'DESC'))) != null) {
+            $data['newslist'] = $rs;
+            $data['sumpage'] = $this->getSumPageAddress($this->tbnews, $param);
+            echo $this->load->view("admin/list_news_v", $data, true);
         } else echo lang("NO_DATA");
     }
     public function loadserviceplace($daprovince_id = 0, $dadistrict_id = 0, $daward_id = 0, $dastreet_id = 0, $daservicegroup_id = 0, $daservice_id = 0, $page = 1)
