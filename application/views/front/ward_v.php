@@ -31,7 +31,7 @@
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-map-marker"></i> Các tuyến đường phố
                 trong <?= $oCurrentWard->dalong_name ?></div>
-            <div class="articlecontent">
+            <div class="articlecontent licolor">
                 <? if(isset($aStreet)  && count($aStreet)>0):?>
                     <ul >
                         <? foreach($aStreet as $dist):?>
