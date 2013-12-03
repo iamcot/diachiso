@@ -11,7 +11,7 @@
             <option value="<?=$dist->id?>"><?=$dist->dalong_name?></option>
         <? endforeach;?>
     </select>
-    <select name="daward_id" onchange="loadProvince(1)">
+    <select name="daward_id">
             <option value="0">Chọn Phường </option>
     </select>
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
@@ -49,6 +49,8 @@
     });
     function saveProvince() {
         var daward_id =  $("select[name=daward_id]").val();
+        var daprovince_id =  $("select[name=daprovince_id]").val();
+        var dadistrict_id =  $("select[name=dadistrict_id]").val();
         var dalong_name = $("input[name=dalong_name]").val();
         var daurl = $("input[name=daurl]").val();
         var dainfo = $("textarea[name=dainfo]").val();
@@ -64,7 +66,9 @@
                           + "&dainfo=" + dainfo
                           + "&damap=" + encodeURIComponent(damap)
                           + "&edit=" + edit
-                          + "&daward_id=" + daward_id,
+                          + "&daward_id=" + daward_id
+                          + "&daprovince_id=" + daprovince_id
+                          + "&dadistrict_id=" + dadistrict_id,
                 success: function (msg) {
                     switch (msg) {
                         case "0":
@@ -125,8 +129,8 @@
                     $("textarea[name=damap]").val(province.damap);
                     $("#damapdemo").html(province.damap)
 
-//                    $("textarea[name=daprovince_id]").val(province.daprovince_id);
-//                    $("textarea[name=dadistrict_id]").val(province.dadistrict_id);
+                    $("textarea[name=daprovince_id]").val(province.daprovince_id);
+                    $("textarea[name=dadistrict_id]").val(province.dadistrict_id);
                 }
             }
         });

@@ -18,8 +18,6 @@
     <meta property="og:url" content="<?="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"?>" />
     <meta property="og:site_name" content="<?=$_SERVER['SERVER_NAME']?>" />
     <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
-
-    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/font-awesome/css/font-awesome.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/frontstyle.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/ckeditor/skins/moono/editor.css">
@@ -39,7 +37,10 @@
 <div id="allpage">
 <div id="topmenu">
     <div class="wrap">
-        <a href="">DigiAddr là gì?</a> | <a href="">Tuyển dụng</a> | <a href="">Hợp tác với DigiAddr</a> | <a href="">Liên hệ</a>
+        <ul>
+        <li><a href="">DigiAddr là gì?</a></li><li><a href="">Tuyển dụng</a></li>
+            <li><a href="">Hợp tác với DigiAddr</a></li><li><a href="">Liên hệ</a></li>
+        </ul>
         <div class="headeruser">
             <? if ($this->session->userdata('dauser_id')): ?>
                 <? if($this->session->userdata('daavatar')!="") echo '<img class="navavatar" src="'.base_url().'thumbnails/'.$this->session->userdata('daavatar').'">';?>
@@ -89,6 +90,7 @@
        // console.log($("#subcat_"+level).html())
         if($("input[name=ajaxloading]").val()=="0" &&  $("#subcat_"+level).html()=="" ){
         $("input[name=ajaxloading]").val("1");
+            addloadgif("#subcat_"+level);
         $.ajax({
             type:"post",
             url:"<?=base_url()?>main/loadsubcat",
@@ -102,7 +104,7 @@
                 });
                 sSubcat += '</ul>';
                 $("#subcat_"+level).html(sSubcat);
-
+                 removeloadgif("#subcat_"+level);
 
                // console.log(sSubcat);
                 //console.log(oSubcats);

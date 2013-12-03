@@ -5,7 +5,7 @@
             <option value="<?=$prov->id?>"><?=$prov->dalong_name?></option>
         <? endforeach;?>
     </select>
-    <select name="dadistrict_id" onchange="loadProvince(1)">
+    <select name="dadistrict_id">
         <? foreach($district as $dist):?>
             <option value="<?=$dist->id?>"><?=$dist->dalong_name?></option>
         <? endforeach;?>
@@ -45,6 +45,7 @@
     });
     function saveProvince() {
         var dadistrict_id =  $("select[name=dadistrict_id]").val();
+        var daprovince_id =  $("select[name=daprovince_id]").val();
         var dalong_name = $("input[name=dalong_name]").val();
         var daurl = $("input[name=daurl]").val();
         var dainfo = $("textarea[name=dainfo]").val();
@@ -60,7 +61,8 @@
                           + "&dainfo=" + dainfo
                           + "&damap=" + encodeURIComponent(damap)
                           + "&edit=" + edit
-                          + "&dadistrict_id=" + dadistrict_id,
+                          + "&dadistrict_id=" + dadistrict_id
+                          + "&daprovince_id=" + daprovince_id,
                 success: function (msg) {
                     switch (msg) {
                         case "0":
@@ -117,8 +119,8 @@
                     $("textarea[name=damap]").val(province.damap);
                     $("#damapdemo").html(province.damap)
 
-//                    $("textarea[name=daprovince_id]").val(province.daprovince_id);
-//                    $("textarea[name=dadistrict_id]").val(province.dadistrict_id);
+                    $("textarea[name=daprovince_id]").val(province.daprovince_id);
+                    $("textarea[name=dadistrict_id]").val(province.dadistrict_id);
                 }
             }
         });

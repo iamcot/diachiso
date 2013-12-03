@@ -44,6 +44,8 @@ $route['404_override'] = '';
 /**
  * route for admin, if not it will be override by home
  */
+$route['login'] = 'login';
+$route['login/(:any)'] = 'login/$1';
 $route['admin'] = 'admin';
 $route['admin/(:any)'] = 'admin/$1';
 $route['admin/(:any)/(:any)'] = 'admin/$1/$2';
@@ -63,6 +65,7 @@ $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/street/$1/
 
 $route['help/(:any)'] = 'main/news/help/$1';
 $route['news/(:any)'] = 'main/news/news/$1';
+
 
 
 

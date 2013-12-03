@@ -1,0 +1,62 @@
+<div id="articlebox">
+    <div id="leftside">
+        <div class="articlebox">
+            <div class="cattitle"><i class="fa fa-map-marker"></i>  <?= $oCurrentStreet->dalong_name ?>, <?= $oCurrentWard->dalong_name ?>,
+                <?= $oCurrentDistrict->dalong_name ?>, <?= $oCurrentProvince->dalong_name ?></div>
+            <div class="articlecontent">
+                <? if ($oCurrentStreet->dainfo != ""): ?>
+                    <div class="articleinfo">
+                        <?= $oCurrentStreet->dainfo ?>
+                    </div>
+                <? endif; ?>
+                <div class="articlemap <?= (($oCurrentStreet->dainfo == "") ? 'width100' : 'width60') ?>">
+                    <?= $oCurrentStreet->damap ?>
+                </div>
+            </div>
+        </div>
+        <div class="articlebox">
+            <div class="cattitle"><i class="fa fa-map-marker"></i>  Các dịch vụ tiêu biểu</div>
+            <div class="articlecontent">
+
+            </div>
+        </div>
+
+
+    </div>
+    <div id="rightside">
+        <div class="articlebox">
+            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $oCurrentStreet->dalong_name ?></div>
+            <div class="articlecontent" id="accordion">
+                <? if (isset($aServiceTree) && count($aServiceTree) > 0): ?>
+                    <? foreach ($aServiceTree as $aServiceGroup): ?>
+                        <h3><?= $aServiceGroup[0] ?></h3>
+                        <div>
+                            <? if (isset($aServiceGroup[1]) && count($aServiceGroup[1]) > 0): ?>
+
+                                <ul>
+                                    <? foreach ($aServiceGroup[1] as $oService): ?>
+                                        <li><a href="?s=<?= $oService->daurl ?>"><i class="fa fa-caret-right"></i>  <?= $oService->dalong_name ?></a></li>
+                                    <? endforeach; ?>
+                                </ul>
+
+                            <? endif; ?>
+                        </div>
+                    <? endforeach; ?>
+                <? endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var icons = {
+            header: "ui-icon-circle-arrow-e",
+            activeHeader: "ui-icon-circle-arrow-s"
+        };
+        $("#accordion").accordion({
+            icons: icons,
+            heightStyle: "content"
+        });
+
+        });
+</script>

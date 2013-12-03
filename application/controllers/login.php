@@ -14,7 +14,7 @@ class Login extends CI_Controller
         $this->lang->load("default", $this->crrlang);
         date_default_timezone_set('Asia/Ho_Chi_Minh');
     }
-
+    public $tbprovince = 'daprovince';
     public function index()
     {
         $nofi = "";
@@ -30,8 +30,13 @@ class Login extends CI_Controller
             $this->session->set_userdata('referer', base_url());
         if ($nofi != "")
             $data["nofi"] = $nofi;
+        $this->load->model("main_m");
         $data['title'] = "Login";
         $data['cat'] = 'admin';
+        $oCurrentProvince = $this->main_m->getProvince();
+        $aNavAddr[$this->tbprovince] = $oCurrentProvince;
+
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbprovince,$aNavAddr);
         $this->render($data);
     }
 

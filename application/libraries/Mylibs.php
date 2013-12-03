@@ -16,14 +16,18 @@ class MyLibs
         $parentid = 0;
         $parentname = "";
         $sAddNav = "";
+        $currurl = base_url();
         foreach ($aAddrTree as $level => $aAddr) {
             $oCurrAdd = $aAddress[$level];
+            if($oCurrAdd == null) header("Location: ".$currurl);
             $sAddNav .= '<li class="parentnav smalltext' . $font . '" onmouseover="ShowSubCat(this,\'' . $parentname . '\',' . $parentid . ',\'' . $level . '\',\''.$sNavCurr.'\')" onmouseout="HideSubCat(\''.$level.'\')">
-                ' . (($font == 10) ? '<i class="fa fa-map-marker"></i> ' : '').''. $oCurrAdd->dalong_name . ' <i class="fa fa-caret-down"></i>
+                ' . (($font == 10) ? '<i class="fa fa-map-marker"></i> ' : '').'<a href="'.$sNavCurr.$oCurrAdd->daurl.'">'. $oCurrAdd->dalong_name . '</a> <i class="fa fa-caret-down"></i>
                 <div class="subnav" id="subcat_' . $level . '" style="display: none;"></div>
                 </li>';
             $parentname = $level;
             $parentid = $oCurrAdd->id;
+            $sNavCurr.= $oCurrAdd->daurl.'/';
+            $currurl.= $oCurrAdd->daurl.'/';
             $font--;
             if($sStopLevel == $level) break;
         }
