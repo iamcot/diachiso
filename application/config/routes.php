@@ -41,6 +41,31 @@
 $route['default_controller'] = "main";
 $route['404_override'] = '';
 
+/**
+ * route for admin, if not it will be override by home
+ */
+$route['admin'] = 'admin';
+$route['admin/(:any)'] = 'admin/$1';
+$route['admin/(:any)/(:any)'] = 'admin/$1/$2';
+$route['admin/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3';
+$route['admin/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4';
+$route['admin/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5';
+$route['admin/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5/$6';
+$route['admin/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5/$6/$7';
+
+
+$route['([a-z0-9-]+)'] = 'main/index/$1';
+$route['main/(:any)'] = 'main/$1';
+$route['([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/district/$1/$2';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/ward/$1/$2/$3';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/street/$1/$2/$3/$4';
+
+
+$route['help/(:any)'] = 'main/news/help/$1';
+$route['news/(:any)'] = 'main/news/news/$1';
+
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

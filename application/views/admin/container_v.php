@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
     <title><?= $title ?></title>
     <link media="screen" type="text/css" rel="stylesheet" href="<?= base_url() ?>src/style.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/ckeditor/skins/moono/editor.css">

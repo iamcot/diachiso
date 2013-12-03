@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+
+
     <title><?= $sTitle ?></title>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="<?=$_SERVER['SERVER_NAME']?> là cổng thông tin tìm kiếm dịch vụ chất lượng nhất Việt Nam. <?=$_SERVER['SERVER_NAME']?> cung cấp hàng trăm nghìn địa điểm dịch vụ và thẻ ưu đãi cho cộng đồng Việt Nam." />
+    <meta name="keyword" content="<?= $sTitle ?>" />
+    <meta name="author" content="<?=$_SERVER['SERVER_NAME']?>">
+    <meta name="robots" content="INDEX, FOLLOW">
+    <meta property="og:title" content="<?= $sTitle ?>" />
+    <meta property="og:image" content="<?=base_url()?>empty.png" />
+    <meta property="og:description" content="<?=$_SERVER['SERVER_NAME']?> là cổng thông tin tìm kiếm dịch vụ chất lượng nhất Việt Nam. <?=$_SERVER['SERVER_NAME']?> cung cấp hàng trăm nghìn địa điểm dịch vụ và thẻ ưu đãi cho cộng đồng Việt Nam." />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="<?="http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"?>" />
+    <meta property="og:site_name" content="<?=$_SERVER['SERVER_NAME']?>" />
+    <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
+
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/font-awesome/css/font-awesome.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/frontstyle.css">
@@ -44,15 +60,7 @@
 <div class="nav">
     <div class="wrap">
         <ul id="navaddr">
-         <?
-         $sNavCurr = "/";
-         $font = 10;
-         $parentid = 0;
-         $parentname = "";
-         foreach($aNavAddr as $level=>$addr):?>
-            <li onmouseover="ShowSubCat(this,'<?=$parentname?>',<?=$parentid?>,'<?=$level?>')" onmouseout=""><a class="smalltext<?=($font)?>" href="<?=($sNavCurr = $sNavCurr.$addr->daurl."/")?>"><? if($font==10):?><i class="fa fa-map-marker"></i> <?endif;?><?=$addr->dalong_name?> <i class="fa fa-caret-down"></i></a> </li>
-             <div id="subcat_<?=$level?>" style="display: none;"></div>
-             <? $parentname=$level;$parentid=$addr->id; $font--; endforeach;?>
+         <?=$aNavAddr?>
         </ul>
 
         <ul id="navservice">
@@ -76,22 +84,39 @@
 </body>
 </html>
 <script>
-    function ShowSubCat(li,parentname,parentid,level){
-        if($("input[name=ajaxloading]").val()=="0" &&  $("#subcat_"+level).val()=="" ){
+    function ShowSubCat(li,parentname,parentid,level,parenturl){
+        //console.log($("input[name=ajaxloading]").val());
+       // console.log($("#subcat_"+level).html())
+        if($("input[name=ajaxloading]").val()=="0" &&  $("#subcat_"+level).html()=="" ){
         $("input[name=ajaxloading]").val("1");
         $.ajax({
             type:"post",
             url:"<?=base_url()?>main/loadsubcat",
             data:"parentname="+parentname+"&parentid="+parentid+"&current="+level,
             success: function(msg){
-                var cats = eval(msg);
-                $("#subcat_"+level).val(msg);
-                console.log(cats);
+                var oSubcats = eval(msg);
+                //$("#subcat_"+level).val(msg);
+                var sSubcat = "<ul class='SubNavAddr'>";
+                $.each(oSubcats, function (index, oCat) {
+                    sSubcat += '<li><a href="'+parenturl+oCat.daurl+'">'+oCat.dalong_name+'</a></li>';
+                });
+                sSubcat += '</ul>';
+                $("#subcat_"+level).html(sSubcat);
+
+
+               // console.log(sSubcat);
+                //console.log(oSubcats);
             },
             complete: function(){
                 $("input[name=ajaxloading]").val("0")
             }
         });
         }
+
+            $("#subcat_"+level).show();
+
     }
+function HideSubCat(level){
+    $('div[id^="subcat_"]').hide();
+}
 </script>

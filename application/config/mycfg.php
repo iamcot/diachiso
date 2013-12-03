@@ -7,3 +7,10 @@ $config['pp'] = 5;
 $config['mapw'] = 400;
 $config['maph'] = 200;
 $config['mapz'] = 15;
+$config['aAddrTree'] = array(  // table,parenttable)
+                               'daprovince' => array('daprovince',''            ),
+                               'dadistrict' => array('dadistrict','daprovince'  ),
+                               'daward'     => array('daward'    ,'dadistrict'  ),
+                               'dastreet'   => array('dastreet'  ,'daward'      ),
+                            );
+

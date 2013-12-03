@@ -32,33 +32,32 @@ class Main extends CI_Controller {
 
     public function index($sCurrentProvince="")//seourl
     {
-        $aProvince = $this->main_m->getProvince();
-        $oCurrentProvince = null;
-
-        if($sCurrentProvince!=""){
-            foreach($aProvince as $row){
-                if($row->daurl == $sCurrentProvince){
-                    $oCurrentProvince = $row;
-                    $sCurrentProvince = $row->daurl;
-                    break;
-                }
-            }
-        }
-        if($sCurrentProvince=="" || $oCurrentProvince == null) {
-            $oCurrentProvince = $aProvince[0];
-        }
-        $data['oCurrentProvince'] = $oCurrentProvince;
+        $oCurrentProvince = $this->main_m->getProvince($sCurrentProvince);
         $data['sTitle'] = $oCurrentProvince->dalong_name;
         $data['sCat'] = 'start';
-        $data['aProvince'] = $aProvince;
         $data['sBody'] = $this->load->view("front/start_v",$data,true);
-        //build navigator address, at start page, only have province
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
-        $aNavAddr[$this->tbdistrict] = $oCurrentProvince;
-        $aNavAddr[$this->tbward] = $oCurrentProvince;
 
-        $data['aNavAddr'] = $aNavAddr;
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbprovince,$aNavAddr);
         $this->render($data);
+    }
+    public function district($province,$daseorul){
+        $oCurrentProvince = $this->main_m->getProvince($province);
+        $oCurrentDistrict = $this->main_m->getDistrict($daseorul);
+        $data['sTitle'] = $oCurrentProvince->dalong_name;
+        $data['sCat'] = 'start';
+        $data['sBody'] = $this->load->view("front/start_v",$data,true);
+        $aNavAddr[$this->tbprovince] = $oCurrentProvince;
+        $aNavAddr[$this->tbdistrict] = $oCurrentDistrict;
+
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbdistrict,$aNavAddr);
+        $this->render($data);
+    }
+    public function ward($province,$district,$daseorul){
+        echo $district.'@'.$daseorul;
+    }
+    public function street($province,$district,$ward,$daseorul){
+        echo $ward.'@'.$daseorul;
     }
 
     public $tbprovince = 'daprovince';
@@ -86,6 +85,9 @@ class Main extends CI_Controller {
         $parentid = $this->input->post('parentid');
         $arr = $this->main_m->getsubcat($parentname,$parentid,$current);
         $this->mylibs->echojson($arr);
+    }
+    public function news($cat,$id){
+        echo 'hellonews';
     }
 }
 

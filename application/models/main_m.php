@@ -14,12 +14,21 @@ class Main_m extends CI_Model
     public $tbdeal = 'dadeal';
     public $crrlang = '';
 
-    public function getProvince()
+    public function getProvince($sCurrProvince="")
     {
-        $sql = "SELECT * FROM " . $this->tbprovince . " WHERE dadeleted = 0 ORDER BY daorder DESC, dalong_name";
+        $where = "";
+        if($sCurrProvince != "") $where =" AND daurl='$sCurrProvince' ";
+        $sql = "SELECT * FROM " . $this->tbprovince . " WHERE dadeleted = 0 $where ORDER BY daorder DESC, dalong_name LIMIT 0,1";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
-            return $qr->result();
+            return $qr->row();
+        } else return null;
+    }
+    public function getDistrict($daseorul){
+        $sql = "SELECT * FROM " . $this->tbdistrict . " WHERE dadeleted = 0 AND daurl='$daseorul' LIMIT 0,1";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            return $qr->row();
         } else return null;
     }
 
