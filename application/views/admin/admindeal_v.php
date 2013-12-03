@@ -47,7 +47,7 @@
                 <tr>
                     <td colspan="2">
                         <label>Tên đầy đủ</label>
-                        <input type="text" name="dalong_name" placeholder="Tên đầy đủ" title="Tên đầy đủ"></td>
+                        <input type="text" name="dalong_name" placeholder="Tên đầy đủ" title="Tên đầy đủ" ></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -112,6 +112,19 @@
     </div>
 </div>
 <script>
+    function dealclear(){
+        $("input[name=dalong_name]").val("");
+        $("input[name=edit]").val("");
+        $("input[name=daurl]").val("");
+        $("select[name=datype]").val("");
+        $("input[name=daamount]").val("");
+        $("input[name=dafrom]").val("");
+        $("input[name=dato]").val("");
+        $("input[name=dldaserviceplace_id]").val("");
+
+        $("textarea[name=daspecial]").val("");
+        $("textarea[name=dacondition]").val("");
+    }
     $(function () {
         $('input[name=dalong_name]').friendurl({id : 'daurl'});
         $( '.ckeditor' ).ckeditor();

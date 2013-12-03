@@ -27,14 +27,37 @@ class Main extends CI_Controller {
         //default
         $this->lang->load("default", $this->crrlang);
         date_default_timezone_set('Asia/Ho_Chi_Minh');
-
+        $this->load->model("main_m");
     }
 
-    public function index()
+    public function index($sCurrentProvince="")//seourl
     {
-        $data['title'] = "Trang chủ";
-        $data['cat'] = 'home';
-        $data['body'] = $this->load->view("front/start_v",$data,true);
+        $aProvince = $this->main_m->getProvince();
+        $oCurrentProvince = null;
+
+        if($sCurrentProvince!=""){
+            foreach($aProvince as $row){
+                if($row->daurl == $sCurrentProvince){
+                    $oCurrentProvince = $row;
+                    $sCurrentProvince = $row->daurl;
+                    break;
+                }
+            }
+        }
+        if($sCurrentProvince=="" || $oCurrentProvince == null) {
+            $oCurrentProvince = $aProvince[0];
+        }
+        $data['oCurrentProvince'] = $oCurrentProvince;
+        $data['sTitle'] = $oCurrentProvince->dalong_name;
+        $data['sCat'] = 'start';
+        $data['aProvince'] = $aProvince;
+        $data['sBody'] = $this->load->view("front/start_v",$data,true);
+        //build navigator address, at start page, only have province
+        $aNavAddr[$this->tbprovince] = $oCurrentProvince;
+        $aNavAddr[$this->tbdistrict] = $oCurrentProvince;
+        $aNavAddr[$this->tbward] = $oCurrentProvince;
+
+        $data['aNavAddr'] = $aNavAddr;
         $this->render($data);
     }
 
@@ -52,8 +75,17 @@ class Main extends CI_Controller {
 
     public function render($data = array())
     {
-        $data['title'] = $data['title'].' - '.$this->config->item('sufix_title');
+        //get navigator service group
+        $data['aNavService'] = $this->main_m->getNavService();
+        $data['sTitle'] = $data['sTitle'].' - '.$this->config->item('sufix_title');
         $this->load->view('container_v', $data);
+    }
+    public function loadsubcat(){
+        $current = $this->input->post('current');
+        $parentname = $this->input->post('parentname');
+        $parentid = $this->input->post('parentid');
+        $arr = $this->main_m->getsubcat($parentname,$parentid,$current);
+        $this->mylibs->echojson($arr);
     }
 }
 

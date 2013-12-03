@@ -65,6 +65,7 @@
             <?= (isset($body) ? $body : "") ?>
         </div>
     </div>
+    <input type="hidden" name="base_url" value="<?=base_url()?>">
     <div style="clear: both;"></div>
     <footer>
         <div class="wrap">

@@ -138,3 +138,14 @@ function reloadmap() {
     $("#damapdemo").html(map);
 
 }
+function checkexitsseourl(table,catname,catval,url){
+    $.ajax({
+        type:"post",
+        url: $("input[name=base_url]").val()+"admin/checkexitsseourl",
+        data: "table="+table+"&catname="+catname+"&url="+url+"&catval="+catval,
+        success: function(msg){
+            if(msg==1) return true;
+            else return false;
+        }
+    })
+}

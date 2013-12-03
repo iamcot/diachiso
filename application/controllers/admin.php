@@ -450,6 +450,12 @@ class Admin extends CI_Controller
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+    public function hidenews($id, $status)
+    {
+        $str = $this->db->update_string($this->tbnews, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
+        if ($this->db->query($str)) echo 1;
+        else echo 0;
+    }
     public function hidedeal($id, $status)
     {
         $str = $this->db->update_string($this->tbdeal, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
@@ -506,6 +512,26 @@ class Admin extends CI_Controller
         else echo 0;
     }
 
+    public function loadeditnews($id)
+    {
+        $sql = "SELECT * FROM " . $this->tbnews . " WHERE id=$id";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            $row = $qr->row();
+            $this->mylibs->echojson(array(
+                'id' => $row->id,
+                'dalong_name' => $row->dalong_name,
+                'daurl' => $row->daurl,
+                'dapic' => $row->dapic,
+                'id' => $row->id,
+                'dacontent_short' => $row->dacontent_short,
+                'dacontent' => $row->dacontent,
+                'datype' => $row->datype,
+                'dacat' => $row->dacat,
+                'daserviceplace_id' => $row->daserviceplace_id,
+            ));
+        } else echo '0';
+    }
     public function loadeditservicegroup($id)
     {
         $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE id=$id";
@@ -673,7 +699,7 @@ class Admin extends CI_Controller
         $where = "";
         if ($parent_id != null) {
             foreach ($parent_id as $k => $v) {
-                if ($v > 0 || $v != "")
+                if ($v > 0 || strlen($v) >= 3)
                     $where .= ($where != "" ? " AND " : " WHERE ") . $k . " = " . "'$v'";
             }
         }
@@ -691,8 +717,8 @@ class Admin extends CI_Controller
         $where = "";
         if ($parent_id != null) {
             foreach ($parent_id as $k => $v) {
-                if ($v > 0)
-                    $where .= ($where != "" ? " AND " : " WHERE ") . $k . " = " . $v;
+                if ($v > 0 || strlen($v) >= 3)
+                    $where .= ($where != "" ? " AND " : " WHERE ") . $k . " = " . "'$v'";
             }
         }
         $sql = "SELECT count(id) numid FROM " . $table . $where;
@@ -978,6 +1004,16 @@ class Admin extends CI_Controller
 
         }
         echo $kq;
+    }
+    public function checkexitsseourl(){
+        $table  = $this->input->post("table");
+        $catname = $this->input->post("catname");
+        $catval  = $this->input->post("catval");
+        $url     = $this->input->post("url");
+        $sql="SELECT count(id) numrow FROM ".$table." WHERE $catname='$catval' AND daurl='$url'";
+        $qr = $this->db->query($sql);
+        if($qr->row()->numrow == 0) echo 0;
+        else echo 1;
     }
 }
 

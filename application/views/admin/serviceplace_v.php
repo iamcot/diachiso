@@ -145,7 +145,18 @@
         location.href = "<?=base_url()?>admin/deal/"+id;
     }
     function morenews(){
+        var id = $("input[name=edit]").val();
+        if(id == "") {
+            alert("Chưa có dịch vụ, xin hãy chọn 1 dịch vụ trước.");
+            return;
+        }
+
+        $("input[name=datype]").filter('[value=service]').prop('checked', true);
+        $("input[name=newsdaserviceplace_id]").val(id);
+        $("#newsforhome").hide();
+        $("#newsforservice").show();
         $( "#tabs" ).tabs( "option", "active", 4 );
+        loadnews(1);
     }
     function saveProvince() {
         var daservicegroup_id = $("select[name=daservicegroup_id]").val();

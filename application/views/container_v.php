@@ -2,9 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><?= $title ?></title>
+    <title><?= $sTitle ?></title>
+    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/font-awesome/css/font-awesome.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/frontstyle.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/ckeditor/skins/moono/editor.css">
+
     <link type="text/css" rel="stylesheet"
           href="<?= base_url() ?>src/smoothness/jquery-ui-1.10.3.custom.css">
     <script src="<?= base_url() ?>src/jquery.min.js"></script>
@@ -37,24 +40,58 @@
         <h2><?= $this->config->item('sitename') . (($this->lang->line("slogan") != "") ? " - " . $this->lang->line("slogan") : '') ?></h2>
     </div>
 </header>
+    <div id="topbanner"><?=((isset($topbanner) && $cat=="start")?$topbanner:'')?></div>
 <div class="nav">
     <div class="wrap">
-        <ul>
-            <li><a href="<?= base_url() ?>"
-                   class="<?= (($cat == 'home') ? 'select' : '') ?>">Trang chủ</a></li>
-
+        <ul id="navaddr">
+         <?
+         $sNavCurr = "/";
+         $font = 10;
+         $parentid = 0;
+         $parentname = "";
+         foreach($aNavAddr as $level=>$addr):?>
+            <li onmouseover="ShowSubCat(this,'<?=$parentname?>',<?=$parentid?>,'<?=$level?>')" onmouseout=""><a class="smalltext<?=($font)?>" href="<?=($sNavCurr = $sNavCurr.$addr->daurl."/")?>"><? if($font==10):?><i class="fa fa-map-marker"></i> <?endif;?><?=$addr->dalong_name?> <i class="fa fa-caret-down"></i></a> </li>
+             <div id="subcat_<?=$level?>" style="display: none;"></div>
+             <? $parentname=$level;$parentid=$addr->id; $font--; endforeach;?>
         </ul>
 
+        <ul id="navservice">
+            <? foreach($aNavService as $row):?>
+                <li><a><?=$row->dalong_name?></a></li>
+            <? endforeach;?>
+        </ul>
     </div>
 </div>
 <div id="content" class="wrap">
-    <?= (isset($body) ? $body : "") ?>
+    <?= (isset($sBody) ? $sBody : "") ?>
 </div>
 <footer>
     <div class="wrap">
         <p>Copyright &copy 2013.</p>
     </div>
 </footer>
+    <input type="hidden" name="base_url" value="<?=base_url()?>">
+    <input type="hidden" name="ajaxloading" value="0">
 </div>
 </body>
 </html>
+<script>
+    function ShowSubCat(li,parentname,parentid,level){
+        if($("input[name=ajaxloading]").val()=="0" &&  $("#subcat_"+level).val()=="" ){
+        $("input[name=ajaxloading]").val("1");
+        $.ajax({
+            type:"post",
+            url:"<?=base_url()?>main/loadsubcat",
+            data:"parentname="+parentname+"&parentid="+parentid+"&current="+level,
+            success: function(msg){
+                var cats = eval(msg);
+                $("#subcat_"+level).val(msg);
+                console.log(cats);
+            },
+            complete: function(){
+                $("input[name=ajaxloading]").val("0")
+            }
+        });
+        }
+    }
+</script>

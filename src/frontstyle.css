@@ -4,7 +4,7 @@
 }
 html,body{
     font-size:100%;
-    font-family: Helvetica, arial, freesans, clean, sans-serif;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     color:#444;
     height:100%;
 }
@@ -38,7 +38,7 @@ b, strong{
     font-weight: bold;
 }
 .title b{
-    font-weight: 500;
+    font-weight: bold;
 }
 fieldset
 {
@@ -109,13 +109,14 @@ header{
     border-bottom: 1px solid #eee;
     color: #444;
     min-height: 44px;
-    padding: 14px 0px 13px 0px;
+    padding: 10px 0px 5px 0px;
 }
 
 header h2{
     float: left;
-    font-size: 32px;
-    font-weight: 300;
+    letter-spacing: -0.06em;
+    font-size: 28px;
+    font-weight: bolder;
     line-height: 1.375;
     margin: 0;
     text-shadow: -1px -1px white, 1px 1px #ccc;
@@ -162,21 +163,74 @@ a:hover{
 .nav ul li{
     float: left;
     height: 36px;
-    line-height: 2.4;
+    line-height: 56px;
+}
+.nav a:hover{
+            text-decoration: none;
+}
+ul{
+    margin-left:0;
 }
 .nav ul li a{
-    display: block;
+
+    /*display: block;*/
     height: 36px;
     margin: 0 7px 0 0;
-    padding: 0 15px 0 15px;
+    padding: 0 7px 0 7px;
     position: relative;
     overflow: hidden;
+    vertical-align: text-bottom;
+
 }
-.nav ul li a:hover,
-.nav ul li a.select{
+#navaddr li a{
+
+    /*display: block;*/
+    height: 36px;
+    margin: 0 7px 0 0;
+    padding: 0 !important;
+    position: relative;
+    overflow: hidden;
+    vertical-align: text-bottom;
+
+}
+#navservice .nav ul li a:hover,
+#navservice .nav ul li a.select{
     background: #f5f5f5;
-    font-weight: bold;
     text-decoration: none;
+}
+
+#navservice{
+    float:right;
+    display: block;
+    text-transform: uppercase;
+    font-weight: bolder;
+}
+#navaddr{
+    float:left;
+    display: block;
+}
+
+#navaddr a{
+    vertical-align: text-bottom;
+    line-height: 56px;
+}
+.smalltext10{
+    font-size:1.3em;
+}
+.smalltext9{
+    font-size:1em;
+}
+.smalltext8{
+    font-size:.95em;
+}
+.smalltext7{
+    font-size:.9em;
+}
+.smalltext6{
+    font-size:.85em;
+}
+.smalltext5{
+    font-size:.85em;
 }
 
 .ui-tabs-vertical { width: 100%; }
@@ -345,6 +399,9 @@ Pagination
 #loginbg{
     background: transparent url(img/html.png) repeat 0 0;
 }
+#loginbg .nav ul li{
+    line-height: 36px;
+}
 #loginbg .nav{
     margin-bottom: 0 !important;
 }
@@ -359,14 +416,13 @@ Pagination
 }
 #loginpage h1 {
     color: #177BA4;
-    margin: 0;
-    margin-top: 15px;
+    margin: 0 0 10px 0;
     padding: 0;
 }
 #loginpage h1 {
-    font-weight: 900;
-    font-family: "museo_sans_500", Arial, sans-serif;
-    letter-spacing: -0.05em;
+    font-weight: bolder;
+    font-family: arial, freesans, clean, sans-serif;
+    letter-spacing: -0.08em;
     line-height: 40px;
     text-rendering: optimizelegibility;
     display: inline-block;
@@ -395,7 +451,7 @@ Pagination
 #nofication{
     font-family: Consolas, Monaco, Courier New, Courier, monospace;
     font-size: 13px;
-    background-color: #fffacd;
+    background-color: #FBE6F2;
     border: 1px solid #CC0000;
     color: #002166;
     display: block;
@@ -440,4 +496,5 @@ footer{
 .navavatar{
     max-height: 20px;
     vertical-align: middle;
+    border:1px solid #aaa;
 }

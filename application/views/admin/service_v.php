@@ -77,9 +77,6 @@
                    onclick="tabloadService('news',0,'newsdaserviceplace_id','#newsservicedalong_name','#newsserviceprovince','#newsservice','#newsservicedapic','#newsstatus')">
             <input type="button" value="Load Dịch vụ mới nhất"
                    onclick="tabloadService('news',1,'newsdaserviceplace_id','#newsservicedalong_name','#newsserviceprovince','#newsservice','#newsservicedapic','#newsstatus')">
-            <input type="button" value="Lưu" onclick="savepic()">
-            <input type="button" value="Bỏ qua" onclick="cancel()">
-
             <table>
                 <tr>
                     <td>
@@ -157,11 +154,63 @@
                 </tr>
             </table>
         </fieldset>
+        <fieldset>
+            <legend>Danh sách bài viết</legend>
         <div id="listnews"></div>
+        </fieldset>
     </div>
 
 </div>
 <script>
+function newsclearinput(){
+    $("input[name=newsdalong_name]").val("");
+    $("input[name=newsedit]").val("");
+    $("input[name=newsdaurl]").val("");
+
+
+    $("input[name=newsdapic]").val("");
+    $("textarea[name=dacontent_short]").val("");
+    $("textarea[name=dacontent]").val("");
+    $("#newspicdemo").html('');
+}
+function editnews(id) {
+//        $("select[name=daprovince_id]").val(3);
+    addloadgif("#newsstatus");
+    $.ajax({
+        type: "post",
+        url: "<?=base_url()?>admin/loadeditnews/" + id,
+        success: function (msg) {
+            if (msg == "0") alert('<?=lang("NO_DATA")?>');
+            else {
+                var province = eval(msg);
+                $("input[name=newsdalong_name]").val(province.dalong_name);
+                $("input[name=newsedit]").val(province.id);
+                $("input[name=newsdaurl]").val(province.daurl);
+                if(province.datype == "service"){
+                    $("input[name=datype]").filter('[value=service]').prop('checked', true);
+
+                    $("input[name=newsdaserviceplace_id]").val(province.daserviceplace_id);
+                    $("#newsforhome").hide();
+                    $("#newsforservice").show();
+
+                }
+                else if(province.datype == "home"){
+                    $("input[name=datype]").filter('[value=home]').prop('checked', true);
+
+                    $("select[name=dacats]").val(province.dacat);
+                    $("#newsforservice").hide();
+                    $("#newsforhome").show();
+                }
+
+                $("input[name=newsdapic]").val(province.dapic);
+                $("textarea[name=dacontent_short]").val(province.dacontent_short);
+                $("textarea[name=dacontent]").val(province.dacontent);
+                $("#newspicdemo").html('<img src="<?=base_url()?>thumbnails/'+province.dapic+'">');
+                removeloadgif("#newsstatus");
+            }
+        }
+    });
+}
 function savenews(){
     var type = $("input[name=datype]:checked").val();
     var daserviceplace_id = "";
@@ -196,6 +245,7 @@ function savenews(){
                  + "&dacontent_short=" + dacontent_short
                  + "&daserviceplace_id=" + daserviceplace_id
                  + "&dacat=" + dacat
+                 + "&edit=" + edit
                  + "&datype=" + type,
         success: function(msg){
             switch (msg) {
@@ -208,7 +258,7 @@ function savenews(){
                     addsavegif("newsstatus");
                     removeloadgif("newsstatus");
                     loadnews($("input[name=newscurrpage]").val());
-
+                    newsclearinput();
                     //provinceclear();
 
                     break;
@@ -246,7 +296,7 @@ function changenewstype() {
     if (type == "home") {
         $("#newsforservice").hide();
         $("#newsforhome").show();
-
+        loadnews(1);
     }
     else if (type == "service") {
         $("#newsforhome").hide();
@@ -346,6 +396,9 @@ function tabloadService(
                 $("input[name=" + namedaserviceplace_id + "]").val(province.id);
                 if (mod == "pic") {
                     loadoldpic();
+                }
+                else if(mod == "news"){
+                    loadnews(1);
                 }
             }
             removeloadgif(idstatus);
@@ -513,5 +566,18 @@ function updateoldpic() {
         });
     }
 }
-
+function hidenews(id, status) {
+    $.ajax({
+        type: "post",
+        url: "<?=base_url()?>admin/hidenews/" + id + "/" + status,
+        success: function (msg) {
+            if (msg == "1") {
+                loadnews($("input[name=currpage]").val());
+            }
+            else {
+                alert("Thao tác thất bại!");
+            }
+        }
+    });
+}
 </script>
