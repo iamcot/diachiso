@@ -52,7 +52,7 @@ class Main extends CI_Controller {
         $data['oCurrentProvince'] = $oCurrentProvince;
         $data['aWard'] = $this->main_m->getsubcat($this->tbdistrict, $oCurrentDistrict->id, $this->tbward);
         $data['sTitle'] = $oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
-        $data['aServiceTree'] = $this->main_m->getFullServiceTree();
+        $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$this->tbdistrict."_id","v"=>$oCurrentDistrict->id));
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/';
         //$data['sCat'] = 'start';
         $data['aStreet'] = $this->main_m->getStreet($oCurrentProvince->id,$oCurrentDistrict->id,0);
@@ -75,7 +75,7 @@ class Main extends CI_Controller {
         $data['aStreet'] = $this->main_m->getStreet($oCurrentProvince->id,$oCurrentDistrict->id,$oCurrentWard->id);
 //        $data['aStreet'] = $this->main_m->getsubcat($this->tbward, $oCurrentWard->id, $this->tbstreet);
         $data['sTitle'] = $oCurrentWard->dalong_name.','.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
-        $data['aServiceTree'] = $this->main_m->getFullServiceTree();
+        $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$this->tbward."_id","v"=>$oCurrentWard->id));
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/';
         //$data['sCat'] = 'start';
         $data['sBody'] = $this->load->view("front/ward_v",$data,true);
@@ -97,7 +97,7 @@ class Main extends CI_Controller {
         $data['oCurrentWard'] = $oCurrentWard;
         $data['oCurrentStreet'] = $oCurrentStreet;
         $data['sTitle'] = $oCurrentStreet->dalong_name.', '.$oCurrentWard->dalong_name.','.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
-        $data['aServiceTree'] = $this->main_m->getFullServiceTree();
+        $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$this->tbstreet."_id","v"=>$oCurrentStreet->id));
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/'.$oCurrentWard->daurl.'/';
         //$data['sCat'] = 'start';
         $data['sBody'] = $this->load->view("front/street_v",$data,true);

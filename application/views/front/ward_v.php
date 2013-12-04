@@ -48,18 +48,18 @@
             <div class="articlecontent" id="accordion">
                 <? if (isset($aServiceTree) && count($aServiceTree) > 0): ?>
                     <? foreach ($aServiceTree as $aServiceGroup): ?>
-                        <h3><?= $aServiceGroup[0] ?></h3>
-                        <div>
-                            <? if (isset($aServiceGroup[1]) && count($aServiceGroup[1]) > 0): ?>
 
+                        <? if (isset($aServiceGroup[1]) && count($aServiceGroup[1]) > 0): ?>
+                            <h3><?= $aServiceGroup[0] ?></h3>
+                            <div>
                                 <ul>
                                     <? foreach ($aServiceGroup[1] as $oService): ?>
-                                        <li><a href="?s=<?= $oService->daurl ?>"><i class="fa fa-caret-right"></i>  <?= $oService->dalong_name ?></a></li>
+                                        <li><a href="?s=<?= $oService->daurl ?>"><i class="fa fa-caret-right"></i>  <?= $oService->dalong_name ?> (<?=$oService->numplace?>)</a></li>
                                     <? endforeach; ?>
                                 </ul>
+                            </div>
+                        <? endif; ?>
 
-                            <? endif; ?>
-                        </div>
                     <? endforeach; ?>
                 <? endif; ?>
             </div>

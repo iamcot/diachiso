@@ -107,9 +107,13 @@ class Main_m extends CI_Model
         else return null;
     }
 
-    public function getFullServiceTree()
+    public function getFullServiceTree($param = null)
     {
-        $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dadeleted=0 ORDER BY dashowhome DESC, dalong_name";
+        $where ="";
+        if($param != null){
+            $where = " AND p.".$param['k']." = '".$param['v']."' ";
+        }
+        $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dadeleted=0  ORDER BY dashowhome DESC, dalong_name";
         $qr = $this->db->query($sql);
         $aServiceTree = array();
         if ($qr->num_rows() > 0) {
@@ -118,12 +122,13 @@ class Main_m extends CI_Model
             foreach ($rs as $aServiceGroupItem) {
                 $aServiceTree[$aServiceGroupItem->id][0] = $aServiceGroupItem->dalong_name;
             }
-            $sql = "SELECT * FROM " . $this->tbservice_item . " WHERE dadeleted=0 ORDER BY dalong_name";
+            $sql = "SELECT s.*, (SELECT count(p.id) FROM ".$this->tbservice_place." p WHERE p.daservice_id=s.id $where ) numplace FROM " . $this->tbservice_item . " s WHERE s.dadeleted=0 ORDER BY s.dalong_name";
             $qr = $this->db->query($sql);
             if ($qr->num_rows() > 0) {
                 $rs = $qr->result();
                 foreach ($rs as $aServiceItem) {
-                    $aServiceTree[$aServiceItem->daservicegroup_id][1][] = $aServiceItem;
+                    if($aServiceItem->numplace > 0)
+                        $aServiceTree[$aServiceItem->daservicegroup_id][1][] = $aServiceItem;
                 }
             }
         }
