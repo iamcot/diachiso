@@ -37,6 +37,8 @@ class Main extends CI_Controller {
         $data['sCat'] = 'start';
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/';
         $data['aDistrict'] = $this->main_m->getsubcat($this->tbprovince, $oCurrentProvince->id, $this->tbdistrict);
+        $data['sServicePlace_hot'] = $this->main_m->getHomeServicePlace("hot",$oCurrentProvince->id);
+        $data['sServicePlace_new'] = $this->main_m->getHomeServicePlace("new",$oCurrentProvince->id);
         $data['sBody'] = $this->load->view("front/start_v",$data,true);
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
 
@@ -107,6 +109,32 @@ class Main extends CI_Controller {
         $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbstreet,$aNavAddr);
         $this->render($data);
     }
+    public function serviceplace($province,$district,$ward,$daseorul,$seourl){
+        $oCurrentProvince = $this->main_m->getProvince($province);
+        $oCurrentDistrict = $this->main_m->getDistrict($oCurrentProvince->id,$district);
+        $oCurrentWard = $this->main_m->getWard($oCurrentDistrict->id,$ward);
+        $oCurrentStreet = $this->main_m->getStreet($oCurrentProvince->id,$oCurrentDistrict->id,$oCurrentWard->id,$daseorul);
+        if($oCurrentStreet != null) $oCurrentStreet = $oCurrentStreet[0];
+        $place_id = $this->mylibs->getIdFromSeourl($seourl);
+        $oCurrentPlace = $this->main_m->getServicePlace($place_id);
+        $data['oCurrentDistrict'] = $oCurrentDistrict;
+        $data['oCurrentProvince'] = $oCurrentProvince;
+        $data['oCurrentWard'] = $oCurrentWard;
+        $data['oCurrentStreet'] = $oCurrentStreet;
+        $data['oCurrentPlace'] = $oCurrentPlace;
+        $data['sTitle'] = $oCurrentPlace->dalong_name.', '.$oCurrentStreet->dalong_name.', '.$oCurrentWard->dalong_name.','.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
+        $data['aServiceTree'] = $this->main_m->getFullServiceTree();
+        $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/'.$oCurrentWard->daurl.'/'.$oCurrentStreet->daurl.'/';
+        //$data['sCat'] = 'start';
+        $data['sBody'] = $this->load->view("front/serviceplace_v",$data,true);
+        $aNavAddr[$this->tbprovince] = $oCurrentProvince;
+        $aNavAddr[$this->tbdistrict] = $oCurrentDistrict;
+        $aNavAddr[$this->tbward] = $oCurrentWard;
+        $aNavAddr[$this->tbstreet] = $oCurrentStreet;
+
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbstreet,$aNavAddr);
+        $this->render($data);
+    }
 
     public $tbprovince = 'daprovince';
     public $tbdistrict = 'dadistrict';
@@ -136,6 +164,16 @@ class Main extends CI_Controller {
     }
     public function news($cat,$id){
         echo 'hellonews';
+    }
+    public function makethumb(){
+        $filename = $this->input->get("f");
+        $width = $this->input->get("w");
+        $height = $this->input->get("h");
+        $file_path =  dirname($_SERVER['SCRIPT_FILENAME']) . '/././images/';
+        $thumb = $this->mylibs->makeThumbnails($file_path,$filename,$width,$height);
+        header('Content-Type: image/jpeg');
+        imagepng($thumb);
+        imagedestroy($thumb);
     }
 }
 

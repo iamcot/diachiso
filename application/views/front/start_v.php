@@ -28,7 +28,20 @@
     <div id="leftside">
         <div class="articlebox">
             <div class="cattitle">Địa chỉ được quan tâm</div>
-            <div class="articlecontent"></div>
+            <div class="articlecontent">
+                <? if(count($sServicePlace_hot)>0):?>
+                    <ul class="bxslider">
+                        <? foreach($sServicePlace_hot as $place):?>
+                            <li>
+                                <a href="<?=$this->mylibs->makePlaceUrl($place)?>">
+                                <img src="<?=base_url()?>main/makethumb/?f=<?=$place->dapic?>&w=320&h=200"
+                                title="<?=$place->dalong_name.'<br>'.$place->provincename?>">
+                                </a>
+                            </li>
+                        <? endforeach;?>
+                    </ul>
+                <? endif;?>
+            </div>
         </div>
         <div class="articlebox">
             <div class="cattitle">Gợi ý dịch vụ</div>
@@ -36,7 +49,20 @@
         </div>
         <div class="articlebox">
             <div class="cattitle">Địa chỉ mới</div>
-            <div class="articlecontent"></div>
+            <div class="articlecontent">
+                <? if(count($sServicePlace_new)>0):?>
+                    <ul class="bxslider">
+                        <? foreach($sServicePlace_new as $place):?>
+                            <li>
+                                <a href="<?=$this->mylibs->makePlaceUrl($place)?>">
+                                    <img src="<?=base_url()?>main/makethumb/?f=<?=$place->dapic?>&w=320&h=200"
+                                         title="<?=$place->dalong_name.'<br>'.$place->provincename?>">
+                                </a>
+                            </li>
+                        <? endforeach;?>
+                    </ul>
+                <? endif;?>
+            </div>
         </div>
         <div class="articlebox">
             <div class="cattitle">Dịch vụ phổ biến</div>
@@ -63,3 +89,16 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+ $(".bxslider").bxSlider({
+     captions: true,
+     auto: true,
+     autoControls: true,
+     minSlides: 2,
+     maxSlides: 2,
+     slideWidth: 320,
+     slideMargin: 10
+ });
+});
+</script>

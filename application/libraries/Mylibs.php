@@ -8,7 +8,7 @@ class MyLibs
 
     public $CI;
 
-    public function makeNavAddr($sStopLevel,$aAddress)
+    public function makeNavAddr($sStopLevel, $aAddress)
     {
         $aAddrTree = $this->CI->config->item('aAddrTree');
         $sNavCurr = "/";
@@ -19,17 +19,17 @@ class MyLibs
         $currurl = base_url();
         foreach ($aAddrTree as $level => $aAddr) {
             $oCurrAdd = $aAddress[$level];
-            if($oCurrAdd == null) header("Location: ".$currurl);
-            $sAddNav .= '<li class="parentnav smalltext' . $font . '" onmouseover="ShowSubCat(this,\'' . $parentname . '\',' . $parentid . ',\'' . $level . '\',\''.$sNavCurr.'\')" onmouseout="HideSubCat(\''.$level.'\')">
-                ' . (($font == 10) ? '<i class="fa fa-map-marker"></i> ' : '').'<a href="'.$sNavCurr.$oCurrAdd->daurl.'">'. $oCurrAdd->dalong_name . '</a> <i class="fa fa-caret-down"></i>
+            if ($oCurrAdd == null) header("Location: " . $currurl);
+            $sAddNav .= '<li class="parentnav smalltext' . $font . '" onmouseover="ShowSubCat(this,\'' . $parentname . '\',' . $parentid . ',\'' . $level . '\',\'' . $sNavCurr . '\')" onmouseout="HideSubCat(\'' . $level . '\')">
+                ' . (($font == 10) ? '<i class="fa fa-map-marker"></i> ' : '') . '<a href="' . $sNavCurr . $oCurrAdd->daurl . '">' . $oCurrAdd->dalong_name . '</a> <i class="fa fa-caret-down"></i>
                 <div class="subnav" id="subcat_' . $level . '" style="display: none;"></div>
                 </li>';
             $parentname = $level;
             $parentid = $oCurrAdd->id;
-            $sNavCurr.= $oCurrAdd->daurl.'/';
-            $currurl.= $oCurrAdd->daurl.'/';
+            $sNavCurr .= $oCurrAdd->daurl . '/';
+            $currurl .= $oCurrAdd->daurl . '/';
             $font--;
-            if($sStopLevel == $level) break;
+            if ($sStopLevel == $level) break;
         }
         return $sAddNav;
     }
@@ -137,6 +137,92 @@ class MyLibs
                 break;
         }
         return $acees;
+    }
+
+    public function makePlaceUrl($place)
+    {
+        return base_url() . $place->provinceurl . '/' . $place->districturl . '/' . (($place->wardurl != '') ? $place->wardurl . '/' : '') . (($place->streeturl != '') ? $place->streeturl . '/' : '') . $place->daurl . '-' . $place->id . '.html';
+    }
+
+    public function makeThumbnails($file_path, $file_name, $width, $height)
+    {
+        $file_path = $file_path . $file_name;
+
+        list($img_width, $img_height) = @getimagesize($file_path);
+        if (!$img_width || !$img_height) {
+            return false;
+        }
+
+        $ratew = $width/$img_width;
+        $rateh = $height/$img_height;
+
+        $rate = ($ratew>$rateh)?$ratew:$rateh; //lay rate cao hon
+        $tmpw = $width / $rate;
+        $tmph = $height / $rate;
+
+       // if ($img_height < $img_width) {
+
+            if($tmph < $img_height)
+            $offH = ($img_height - $tmph) /2;
+            else $offH = ($tmph - $img_height) /2;
+
+            if($tmpw < $img_width)
+            $offW = ($img_width - $tmpw ) / 2;
+            else $offW = ($tmpw - $img_width) / 2;
+       // }
+//        elseif ($img_height > $img_width) {
+//            $offW = 0;
+//            $offH = ($img_height - $img_width) / 2;
+//            $img_height = $img_width;
+//        }
+//        else {
+//            $offW = 0;
+//            $offH = 0;
+//        }
+        $new_img = @imagecreatetruecolor($width, $height);
+        switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
+            case 'jpg':
+            case 'jpeg':
+                $src_img = @imagecreatefromjpeg($file_path);
+                //$write_image = 'imagejpeg';
+                //$image_quality = isset($options['jpeg_quality']) ?
+                //    $options['jpeg_quality'] : 80;
+                break;
+            case 'gif':
+                @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
+                $src_img = @imagecreatefromgif($file_path);
+                //$write_image = 'imagegif';
+                $image_quality = null;
+                break;
+            case 'png':
+                @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
+                @imagealphablending($new_img, false);
+                @imagesavealpha($new_img, true);
+                $src_img = @imagecreatefrompng($file_path);
+                //$write_image = 'imagepng';
+                //$image_quality = isset($options['png_quality']) ?
+                //    $options['png_quality'] : 9;
+                break;
+            default:
+                $src_img = null;
+        }
+
+        @imagecopyresampled(
+            $new_img,
+            $src_img,
+            0, 0, $offW, $offH,
+            $width,
+            $height,
+            $tmpw,
+            $tmph
+        );
+        @imagedestroy($src_img);
+        return $new_img;
+    }
+    function getIdFromSeourl($seourl){
+        $a = explode(".",$seourl);
+        $l = explode("-",$a[0]);
+        return end($l);
     }
 
 }

@@ -22,8 +22,7 @@
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/frontstyle.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/ckeditor/skins/moono/editor.css">
 
-    <link type="text/css" rel="stylesheet"
-          href="<?= base_url() ?>src/smoothness/jquery-ui-1.10.3.custom.css">
+    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/smoothness/jquery-ui-1.10.3.custom.css">
     <script src="<?= base_url() ?>src/jquery.min.js"></script>
     <script src="<?= base_url() ?>src/mylib.js"></script>
     <script src="<?= base_url() ?>src/jquery-ui-min.js"></script>
@@ -31,6 +30,9 @@
     <script src="<?= base_url() ?>src/jupload/vendor/jquery.ui.widget.js"></script>
     <script src="<?= base_url() ?>src/jupload/jquery.iframe-transport.js"></script>
     <script src="<?= base_url() ?>src/jupload/jquery.fileupload.js"></script>
+    <script src="<?= base_url() ?>src/jquery.bxslider/jquery.bxslider.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="<?= base_url() ?>src/jquery.bxslider/jquery.bxslider.css">
+
 </head>
 
 <body>

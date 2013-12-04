@@ -14,3 +14,6 @@ $config['aAddrTree'] = array(  // table,parenttable)
                                'dastreet'   => array('dastreet'  ,'daward'      ),
                             );
 
+$config['iHomeServicePlae'] = 10;
+
+$config['iHomeCatDeal'] = 6;

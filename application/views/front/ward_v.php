@@ -35,7 +35,7 @@
                 <? if(isset($aStreet)  && count($aStreet)>0):?>
                     <ul >
                         <? foreach($aStreet as $dist):?>
-                            <li class="width20"><a href="<?=$sCurrentTree.$dist->daurl?>"><i class="fa fa-caret-right"></i> <?=$dist->dalong_name?></a></li>
+                            <li class="width20"><a href="<?=$sCurrentTree.$oCurrentWard->daurl.'/'.$dist->daurl?>"><i class="fa fa-caret-right"></i> <?=$dist->dalong_name?></a></li>
                         <? endforeach;?>
                     </ul>
                 <? endif;?>

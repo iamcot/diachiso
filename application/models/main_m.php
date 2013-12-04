@@ -22,16 +22,18 @@ class Main_m extends CI_Model
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->row();
-        } else return null;
+        }
+        else return null;
     }
 
-    public function getDistrict($province,$daseorul)
+    public function getDistrict($province, $daseorul)
     {
         $sql = "SELECT * FROM " . $this->tbdistrict . " WHERE dadeleted = 0 AND daurl='$daseorul' AND daprovince_id='$province' LIMIT 0,1";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->row();
-        } else return null;
+        }
+        else return null;
     }
 
     public function getOtherWard($district_id, $ward_id)
@@ -40,33 +42,38 @@ class Main_m extends CI_Model
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result();
-        } else return null;
+        }
+        else return null;
     }
 
-    public function getWard($district_id,$daseorul)
+    public function getWard($district_id, $daseorul)
     {
         $sql = "SELECT * FROM " . $this->tbward . " WHERE dadeleted = 0 AND daurl='$daseorul' AND dadistrict_id = '$district_id' LIMIT 0,1";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->row();
-        } else return null;
+        }
+        else return null;
     }
-    public function getStreet($province_id,$district_id,$ward_id,$daurl=""){
+
+    public function getStreet($province_id, $district_id, $ward_id, $daurl = "")
+    {
 
         $where = "";
-        if($province_id>0 ) $where .=" AND s.daprovince_id='$province_id' ";
-        if($district_id>0)  $where.= " AND s.dadistrict_id='$district_id'";
-        if($ward_id>0) $where .= " AND s.daward_id='$ward_id'";
-        $limit="";
-        if($daurl!=""){
-            $where.=" AND s.daurl='".$daurl."' ";
-            $limit=" LIMIT 0,1";
+        if ($province_id > 0) $where .= " AND s.daprovince_id='$province_id' ";
+        if ($district_id > 0) $where .= " AND s.dadistrict_id='$district_id'";
+        if ($ward_id > 0) $where .= " AND s.daward_id='$ward_id'";
+        $limit = "";
+        if ($daurl != "") {
+            $where .= " AND s.daurl='" . $daurl . "' ";
+            $limit = " LIMIT 0,1";
         }
-        $sql="SELECT s.*, w.daurl wardurl FROM ".$this->tbstreet." s, ".$this->tbward." w WHERE s.daward_id=w.id AND s.dadeleted=0 $where ORDER BY s.dalong_name $limit";
+        $sql = "SELECT s.*, w.daurl wardurl FROM " . $this->tbstreet . " s, " . $this->tbward . " w WHERE s.daward_id=w.id AND s.dadeleted=0 $where ORDER BY s.dalong_name $limit";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result();
-        } else return null;
+        }
+        else return null;
     }
 
     public function getNavService()
@@ -75,7 +82,8 @@ class Main_m extends CI_Model
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result();
-        } else return null;
+        }
+        else return null;
     }
 
     public function getsubcat($parentname, $parentid, $current)
@@ -87,7 +95,8 @@ class Main_m extends CI_Model
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result_array();
-        } else return null;
+        }
+        else return null;
     }
 
     public function getFullServiceTree()
@@ -111,5 +120,51 @@ class Main_m extends CI_Model
             }
         }
         return $aServiceTree;
+    }
+
+    public function getHomeServicePlace($type,$province_id)
+    {
+        $order = "";
+        switch ($type) {
+            case "hot":
+                $order = " daview DESC, dalike DESC, dacomment DESC ";
+                break;
+            case "new":
+                $order = " sp.id DESC ";
+                break;
+            case "random":
+                $order = " RAND() ";
+                break;
+            default:
+                $order = " sp.id DESC ";
+                break;
+        }
+        $sql = "SELECT sp.*, p.dalong_name provincename, p.daurl provinceurl,  d.dalong_name districtname, d.daurl districturl,
+            COALESCE(s.dalong_name,'') streetname,
+            COALESCE(s.daurl,'') streeturl,
+            COALESCE(w.dalong_name,'')  wardname,
+            COALESCE(w.daurl,'') wardurl
+            FROM " . $this->tbservice_place . " sp
+             LEFT JOIN " . $this->tbprovince . " p
+              ON  sp.daprovince_id = p.id
+             LEFT JOIN " . $this->tbdistrict . " d
+              ON  sp.dadistrict_id = d.id
+             LEFT JOIN " . $this->tbward . " w
+              ON sp.daward_id = w.id
+             LEFT JOIN " . $this->tbstreet . "  s
+              ON sp.dastreet_id =  s.id
+            WHERE sp.dadeleted=0 AND sp.daprovince_id=$province_id ORDER BY $order LIMIT 0," . $this->config->item('iHomeServicePlae');
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            return $qr->result();
+        }
+        else return null;
+    }
+    function getServicePlace($place_id){
+        $sql="SELECT * FROM ".$this->tbservice_place." WHERE id=$place_id AND dadeleted=0 limit 0,1";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->row();
+        else return null;
     }
 }

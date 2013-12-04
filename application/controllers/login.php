@@ -60,7 +60,7 @@ class Login extends CI_Controller
                 "dafname" => $user->dafname,
                 "dalname" => $user->dalname,
                 "darole" => $user->darole,
-                "damobi" => $user->damobie,
+                "damobi" => $user->damobi,
                 "daemail" => $user->daemail,
                 "daaddr" => $user->daaddr,
                 "daavatar" => $user->daavatar,
