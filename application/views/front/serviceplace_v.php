@@ -45,7 +45,7 @@
                 <? switch ($placetab ){
                     case "info": echo $oCurrentPlace->dainfo; break;
                     case "pics": echo $sTabContent; break;
-                    dafault: echo 'Hiện tại Không có nội dung này.';break;
+                    default: echo 'Hiện tại Không có nội dung này.';break;
                 } ?>
 
             </div>
