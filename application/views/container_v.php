@@ -101,8 +101,10 @@
                 var oSubcats = eval(msg);
                 //$("#subcat_"+level).val(msg);
                 var sSubcat = "<ul class='SubNavAddr'>";
+                <? if(isset($page) && $page=="serviceplace") echo 'var ext = true;';
+                else echo 'var ext= false;'?>
                 $.each(oSubcats, function (index, oCat) {
-                    sSubcat += '<li><a href="'+parenturl+oCat.daurl+'">'+oCat.dalong_name+'</a></li>';
+                    sSubcat += '<li><a href="'+parenturl+oCat.daurl+((ext)?'-'+oCat.id+'.html':'')+'">'+oCat.dalong_name+'</a></li>';
                 });
                 sSubcat += '</ul>';
                 $("#subcat_"+level).html(sSubcat);

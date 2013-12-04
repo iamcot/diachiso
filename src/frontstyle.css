@@ -290,7 +290,7 @@ a:hover .subcatshow{
 
 .subnav ul {
     margin: 0;
-    padding: 5px 0 5px 0;
+    padding: 5px 5px 5px 0;
     overflow: hidden;
     margin-bottom: 5px;
 }
@@ -307,12 +307,14 @@ a:hover .subcatshow{
     padding: 3px 0 3px 5px;
     height: 26px !important;
     vertical-align: middle;
+    padding-right: 5px;
 }
 
 .subnav li a:hover {
     background: #1d9d74;
     color: #fff !important;
     border-radius: 5px;
+
 }
 
 .subnav {
@@ -321,7 +323,7 @@ a:hover .subcatshow{
     background-color: #f5f5f5;
     z-index: 900;
     font-size: 12px;
-    max-width: 230px;
+    max-width: 240px;
     /*max-height: 450px;*/
     overflow: hidden;
     -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
@@ -675,19 +677,18 @@ footer {
 
 #rightside {
     float: left;
-    margin-left: 2.564102564102564%;
+    margin-left: 2.464102564102564%;
     display: block;
     overflow: hidden;
-    width: 31.623931623931625%;
+    width: 31.523931623931625%;
 }
 
 .articlebox {
-    width: 99%;
     border: #ddd 1px solid;
     background-color: #fff;
-    border-radius: 2px !important;
-    -webkit-border-radius: 3px !important;
-    -moz-border-radius: 3px !important;
+    border-radius: 2px;
+    -webkit-border-radius: 2px ;
+    -moz-border-radius: 2px ;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     margin-bottom: 10px;
@@ -710,10 +711,79 @@ footer {
     box-shadow: 0 0 5px rgba(0, 0, 0, .2);
     -o-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+.cattabstitle{
+    background: #ffffff;
+    border-bottom: #eee 1px solid;
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    -o-box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.placeleft{
+    float:left;
+    width:60%;
+    overflow: hidden;
+}
+.placeinfo{
+    float:left;
+    width:60%;
+    padding: 15px;
+    overflow: hidden;
+}
+.placeinfo li{
+    margin-bottom: 5px;
+}
+.placeinfo i{
+    min-width: 20px;
+    text-align: center;
+    color: #15694e;
+}
+.placeinfo h4{
+    font-size: 1.2em !important;
+    color: #da4f49;
+}
+.placeinfo span{
+    font-size: .8em;
+}
+.placemap{
+    float:left;
+    width:39.295238095%;
+    overflow: hidden;
+    display: block;
 
+}
+.placemap img{
+    width: 100%;
+}
+.placepic{
+    float:left;
+    width: 30.76923076%;
+    overflow: hidden;
+}
+.placepic img{
+    width: 100%;
+}
+.cattabstitle ul{
+    list-style: none;
+}
+.cattabstitle ul li{
+    display: inline-block;
+}
+.cattabstitle ul li a{
+    display: inline-block;
+    padding: 10px;
+}
+.cattabstitle ul li a:hover, a.select{
+    color: #fff;
+    background: #1d9d74;
+}
 .articlecontent {
     padding: 15px;
     overflow: hidden;
+    display: block;
+    min-height: 20px;
+    background: #fff;
+    text-align: justify;
 }
 
 .articlecontent ul {
@@ -742,7 +812,14 @@ footer {
     background: #1d9d74;
     border-radius: 5px;
 }
-
+#articlebox{
+    overflow: hidden;
+}
+.nobodercorner{
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
 .articlebox .articleinfo {
     float: left;
     width: 40%;
@@ -803,8 +880,37 @@ footer {
     background-position: center center;
     background-repeat: no-repeat;
 }
+.listplace{
 
-@media all and (max-width:700px) {
+}
+.listplace h2{
+    font-size: 1em;
+    color: #da4f49;
+}
+.listplace li{
+    clear: left;
+    padding-bottom: 10px;
+    display: block;
+    overflow: hidden;
+    vertical-align: middle;
+}
+.listplace a{
+    overflow: hidden;
+}
+.listplace img{
+    width: 50px;
+    float:left;
+    margin-right: 10px;
+}
+#placepics{
+    text-align: center;
+}
+#placepics img{
+    width: 80%;
+    display: block;
+    margin: 10px auto 10px;
+}
+@media all and (max-width:600px) {
     .headeruser {
         float: left;
     }
@@ -828,5 +934,23 @@ footer {
 
     .articlebox {
         width: 100%;
+    }
+    .placeleft{
+        overflow: hidden;
+    }
+    .placeinfo{
+        width: 100%;
+        padding: 15px;
+        overflow: hidden;
+    }
+
+    .placemap{
+        width: 100%;
+        overflow: hidden;
+        display: block;
+    }
+    .placepic{
+        width: 100%;
+        overflow: hidden;
     }
 }

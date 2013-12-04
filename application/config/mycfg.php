@@ -12,6 +12,7 @@ $config['aAddrTree'] = array(  // table,parenttable)
                                'dadistrict' => array('dadistrict','daprovince'  ),
                                'daward'     => array('daward'    ,'dadistrict'  ),
                                'dastreet'   => array('dastreet'  ,'daward'      ),
+                               'daservice_place'   => array('daservice_place','dastreet'),
                             );
 
 $config['iHomeServicePlae'] = 10;

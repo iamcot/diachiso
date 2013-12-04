@@ -84,7 +84,7 @@
             </div>
         </div>
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-comment-o"></i> Đánh giá mới</div>
+            <div class="cattitle"><i class="fa fa-comments-o"></i> Đánh giá mới</div>
             <div class="articlecontent"></div>
         </div>
     </div>

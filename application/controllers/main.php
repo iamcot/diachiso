@@ -122,17 +122,26 @@ class Main extends CI_Controller {
         $data['oCurrentWard'] = $oCurrentWard;
         $data['oCurrentStreet'] = $oCurrentStreet;
         $data['oCurrentPlace'] = $oCurrentPlace;
-        $data['sTitle'] = $oCurrentPlace->dalong_name.', '.$oCurrentStreet->dalong_name.', '.$oCurrentWard->dalong_name.','.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
+        $data['sTitle'] = $oCurrentPlace->dalong_name.' '.$oCurrentPlace->daaddr.', '.$oCurrentStreet->dalong_name.', '.$oCurrentWard->dalong_name.','.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
+        $data['placeAddres'] = $oCurrentPlace->daaddr.', '.$oCurrentStreet->dalong_name.', '.$oCurrentWard->dalong_name.','.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->dalong_name;
         $data['aServiceTree'] = $this->main_m->getFullServiceTree();
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/'.$oCurrentWard->daurl.'/'.$oCurrentStreet->daurl.'/';
         //$data['sCat'] = 'start';
+        $data['page']= 'serviceplace';
+        $data['placetab'] = (($this->input->get("tab"))?$this->input->get("tab"):"info");
+        if($data['placetab'] == 'pics'){
+            $datas['aPics'] = $this->main_m->getPlacePics($oCurrentPlace->id);
+            $data['sTabContent'] = $this->load->view('front/listpics_v',$datas,true);
+        }
+        $data['aStreetPlaces'] = $this->main_m->getsubcat($this->tbstreet,$oCurrentStreet->id,$this->tbservice_place);
         $data['sBody'] = $this->load->view("front/serviceplace_v",$data,true);
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
         $aNavAddr[$this->tbdistrict] = $oCurrentDistrict;
         $aNavAddr[$this->tbward] = $oCurrentWard;
         $aNavAddr[$this->tbstreet] = $oCurrentStreet;
+        $aNavAddr[$this->tbservice_place] = $oCurrentPlace;
 
-        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbstreet,$aNavAddr);
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbservice_place,$aNavAddr,$oCurrentPlace->id);
         $this->render($data);
     }
 
@@ -172,7 +181,7 @@ class Main extends CI_Controller {
         $file_path =  dirname($_SERVER['SCRIPT_FILENAME']) . '/././images/';
         $thumb = $this->mylibs->makeThumbnails($file_path,$filename,$width,$height);
         header('Content-Type: image/jpeg');
-        imagepng($thumb);
+        imagejpeg($thumb,null,80);
         imagedestroy($thumb);
     }
 }

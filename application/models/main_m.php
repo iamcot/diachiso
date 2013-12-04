@@ -88,10 +88,18 @@ class Main_m extends CI_Model
 
     public function getsubcat($parentname, $parentid, $current)
     {
+        if($current == $this->tbservice_place){
+            $pic = ", dapic,daview,dalike,dacomment";
+            $order = " RAND() ";
+        }
+        else{ $pic = "";
+            $order = "dalong_name";
+        }
+
         if ($parentid == 0 && ($parentname == "" || $parentname == null))
-            $sql = "SELECT id,dalong_name,daurl FROM " . $current . " WHERE  dadeleted=0 ORDER BY dalong_name";
+            $sql = "SELECT id,dalong_name,daurl $pic   FROM " . $current . " WHERE  dadeleted=0 ORDER BY dalong_name";
         else
-            $sql = "SELECT id,dalong_name,daurl FROM " . $current . " WHERE " . $parentname . "_id = " . $parentid . " AND dadeleted=0 ORDER BY dalong_name";
+            $sql = "SELECT id,dalong_name,daurl $pic  FROM " . $current . " WHERE " . $parentname . "_id = " . $parentid . " AND dadeleted=0 ORDER BY $order  LIMIT 0,".$this->config->item('iHomeServicePlae');
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result_array();
@@ -161,10 +169,23 @@ class Main_m extends CI_Model
         else return null;
     }
     function getServicePlace($place_id){
+        $this->updateItemView($this->tbservice_place,$place_id);
         $sql="SELECT * FROM ".$this->tbservice_place." WHERE id=$place_id AND dadeleted=0 limit 0,1";
         $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
+        if($qr->num_rows()>0){
             return $qr->row();
+        }
+        else return null;
+    }
+    function updateItemView($table,$id){
+        $sql="UPDATE $table SET daview=(daview+1) WHERE id=$id";
+        $this->db->query($sql);
+    }
+    function getPlacePics($sPlace_id){
+        $sql="SELECT * FROM ".$this->tbpic." WHERE daserviceplace_id=$sPlace_id";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->result();
         else return null;
     }
 }

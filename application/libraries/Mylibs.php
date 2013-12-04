@@ -8,7 +8,7 @@ class MyLibs
 
     public $CI;
 
-    public function makeNavAddr($sStopLevel, $aAddress)
+    public function makeNavAddr($sStopLevel, $aAddress, $placeid=0)
     {
         $aAddrTree = $this->CI->config->item('aAddrTree');
         $sNavCurr = "/";
@@ -21,7 +21,7 @@ class MyLibs
             $oCurrAdd = $aAddress[$level];
             if ($oCurrAdd == null) header("Location: " . $currurl);
             $sAddNav .= '<li class="parentnav smalltext' . $font . '" onmouseover="ShowSubCat(this,\'' . $parentname . '\',' . $parentid . ',\'' . $level . '\',\'' . $sNavCurr . '\')" onmouseout="HideSubCat(\'' . $level . '\')">
-                ' . (($font == 10) ? '<i class="fa fa-map-marker"></i> ' : '') . '<a href="' . $sNavCurr . $oCurrAdd->daurl . '">' . $oCurrAdd->dalong_name . '</a> <i class="fa fa-caret-down"></i>
+                ' . (($font == 10) ? '<i class="fa fa-map-marker"></i> ' : '') . '<a href="' . $sNavCurr . $oCurrAdd->daurl.(($placeid>0 && $font==6)?'-'.$placeid.'.html':'') . '">' . $oCurrAdd->dalong_name . '</a> <i class="fa fa-caret-down"></i>
                 <div class="subnav" id="subcat_' . $level . '" style="display: none;"></div>
                 </li>';
             $parentname = $level;
