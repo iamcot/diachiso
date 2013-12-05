@@ -1,10 +1,3 @@
-<? if (isset($promotedeal)): ?>
-    <ul id="promotedeal">
-        <? foreach ($promotedeal as $deal): ?>
-            <li><?= $deal ?></li>
-        <? endforeach; ?>
-    </ul>
-<? endif; ?>
 <? if (isset($sHotDealList) && $sHotDealList != ""): ?>
     <div class="articlebox">
         <div class="cattitle"><?=$this->lang->line('dealname')?> HOT</div>
@@ -96,7 +89,7 @@ $(document).ready(function(){
  $(".bxslider").bxSlider({
      captions: true,
      auto: true,
-     autoControls: true,
+     autoControls: false,
      minSlides: 2,
      maxSlides: 2,
      slideWidth: 320,

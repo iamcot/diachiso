@@ -49,8 +49,8 @@ class UploadHandler
                 'thumbnail' => array(
                     'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']).'/thumbnails/',
                     'upload_url' => $this->getFullUrl().'/thumbnails/',
-                    'max_width' => 200,
-                    'max_height' => 200
+                    'max_width' => 300,
+                    'max_height' => 300
                 )
             )
         );
@@ -164,6 +164,11 @@ class UploadHandler
         $new_img = imagecreatetruecolor( $thumbSize , $thumbSize );
         switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
             case 'jpg':
+                $src_img = @imagecreatefromjpeg($file_path);
+                $write_image = 'imagejpeg';
+                $image_quality = isset($options['jpeg_quality']) ?
+                    $options['jpeg_quality'] : 80;
+                break;
             case 'jpeg':
                 $src_img = @imagecreatefromjpeg($file_path);
                 $write_image = 'imagejpeg';

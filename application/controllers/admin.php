@@ -416,6 +416,7 @@ class Admin extends CI_Controller
             'daoldprice' => $this->input->post("daoldprice"),
             'dainfo' => $this->input->post("dainfo"),
             'dapic' => $this->input->post("dapic"),
+            'dapromo' => $this->input->post("dapromo"),
             'dacreate' => date("Y-m-d H:i:s"),
             'dauser_id' => $this->session->userdata('dauser_id'),
 
@@ -577,7 +578,7 @@ class Admin extends CI_Controller
                 'daoldprice' => $row->daoldprice,
                 'dapic' => $row->dapic,
                 'dainfo' => $row->dainfo,
-
+                'dapromo' => $row->dapromo,
             ));
         } else echo '0';
     }
@@ -918,8 +919,8 @@ class Admin extends CI_Controller
         $configs['thumbnail'] = array(
             'upload_dir' => dirname($_SERVER['SCRIPT_FILENAME']) . '/././thumbnails/',
             'upload_url' => base_url() . 'thumbnails/',
-            'max_width' => 200,
-            'max_height' => 200
+            'max_width' => 300,
+            'max_height' => 300
         );
         $upload_handler = jupload($configs);
 

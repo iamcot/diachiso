@@ -23,7 +23,7 @@
                     <span><?= $oCurrentPlace->dalong_name ?></span></li>
                 <li><i class="fa fa-dollar"></i>
                     <span><b
-                            class="colorred size15"><?= (($oDealInfo->datype == "percent") ? number_format($oDealInfo->daoldprice * ($oDealInfo->daamount / 100), 0, ',', '.') : number_format(($oDealInfo->daoldprice - $oDealInfo->daamount), 0, ',', '.')) ?></b> <span
+                            class="colorred size15"><?= (($oDealInfo->datype == "percent") ? number_format($oDealInfo->daoldprice * (100- $oDealInfo->daamount)/100, 0, ',', '.') : number_format(($oDealInfo->daoldprice - $oDealInfo->daamount), 0, ',', '.')) ?></b> <span
                             style="font-size: .8em">đ</span> </span>
                 </li>
                 <li><i class="fa fa-strikethrough"></i>

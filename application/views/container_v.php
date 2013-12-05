@@ -75,6 +75,11 @@
         </ul>
     </div>
 </div>
+    <? if (isset($sPromoDealList)): ?>
+            <div class=" homedealhot" id="promotedeal">
+                <?=$sPromoDealList?>
+            </div>
+    <? endif; ?>
 <div id="content" class="wrap">
     <?= (isset($sBody) ? $sBody : "") ?>
 </div>

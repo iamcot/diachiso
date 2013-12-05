@@ -4,6 +4,9 @@
     <input type="text" name="dldaserviceplace_id" class="idinput" value="<?= $daserviceplace_id ?>">
     <input type="button" value="Load Dịch vụ" onclick="tabloadService(0)">
     <input type="button" value="Load Dịch vụ mới nhất" onclick="tabloadService(1)">
+    <label>ID Deal</label>
+    <input type="text" name="dldealid" class="idinput" value="">
+    <input type="button" value="Load Deal" onclick="editProvince($('input[name=dldealid]').val())">
     <span id="dlstatus" style="float:right"></span>
     <table>
         <tr>
@@ -82,7 +85,10 @@
                         <input type="text" name="dapic" placeholder="Hình đại diện" title="Hình đại diện">
                         <input id="picupload"  type="file" name="files[]" data-url="<?=base_url()?>admin/calljupload" multiple>
                     </td>
-                    <td id="dapicdemo" style="padding: 10px;"></td>
+                    <td id="dapicdemo" style="padding: 10px;" rowspan="2"></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="dapromo"> <label>Sản phẩm ưu tiên đặc biệt</label></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -143,6 +149,8 @@
         $("textarea[name=daspecial]").val("");
         $("textarea[name=dacondition]").val("");
         $("textarea[name=dainfo]").val("");
+        $("input[name=dapromo]").prop('checked',false);
+        $("#dapicdemo").html('');
     }
     $(function () {
         $('input[name=dalong_name]').friendurl({id : 'daurl'});
@@ -209,6 +217,7 @@
         var dainfo         = $("textarea[name=dainfo]").val();
         var daoldprice          = $("input[name=daoldprice]").val();
         var dapic               = $("input[name=dapic]").val();
+        var dapromo = (($("input[name=dapromo]").prop('checked'))?1:0);
 
         if(daserviceplace_id == ""){
             alert("Chưa có ID Điểm dịch vụ");
@@ -234,7 +243,8 @@
                 + "&daspecial=" + encodeURIComponent(daspecial)
                 + "&dacondition=" + encodeURIComponent(dacondition)
                 + "&dainfo=" + encodeURIComponent(dainfo)
-                + "&daoldprice=" + daoldprice,
+                + "&daoldprice=" + daoldprice
+                + "&dapromo=" + dapromo,
 
             success: function (msg){
                 switch (msg) {
@@ -246,7 +256,7 @@
                     case "1":
                         loadlistdeal($("input[name=currpage]").val());
                         addsavegif();
-                        //provinceclear();
+                        dealclear();
                         break;
                     default :
                         alert("Lỗi lưu - không xác định.")
@@ -280,6 +290,7 @@
                     $("textarea[name=daspecial]").val(province.daspecial);
                     $("textarea[name=dacondition]").val(province.dacondition);
                     $("textarea[name=dainfo]").val(province.dainfo);
+                    $("input[name=dapromo]").prop('checked',((province.dapromo==1)?true:false));
                     removeloadgif("#loadstatus");
                     $("#dapicdemo").html('<img src="<?=base_url()?>thumbnails/'+province.dapic+'">')
                 }

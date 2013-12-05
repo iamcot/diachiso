@@ -51,10 +51,14 @@ class Main extends CI_Controller {
         $data['sServicePlace_new'] = $this->main_m->getHomeServicePlace("new",$oCurrentProvince->id);
         $data['aHotDealList'] = $this->main_m->getDealList($oCurrentProvince->id, "hot",$this->config->item('num_dealhot'));
         $data['sHotDealList'] = $this->load->view("front/homedealitem_v",$data,true);
+
         $data['sBody'] = $this->load->view("front/start_v",$data,true);
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
 
         $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbprovince,$aNavAddr);
+        $data['bIsPromoDeal'] = 1;
+        $data['aHotDealList'] = $this->main_m->getDealList($oCurrentProvince->id, "promo",2);
+        $data['sPromoDealList'] = $this->load->view("front/homedealitem_v",$data,true);
         $this->render($data);
     }
     public function district($province,$daseorul){

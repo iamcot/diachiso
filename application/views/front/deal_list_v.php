@@ -29,7 +29,7 @@
                                 <span><b class="colorred">- <?=number_format($deal->daamount,0,',','.')?></b> <span style="font-size: .8em"><?=(($deal->datype=="percent")?"%":"đ")?></span></span>
                             </li>
                             <li><i class="fa fa-dollar"></i>
-                                <span><b class="colorred"><?=(($deal->datype=="percent")?number_format($deal->daoldprice*($deal->daamount/100),0,',','.'):number_format(($deal->daoldprice - $deal->daamount),0,',','.'))?></b> <span style="font-size: .8em">đ</span> </span>
+                                <span><b class="colorred"><?=(($deal->datype=="percent")?number_format($deal->daoldprice * (100- $deal->daamount)/100,0,',','.'):number_format(($deal->daoldprice - $deal->daamount),0,',','.'))?></b> <span style="font-size: .8em">đ</span> </span>
                             </li>
                             <li><i class="fa fa-strikethrough"></i>
                                 <span style="text-decoration: line-through;font-size:.8em"><?=number_format($deal->daoldprice,0,',','.')?> đ </span>

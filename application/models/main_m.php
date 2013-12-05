@@ -13,6 +13,8 @@ class Main_m extends CI_Model
     public $tbuser = 'dauser';
     public $tbdeal = 'dadeal';
     public $crrlang = '';
+    public $vserviceplace = 'daview_serviceplace';
+    public $vdeal = 'daview_deal';
 
     public function getProvince($sCurrProvince = "")
     {
@@ -140,7 +142,7 @@ class Main_m extends CI_Model
         $order = "";
         switch ($type) {
             case "hot":
-                $order = " daview DESC, dalike DESC, dacomment DESC ";
+                $order = " sp.daview DESC, sp.dalike DESC, sp.dacomment DESC ";
                 break;
             case "new":
                 $order = " sp.id DESC ";
@@ -152,21 +154,9 @@ class Main_m extends CI_Model
                 $order = " sp.id DESC ";
                 break;
         }
-        $sql = "SELECT sp.*, p.dalong_name provincename, p.daurl provinceurl,  d.dalong_name districtname, d.daurl districturl,
-            COALESCE(s.dalong_name,'') streetname,
-            COALESCE(s.daurl,'') streeturl,
-            COALESCE(w.dalong_name,'')  wardname,
-            COALESCE(w.daurl,'') wardurl
-            FROM " . $this->tbservice_place . " sp
-             LEFT JOIN " . $this->tbprovince . " p
-              ON  sp.daprovince_id = p.id
-             LEFT JOIN " . $this->tbdistrict . " d
-              ON  sp.dadistrict_id = d.id
-             LEFT JOIN " . $this->tbward . " w
-              ON sp.daward_id = w.id
-             LEFT JOIN " . $this->tbstreet . "  s
-              ON sp.dastreet_id =  s.id
-            WHERE sp.dadeleted=0 AND sp.daprovince_id=$province_id ORDER BY $order LIMIT 0," . $this->config->item('iHomeServicePlae');
+        $sql="SELECT * FROM ".$this->vserviceplace." sp
+        WHERE sp.daprovince_id=$province_id
+        ORDER BY $order LIMIT 0," . $this->config->item('iHomeServicePlae');
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result();
@@ -210,38 +200,22 @@ class Main_m extends CI_Model
         $order = "";
         $wheresg = "";
         if($servicegroup_id > 0){
-            $wheresg = " AND $servicegroup_id = sp.daservicegroup_id ";
+            $wheresg = " AND $servicegroup_id = servicegroupid ";
         }
+
         $now = time();
         switch($typeorder){
             case "normal": $order = " ORDER BY dl.id "; break;
             case "new": $order = " ORDER BY dl.id DESC "; break;
             case "hot": $order = " ORDER BY dl.daview DESC, dl.dalike DESC, dl.dacomment DESC, dl.id DESC "; break;
             case "random": $order = " ORDER BY RAND() "; break;
+            case "promo": $order = " AND dl.dapromo = 1 ORDER BY dl.id DESC "; break;
             default:$order = " ORDER BY dl.id "; break;
         }
-        $sql="SELECT dl.*,sp2.* FROM ".$this->tbdeal." dl,(
-        SELECT sp.id placeid,sp.daurl placeurl,sp.daaddr, sp.dalong_name placename, p.dalong_name provincename, p.daurl provinceurl,  d.dalong_name districtname, d.daurl districturl,
-            COALESCE(s.dalong_name,'') streetname,
-            COALESCE(s.daurl,'') streeturl,
-            COALESCE(w.dalong_name,'')  wardname,
-            COALESCE(w.daurl,'') wardurl
-            FROM " . $this->tbservice_place . " sp
-             LEFT JOIN " . $this->tbprovince . " p
-              ON  sp.daprovince_id = p.id
-             LEFT JOIN " . $this->tbdistrict . " d
-              ON  sp.dadistrict_id = d.id
-             LEFT JOIN " . $this->tbward . " w
-              ON sp.daward_id = w.id
-             LEFT JOIN " . $this->tbstreet . "  s
-              ON sp.dastreet_id =  s.id
-            WHERE sp.dadeleted=0 AND sp.daprovince_id=$provinceid $wheresg
-        ) sp2
+        $sql="SELECT * FROM ".$this->vdeal." dl WHERE dl.dadeleted = 0 AND dl.dato > $now AND dl.provinceid=$provinceid $wheresg  $order LIMIT 0, $limit";
 
-        WHERE dl.dadeleted = 0  AND sp2.placeid = dl.daserviceplace_id
-         AND dl.dato > $now
-         $order LIMIT 0, $limit";
         $qr = $this->db->query($sql);
+
         if($qr->num_rows()>0)
             return $qr->result();
         else return null;

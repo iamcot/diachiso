@@ -353,3 +353,8 @@ footer{
     max-height: 24px;
     vertical-align: middle;
 }
+.width200{
+    width: 200px !important;
+    display: inline-block;
+    float:left;
+}
