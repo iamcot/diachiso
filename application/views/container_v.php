@@ -61,7 +61,16 @@
         <h2><?= $this->config->item('sitename') . (($this->lang->line("slogan") != "") ? " - " . $this->lang->line("slogan") : '') ?></h2>
     </div>
 </header>
-    <div id="topbanner"><?=((isset($topbanner) && $cat=="start")?$topbanner:'')?></div>
+
+    <? if( isset($aBanner) && $sCat=="start"): ?>
+        <div class="bannerwrapper">
+    <ul class="bannerslider">
+        <? foreach($aBanner as $banner):?>
+        <li><img src="/images/<?=$banner->davalue?>"></li>
+        <? endforeach;?>
+        </ul>
+    </div>
+    <? endif;?>
 <div class="nav">
     <div class="wrap">
         <ul id="navaddr">
@@ -94,6 +103,16 @@
 </body>
 </html>
 <script>
+    $(document).ready(function(){
+        $(".bannerslider").bxSlider({
+            captions: false,
+            auto: true,
+            autoControls: false,
+            minSlides: 1,
+            maxSlides: 1,
+            slideMargin: 10
+        });
+    });
     function ShowSubCat(li,parentname,parentid,level,parenturl){
         //console.log($("input[name=ajaxloading]").val());
        // console.log($("#subcat_"+level).html())

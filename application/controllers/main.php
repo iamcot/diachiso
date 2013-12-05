@@ -59,6 +59,7 @@ class Main extends CI_Controller {
         $data['bIsPromoDeal'] = 1;
         $data['aHotDealList'] = $this->main_m->getDealList($oCurrentProvince->id, "promo",2);
         $data['sPromoDealList'] = $this->load->view("front/homedealitem_v",$data,true);
+        $data['aBanner'] = $this->main_m->getBanner();
         $this->render($data);
     }
     public function district($province,$daseorul){

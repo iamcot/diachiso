@@ -15,6 +15,7 @@ class Main_m extends CI_Model
     public $crrlang = '';
     public $vserviceplace = 'daview_serviceplace';
     public $vdeal = 'daview_deal';
+    public $tbconfig = 'daconfig';
 
     public function getProvince($sCurrProvince = "")
     {
@@ -220,5 +221,13 @@ class Main_m extends CI_Model
             return $qr->result();
         else return null;
         //AND $provinceid = (SELECT sp.daprovince_id FROM ".$this->tbservice_place." sp WHERE sp.id= d.daserviceplace_id )
+    }
+    function getBanner(){
+        $sql="SELECT * FROM ".$this->tbconfig." WHERE daname='banner'";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0){
+            return $qr->result();
+        }
+        else return null;
     }
 }

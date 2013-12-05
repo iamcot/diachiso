@@ -1058,7 +1058,7 @@ li{
     margin-bottom: 15px;
 }
 #promotedeal img{
-    max-height: 200px;
+    max-height: 300px;
 }
 #promotedeal ul li{
     width: 47% !important;
@@ -1153,11 +1153,17 @@ li{
     width: 97%;
 
 }
-.bx-pager{
+.articlecontent .bx-pager{
     position: absolute;
     z-index: 99;
     top:180px;
     right:0px;
+}
+.bannerwrapper .bx-pager {
+    position: absolute;
+    z-index: 99;
+    top:160px;
+    right:0px
 }
 @media all and (max-width:600px) {
     .headeruser {

@@ -21,12 +21,11 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if(!$this->session->userdata("darole")){
-            $this->session->set_userdata('referer',base_url()."admin");
-            header("Location: ".base_url()."login");
-        }
-        else if(!$this->mylibs->accessadmin()){
-            header("Location: ".base_url());
+        if (!$this->session->userdata("darole")) {
+            $this->session->set_userdata('referer', base_url() . "admin");
+            header("Location: " . base_url() . "login");
+        } else if (!$this->mylibs->accessadmin()) {
+            header("Location: " . base_url());
         }
         // Your own constructor code
         if ($this->session->userdata("lang"))
@@ -41,7 +40,7 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Admin page";
         $data['cat'] = 'admin';
-        $data['body'] = $this->load->view("admin/adminoverview_v",$data,true);
+        $data['body'] = $this->load->view("admin/adminoverview_v", $data, true);
         $this->render($data);
     }
 
@@ -57,17 +56,18 @@ class Admin extends CI_Controller
     public $tbdeal = 'dadeal';
     public $tbnews = 'danews';
     public $crrlang = '';
+    public $tbconfig = 'daconfig';
 
     public function render($data = array())
     {
-        $data['title'] = $data['title'].' - '.$this->config->item('sufix_title');
+        $data['title'] = $data['title'] . ' - ' . $this->config->item('sufix_title');
         $this->load->view('admin/container_v', $data);
     }
 
     public function address()
     {
-        if(!$this->mylibs->accessaddresspage())
-            header("Location: ".base_url()."admin");
+        if (!$this->mylibs->accessaddresspage())
+            header("Location: " . base_url() . "admin");
         $data = array();
         $data['body'] = $this->load->view('admin/address_v', $data, true);
         $data['cat'] = 'address';
@@ -75,10 +75,10 @@ class Admin extends CI_Controller
         $this->render($data);
     }
 
-    public function deal($daserviceplace_id="")
+    public function deal($daserviceplace_id = "")
     {
-        if(!$this->mylibs->accessdealpage())
-            header("Location: ".base_url()."admin");
+        if (!$this->mylibs->accessdealpage())
+            header("Location: " . base_url() . "admin");
         $data = array();
         $data['daserviceplace_id'] = $daserviceplace_id;
         $data['body'] = $this->load->view('admin/admindeal_v', $data, true);
@@ -89,8 +89,8 @@ class Admin extends CI_Controller
 
     public function user()
     {
-        if(!$this->mylibs->accessuserpage())
-            header("Location: ".base_url()."admin");
+        if (!$this->mylibs->accessuserpage())
+            header("Location: " . base_url() . "admin");
         $data = array();
         $data['body'] = $this->load->view('admin/adminuser_v', $data, true);
         $data['cat'] = 'user';
@@ -100,8 +100,8 @@ class Admin extends CI_Controller
 
     public function service()
     {
-        if(!$this->mylibs->accessservicepage())
-            header("Location: ".base_url()."admin");
+        if (!$this->mylibs->accessservicepage())
+            header("Location: " . base_url() . "admin");
         $data = array();
         $data['body'] = $this->load->view('admin/service_v', $data, true);
         $data['cat'] = 'service';
@@ -167,14 +167,15 @@ class Admin extends CI_Controller
         echo $this->load->view('admin/street_v', $data, true);
     }
 
-    public  function savenews(){
+    public function savenews()
+    {
         $param = array(
             'dalong_name' => $this->input->post("dalong_name"),
             'daurl' => $this->input->post("daurl"),
             'dapic' => $this->input->post("dapic"),
-            'dacontent_short' =>$this->input->post("dacontent_short"),
+            'dacontent_short' => $this->input->post("dacontent_short"),
             'dacontent' => $this->input->post("dacontent"),
-            'daserviceplace_id' =>   $this->input->post("daserviceplace_id"),
+            'daserviceplace_id' => $this->input->post("daserviceplace_id"),
             'dacat' => $this->input->post("dacat"),
             'datype' => $this->input->post("datype"),
             'dacreate' => date("Y-m-d H:i:s"),
@@ -189,19 +190,21 @@ class Admin extends CI_Controller
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
-    public  function saveuser(){
+
+    public function saveuser()
+    {
         $param = array(
             'dafname' => $this->input->post("dafname"),
             'dalname' => $this->input->post("dalname"),
             'dausername' => $this->input->post("dausername"),
-            'damobi' =>$this->input->post("damobi"),
+            'damobi' => $this->input->post("damobi"),
             'daemail' => $this->input->post("daemail"),
-            'daaddr' =>   $this->input->post("daaddr"),
+            'daaddr' => $this->input->post("daaddr"),
             'daavatar' => $this->input->post("daavatar"),
             'darole' => $this->input->post("darole"),
             'dacreate' => date("Y-m-d H:i:s"),
         );
-        if(  $this->input->post("dapassword") != "")
+        if ($this->input->post("dapassword") != "")
             $param['dapassword'] = md5(md5($this->input->post("dapassword")));
         if ($this->input->post("edit") != "") //update
         {
@@ -213,6 +216,7 @@ class Admin extends CI_Controller
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+
     public function saveprovince()
     {
         $param = array(
@@ -402,7 +406,9 @@ class Admin extends CI_Controller
 
         } else echo '0';
     }
-    public function savedeal(){
+
+    public function savedeal()
+    {
         $param = array(
             'dalong_name' => $this->input->post("dalong_name"),
             'daurl' => $this->input->post("daurl"),
@@ -431,6 +437,7 @@ class Admin extends CI_Controller
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+
     public function savestreet()
     {
         $param = array(
@@ -461,12 +468,14 @@ class Admin extends CI_Controller
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+
     public function hidenews($id, $status)
     {
         $str = $this->db->update_string($this->tbnews, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
         if ($this->db->query($str)) echo 1;
         else echo 0;
     }
+
     public function hidedeal($id, $status)
     {
         $str = $this->db->update_string($this->tbdeal, array("dadeleted" => ($status == 0 ? 1 : 0)), " id = " . $id);
@@ -543,6 +552,7 @@ class Admin extends CI_Controller
             ));
         } else echo '0';
     }
+
     public function loadeditservicegroup($id)
     {
         $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE id=$id";
@@ -558,6 +568,7 @@ class Admin extends CI_Controller
             ));
         } else echo '0';
     }
+
     public function loadeditdeal($id)
     {
         $sql = "SELECT * FROM " . $this->tbdeal . " WHERE id=$id";
@@ -569,8 +580,8 @@ class Admin extends CI_Controller
                 'dalong_name' => $row->dalong_name,
                 'daurl' => $row->daurl,
                 'datype' => $row->datype,
-                'dafrom' => date("Y-m-d H:i:s",$row->dafrom),
-                'dato' => date("Y-m-d H:i:s",$row->dato),
+                'dafrom' => date("Y-m-d H:i:s", $row->dafrom),
+                'dato' => date("Y-m-d H:i:s", $row->dato),
                 'daamount' => $row->daamount,
                 'daserviceplace_id' => $row->daserviceplace_id,
                 'daspecial' => $row->daspecial,
@@ -748,14 +759,17 @@ class Admin extends CI_Controller
             return ceil($qr->row()->numid / $this->config->item("pp"));
         } else return 0;
     }
-    public function loaduser($page=1){
+
+    public function loaduser($page = 1)
+    {
         $page -= 1;
-        if (($rs = $this->getService($this->tbuser, null, $page,array('field'=>'id','type'=>''))) != null) {
+        if (($rs = $this->getService($this->tbuser, null, $page, array('field' => 'id', 'type' => ''))) != null) {
             $data['province'] = $rs;
             $data['sumpage'] = $this->getSumPageAddress($this->tbuser, null);
             echo $this->load->view("admin/list_user_v", $data, true);
         } else echo lang("NO_DATA");
     }
+
     public function loadprovince($page = 1)
     {
         $page -= 1;
@@ -859,7 +873,8 @@ class Admin extends CI_Controller
             echo $this->load->view("admin/list_province_v", $data, true);
         } else echo lang("NO_DATA");
     }
-    public function loadlistdeal( $daserviceplace_id , $page = 1)
+
+    public function loadlistdeal($daserviceplace_id, $page = 1)
     {
         $page -= 1;
         $param = array(
@@ -872,15 +887,15 @@ class Admin extends CI_Controller
             echo $this->load->view("admin/list_deal_v", $data, true);
         } else echo lang("NO_DATA");
     }
-    public function loadnews($type, $daserviceplace_id , $page = 1)
+
+    public function loadnews($type, $daserviceplace_id, $page = 1)
     {
         $page -= 1;
-        if($type=="service"){
-        $param = array(
-            "daserviceplace_id" => $daserviceplace_id,
-        );
-        }
-        else if($type == "home"){
+        if ($type == "service") {
+            $param = array(
+                "daserviceplace_id" => $daserviceplace_id,
+            );
+        } else if ($type == "home") {
             $param = array(
                 "dacat" => $daserviceplace_id,
             );
@@ -892,6 +907,7 @@ class Admin extends CI_Controller
             echo $this->load->view("admin/list_news_v", $data, true);
         } else echo lang("NO_DATA");
     }
+
     public function loadserviceplace($daprovince_id = 0, $dadistrict_id = 0, $daward_id = 0, $dastreet_id = 0, $daservicegroup_id = 0, $daservice_id = 0, $page = 1)
     {
         $page -= 1;
@@ -1026,15 +1042,79 @@ class Admin extends CI_Controller
         }
         echo $kq;
     }
-    public function checkexitsseourl(){
-        $table  = $this->input->post("table");
+
+    public function checkexitsseourl()
+    {
+        $table = $this->input->post("table");
         $catname = $this->input->post("catname");
-        $catval  = $this->input->post("catval");
-        $url     = $this->input->post("url");
-        $sql="SELECT count(id) numrow FROM ".$table." WHERE $catname='$catval' AND daurl='$url'";
+        $catval = $this->input->post("catval");
+        $url = $this->input->post("url");
+        $sql = "SELECT count(id) numrow FROM " . $table . " WHERE $catname='$catval' AND daurl='$url'";
         $qr = $this->db->query($sql);
-        if($qr->row()->numrow == 0) echo 0;
+        if ($qr->row()->numrow == 0) echo 0;
         else echo 1;
+    }
+
+    public function savebanner()
+    {
+        $aNewPic = explode(",", $this->input->post("img"));
+        $aNewCaption = explode(",", $this->input->post("caption"));
+        $sVal = "";
+        for ($i = 0; $i < count($aNewPic); $i++) {
+            $pic = $aNewPic[$i];
+            if (trim($pic) == "") continue;
+            $cap = $aNewCaption[$i];
+            if ($sVal != "") $sVal .= ",";
+            $sVal .= "('banner','$pic','$cap')";
+        }
+        if ($sVal != "") {
+            $sql = "INSERT INTO " . $this->tbconfig . " (daname,davalue,dacomment) VALUES " . $sVal;
+            echo $this->db->query($sql);
+        } else {
+            return 0;
+        }
+    }
+
+    public function loadbanner()
+    {
+        $sql = "SELECT * FROM " . $this->tbconfig . " WHERE daname='banner'";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            $arr = $qr->result_array();
+            $this->mylibs->echojson($arr);
+        } else {
+            echo 0;
+        }
+    }
+    public function updateoldbanner()
+    {
+        $aNewPic = explode(",", $this->input->post("img"));
+        $aNewCaption = explode(",", $this->input->post("caption"));
+        $kq = 0;
+        for ($i = 0; $i < count($aNewPic); $i++) {
+            $pic = $aNewPic[$i];
+            if (trim($pic) == "") continue;
+            $cap = $aNewCaption[$i];
+            $sql = "UPDATE " . $this->tbconfig . " SET dacomment='$cap' WHERE davalue='$pic'";
+            $kq += $this->db->query($sql);
+
+        }
+        echo $kq;
+    }
+    function delbanner($filename, $deldb = 0)
+    {
+        //important!!! need admin permission here
+        try {
+            unlink(dirname($_SERVER['SCRIPT_FILENAME']) . "/././images/" . $filename);
+            unlink(dirname($_SERVER['SCRIPT_FILENAME']) . "/././thumbnails/" . $filename);
+            if ($deldb == 1) {
+                $sql = "DELETE FROM " . $this->tbconfig . " WHERE davalue='$filename'";
+                $this->db->query($sql);
+            }
+            echo 1;
+        } catch (Exception $ex) {
+            echo 0;
+        }
     }
 }
 
