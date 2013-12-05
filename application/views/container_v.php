@@ -106,7 +106,7 @@
                 <? if(isset($page) && $page=="serviceplace") echo 'var ext = true;';
                 else echo 'var ext= false;'?>
                 $.each(oSubcats, function (index, oCat) {
-                    sSubcat += '<li><a href="'+parenturl+oCat.daurl+((ext)?'-'+oCat.id+'.html':'')+'">'+oCat.dalong_name+'</a></li>';
+                    sSubcat += '<li><a href="'+parenturl+oCat.daurl+((ext && level == 'daservice_place')?'-'+oCat.id+'.html':'')+'">'+oCat.dalong_name+'</a></li>';
                 });
                 sSubcat += '</ul>';
                 $("#subcat_"+level).html(sSubcat);
