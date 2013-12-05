@@ -1165,6 +1165,9 @@ li{
     top:160px;
     right:0px
 }
+.bx-wrapper .bx-pager{
+    bottom: 0 !important;
+}
 @media all and (max-width:600px) {
     .headeruser {
         float: left;
