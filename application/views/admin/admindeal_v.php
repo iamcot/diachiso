@@ -50,9 +50,12 @@
                         <input type="text" name="dalong_name" placeholder="Tên đầy đủ" title="Tên đầy đủ" ></td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan=>
                         <label>Seo URL</label>
                         <input id="daurl" type="text" name="daurl" placeholder="Seo URL" title="Seo URL"></td>
+                    <td>
+                        <label>Giá cũ </label>
+                        <input type="text" name="daoldprice" placeholder="Giá cũ" title="Giá cũ"></td>
                 </tr>
                 <tr>
                     <td>
@@ -75,6 +78,13 @@
                         <input class="date" type="text" name="dato" placeholder="Kết thúc" title="Kết thúc"></td>
                 </tr>
                 <tr>
+                    <td> <label>Hình đại diện</label>
+                        <input type="text" name="dapic" placeholder="Hình đại diện" title="Hình đại diện">
+                        <input id="picupload"  type="file" name="files[]" data-url="<?=base_url()?>admin/calljupload" multiple>
+                    </td>
+                    <td id="dapicdemo" style="padding: 10px;"></td>
+                </tr>
+                <tr>
                     <td colspan="2">
                         <label>Điểm nổi bật</label>
                         <textarea class="ckeditor" name="daspecial" placeholder="Điểm nổi bật"
@@ -85,6 +95,12 @@
                         <label>Điều kiện sử dụng</label>
                         <textarea class="ckeditor" name="dacondition" placeholder="Điều kiện sử dụng"
                                   title="Điều kiện sử dụng"></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label>Thông tin Deal </label>
+                        <textarea class="ckeditor" name="dainfo" placeholder="Thông tin Deal"
+                                  title="Thông tin Deal"></textarea></td>
                 </tr>
                 <tr>
                     <td>
@@ -121,9 +137,12 @@
         $("input[name=dafrom]").val("");
         $("input[name=dato]").val("");
         $("input[name=dldaserviceplace_id]").val("");
+        $("input[name=daoldprice]").val("");
+        $("input[name=dapic]").val("");
 
         $("textarea[name=daspecial]").val("");
         $("textarea[name=dacondition]").val("");
+        $("textarea[name=dainfo]").val("");
     }
     $(function () {
         $('input[name=dalong_name]').friendurl({id : 'daurl'});
@@ -133,6 +152,16 @@
         var id = $("input[name=dldaserviceplace_id]").val();
         if (id != "" && id > 0)
             tabloadService(0);
+        $('#picupload').fileupload({
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result, function (index, file) {
+                    $('input[name=dapic]').val(file.name);
+                    $("#dapicdemo").html('<img src="<?=base_url()?>thumbnails/'+file.name+'">')
+
+                });
+            }
+        });
     });
     function tabloadService(type) {
 
@@ -177,6 +206,10 @@
         var daserviceplace_id   = $("input[name=dldaserviceplace_id]").val();
         var daspecial           = $("textarea[name=daspecial]").val();
         var dacondition         = $("textarea[name=dacondition]").val();
+        var dainfo         = $("textarea[name=dainfo]").val();
+        var daoldprice          = $("input[name=daoldprice]").val();
+        var dapic               = $("input[name=dapic]").val();
+
         if(daserviceplace_id == ""){
             alert("Chưa có ID Điểm dịch vụ");
             return;
@@ -197,8 +230,12 @@
                 + "&daamount=" + daamount
                 + "&edit=" + edit
                 + "&daserviceplace_id=" + daserviceplace_id
+                + "&dapic=" + dapic
                 + "&daspecial=" + encodeURIComponent(daspecial)
-                + "&dacondition=" + encodeURIComponent(dacondition),
+                + "&dacondition=" + encodeURIComponent(dacondition)
+                + "&dainfo=" + encodeURIComponent(dainfo)
+                + "&daoldprice=" + daoldprice,
+
             success: function (msg){
                 switch (msg) {
                     case "0":
@@ -237,10 +274,14 @@
                     $("input[name=dafrom]").val(province.dafrom);
                     $("input[name=dato]").val(province.dato);
                     $("input[name=dldaserviceplace_id]").val(province.daserviceplace_id);
+                    $("input[name=daoldprice]").val(province.daoldprice);
+                    $("input[name=dapic]").val(province.dapic);
 
                     $("textarea[name=daspecial]").val(province.daspecial);
                     $("textarea[name=dacondition]").val(province.dacondition);
+                    $("textarea[name=dainfo]").val(province.dainfo);
                     removeloadgif("#loadstatus");
+                    $("#dapicdemo").html('<img src="<?=base_url()?>thumbnails/'+province.dapic+'">')
                 }
             }
         });

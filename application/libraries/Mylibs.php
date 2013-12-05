@@ -153,6 +153,20 @@ class MyLibs
             return false;
         }
 
+        if($width > $img_width || $height > $img_height){
+            $height = $img_height;
+            $tmph = $img_height;
+            $width = $img_width;
+            $tmpw = $img_width;
+        }
+        if($height == 'auto'){
+            $height = $img_height * ($width/$img_width);
+            $offW = 0;
+            $offH = 0;
+            $tmpw = $img_width;
+            $tmph = $img_height;
+        }
+        else{
         $ratew = $width/$img_width;
         $rateh = $height/$img_height;
 
@@ -160,7 +174,6 @@ class MyLibs
         $tmpw = $width / $rate;
         $tmph = $height / $rate;
 
-       // if ($img_height < $img_width) {
 
             if($tmph < $img_height)
             $offH = ($img_height - $tmph) /2;
@@ -169,16 +182,7 @@ class MyLibs
             if($tmpw < $img_width)
             $offW = ($img_width - $tmpw ) / 2;
             else $offW = ($tmpw - $img_width) / 2;
-       // }
-//        elseif ($img_height > $img_width) {
-//            $offW = 0;
-//            $offH = ($img_height - $img_width) / 2;
-//            $img_height = $img_width;
-//        }
-//        else {
-//            $offW = 0;
-//            $offH = 0;
-//        }
+        }
         $new_img = @imagecreatetruecolor($width, $height);
         switch (strtolower(substr(strrchr($file_name, '.'), 1))) {
             case 'jpg':

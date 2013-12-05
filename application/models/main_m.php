@@ -78,7 +78,7 @@ class Main_m extends CI_Model
 
     public function getNavService()
     {
-        $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dashowhome=1  ORDER BY dalong_name";
+        $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dadeleted=0 AND dashowhome=1  ORDER BY dalong_name";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result();
@@ -174,7 +174,6 @@ class Main_m extends CI_Model
         else return null;
     }
     function getServicePlace($place_id){
-        $this->updateItemView($this->tbservice_place,$place_id);
         $sql="SELECT * FROM ".$this->tbservice_place." WHERE id=$place_id AND dadeleted=0 limit 0,1";
         $qr = $this->db->query($sql);
         if($qr->num_rows()>0){
@@ -192,5 +191,60 @@ class Main_m extends CI_Model
         if($qr->num_rows()>0)
             return $qr->result();
         else return null;
+    }
+    function getPlaceDeal($sPlace_id){
+        $sql="SELECT * FROM ".$this->tbdeal." WHERE dadeleted=0 AND daserviceplace_id=$sPlace_id ORDER BY id DESC";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->result();
+        else return null;
+    }
+    function getDealInfo($id){
+        $sql="SELECT * FROM ".$this->tbdeal." WHERE dadeleted=0 AND id='$id' LIMIT 0,1";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->row();
+        else return null;
+    }
+    function getDealList($provinceid, $typeorder,$limit=10,$servicegroup_id=0){
+        $order = "";
+        $wheresg = "";
+        if($servicegroup_id > 0){
+            $wheresg = " AND $servicegroup_id = sp.daservicegroup_id ";
+        }
+        $now = time();
+        switch($typeorder){
+            case "normal": $order = " ORDER BY dl.id "; break;
+            case "new": $order = " ORDER BY dl.id DESC "; break;
+            case "hot": $order = " ORDER BY dl.daview DESC, dl.dalike DESC, dl.dacomment DESC, dl.id DESC "; break;
+            case "random": $order = " ORDER BY RAND() "; break;
+            default:$order = " ORDER BY dl.id "; break;
+        }
+        $sql="SELECT dl.*,sp2.* FROM ".$this->tbdeal." dl,(
+        SELECT sp.id placeid,sp.daurl placeurl,sp.daaddr, sp.dalong_name placename, p.dalong_name provincename, p.daurl provinceurl,  d.dalong_name districtname, d.daurl districturl,
+            COALESCE(s.dalong_name,'') streetname,
+            COALESCE(s.daurl,'') streeturl,
+            COALESCE(w.dalong_name,'')  wardname,
+            COALESCE(w.daurl,'') wardurl
+            FROM " . $this->tbservice_place . " sp
+             LEFT JOIN " . $this->tbprovince . " p
+              ON  sp.daprovince_id = p.id
+             LEFT JOIN " . $this->tbdistrict . " d
+              ON  sp.dadistrict_id = d.id
+             LEFT JOIN " . $this->tbward . " w
+              ON sp.daward_id = w.id
+             LEFT JOIN " . $this->tbstreet . "  s
+              ON sp.dastreet_id =  s.id
+            WHERE sp.dadeleted=0 AND sp.daprovince_id=$provinceid $wheresg
+        ) sp2
+
+        WHERE dl.dadeleted = 0  AND sp2.placeid = dl.daserviceplace_id
+         AND dl.dato > $now
+         $order LIMIT 0, $limit";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->result();
+        else return null;
+        //AND $provinceid = (SELECT sp.daprovince_id FROM ".$this->tbservice_place." sp WHERE sp.id= d.daserviceplace_id )
     }
 }

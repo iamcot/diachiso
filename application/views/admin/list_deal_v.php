@@ -3,7 +3,7 @@
         <thead>
         <tr><td>ID</td><td>Tiêu đề</td><td>SEO URL</td>
             <td>Bắt đầu</td><td>Kết thúc</td>
-            <td>Giảm</td><td>Đăng ký</td>
+            <td>Giá cũ</td><td>Giảm</td><td>Đăng ký</td>
             <td>Xem</td><td>Bình luận</td><td>Thích</td>
             <td></td>
         </tr>
@@ -13,7 +13,8 @@
                    <td ><?=$row->id?></td>
                    <td><a href="javascript:editProvince(<?=$row->id?>)"><?=$row->dalong_name?></a></td>
                    <td><?=$row->daurl?></td>
-                   <td><?=date("d/m/Y H:i",$row->dafrom)?></td><td><?=date("d/m/Y H:i",$row->dato)?></td>
+                   <td><?=date("d/m/Y H:i",$row->dafrom)?></td><td><?=date("d/m/Y H:i",$row->dato)?></td>cũ
+                   <td style="text-align: center"><?=$row->daoldprice?></td>
                    <td style="text-align: center"><?=$row->daamount?> (<?=(($row->datype=="percent")?"%":"đ")?>)</td>
                    <td style="text-align: center"></td>
                    <td style="text-align: center"><?=$row->daview?></td>

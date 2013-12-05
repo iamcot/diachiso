@@ -16,5 +16,10 @@ $config['aAddrTree'] = array(  // table,parenttable)
                             );
 
 $config['iHomeServicePlae'] = 10;
+$config['num_dealhot'] = 9;
 
 $config['iHomeCatDeal'] = 6;
+$config['shipfee'] = '10.000';
+$config['hotline'] = '04 113 113 113';
+$config['skype'] = 'websaigonhanoi';
+$config['yahoo'] = 'websaigonhanoi';

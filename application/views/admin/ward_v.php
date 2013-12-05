@@ -10,6 +10,7 @@
             <option value="<?=$dist->id?>"><?=$dist->dalong_name?></option>
         <? endforeach;?>
     </select>
+    <input type="text" name="daprefix" placeholder="Tiền tố Phường/Xã">
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
     <input type="text" id="daurl" name="daurl" placeholder="Seo URL">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>
@@ -51,6 +52,7 @@
         var dainfo = $("textarea[name=dainfo]").val();
         var damap = $("textarea[name=damap]").val();
         var edit = $("input[name=edit]").val();
+        var daprefix = $("input[name=daprefix]").val();
 
         if (dalong_name.trim() != "" && daurl.trim() != "") {
             $.ajax({
@@ -62,6 +64,7 @@
                           + "&damap=" + encodeURIComponent(damap)
                           + "&edit=" + edit
                           + "&dadistrict_id=" + dadistrict_id
+                          + "&daprefix=" + daprefix
                           + "&daprovince_id=" + daprovince_id,
                 success: function (msg) {
                     switch (msg) {
@@ -103,6 +106,7 @@
         $("textarea[name=dainfo]").val("");
         $("textarea[name=damap]").val("");
         $("input[name=edit]").val("");
+        $("input[name=daprefix]").val("");
     }
     function editProvince(id) {
         $.ajax({
@@ -115,6 +119,7 @@
                     $("input[name=dalong_name]").val(province.dalong_name);
                     $("input[name=edit]").val(province.id);
                     $("input[name=daurl]").val(province.daurl);
+                    $("input[name=daprefix]").val(province.daprefix);
                     $("textarea[name=dainfo]").val(province.dainfo);
                     $("textarea[name=damap]").val(province.damap);
                     $("#damapdemo").html(province.damap)

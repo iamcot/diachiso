@@ -3,7 +3,7 @@
         <ul>
             <li><a href="?tab=info" class="<?= ($placetab == 'info') ? 'select' : '' ?>"><i class="fa fa-home"></i> Giới
                     thiệu</a></li>
-            <li><a href="?tab=deal" class="<?= ($placetab == 'deal') ? 'select' : '' ?>"><i class="fa fa-tag"></i>
+            <li><a href="?tab=deal" class="<?= ($placetab == 'deal' || $placetab == 'dealinfo') ? 'select' : '' ?>"><i class="fa fa-tag"></i>
                     Khuyến mãi</a></li>
             <li><a href="?tab=pics" class="<?= ($placetab == 'pics') ? 'select' : '' ?>"><i class="fa fa-picture-o"></i>
                     Thư viện ảnh</a></li>
@@ -42,14 +42,57 @@
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-info-circle"></i></div>
             <div class="articlecontent">
-                <? switch ($placetab ){
-                    case "info": echo $oCurrentPlace->dainfo; break;
-                    case "pics": echo $sTabContent; break;
-                    default: echo 'Hiện tại Không có nội dung này.';break;
-                } ?>
+                <?
+                $content = "";
+                switch ($placetab ){
+                    case "info": $content = $oCurrentPlace->dainfo; break;
+                    case "pics": $content = $sTabContent; break;
+                    case "deal": $content = $sTabContent; break;
+                    case "dealinfo": $content = $sTabContent;break;
+                    default: $content=""; break;
+                }
+                if($content != "")
+                echo $content;
+                else echo  'Hiện tại Không có nội dung này.';
+                ?>
 
             </div>
         </div>
+        <? if($placetab == "dealinfo"):?>
+            <div class="articlebox">
+                <div class="cattitle"><i class="fa fa-map-marker"></i> Thông tin địa điểm</div>
+                <div class="articlecontent">
+                    <div class="placeleft">
+                        <div class="placepic"><img src="<?= base_url() . 'thumbnails/' . $oCurrentPlace->dapic ?>"></div>
+                        <div class="placeinfo">
+                            <ul>
+                                <li><h4><i class="fa fa-home"></i> <?= $oCurrentPlace->dalong_name ?></h4></li>
+                                <li><i class="fa fa-map-marker"></i> <span><?= $placeAddres ?></span></li>
+                                <? if ($oCurrentPlace->datel != ""): ?>
+                                    <li><i class="fa fa-phone-square"></i> <span><?= $oCurrentPlace->datel ?></span>
+                                    </li><? endif; ?>
+                                <? if ($oCurrentPlace->dawebsite != ""): ?>
+                                    <li><i class="fa fa-cloud"></i> <span><?= $oCurrentPlace->dawebsite ?></span>
+                                    </li><? endif; ?>
+                                <? if ($oCurrentPlace->daemail != ""): ?>
+                                    <li><i class="fa fa-envelope"></i> <span><?= $oCurrentPlace->daemail ?></span>
+                                    </li><? endif; ?>
+                                <li><i class="fa fa-rocket"></i> <span>Lượt xem: <b><?= $oCurrentPlace->daview ?></b></span>
+                                    <!--<i class="fa fa-thumbs-up"></i>  <span>Like: <b><?=$oCurrentPlace->dalike?></b></span>-->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="placemap"><?= $oCurrentPlace->damap ?></div>
+                </div>
+            </div>
+            <div class="articlebox">
+                <div class="cattitle"><i class="fa fa-info-circle"></i> Thông tin về khuyến mãi</div>
+                <div class="articlecontent">
+                    <?=$sDealcontent?>
+                </div>
+            </div>
+        <? endif;?>
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-comments-o"></i> Bình luận</div>
             <div class="articlecontent">
@@ -58,11 +101,12 @@
         </div>
     </div>
     <div id="rightside">
+        <? if (count($aStreetPlaces)>1): ?>
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-map-marker"></i> Cùng trên đường này</div>
+            <div class="cattitle"><i class="fa fa-map-marker"></i> Dịch vụ cùng đường này</div>
             <div class="articlecontent listplace">
 
-                <? if (count($aStreetPlaces)): ?>
+
                     <ul>
                         <? foreach($aStreetPlaces as $place):?>
                             <? if($place['id'] == $oCurrentPlace->id) continue; ?>
@@ -76,15 +120,18 @@
                             </a></li>
                         <? endforeach;?>
                     </ul>
-                <? endif; ?>
+
 
             </div>
         </div>
+        <? endif; ?>
+        <? if($sNewDeal!=""):?>
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-tags"></i> <?= $this->lang->line('dealname') ?> mới lên</div>
-            <div class="articlecontent" id="accordion">
-
+            <div class="articlecontent listplace" >
+                <?=$sNewDeal?>
             </div>
         </div>
+        <? endif;?>
     </div>
 </div>

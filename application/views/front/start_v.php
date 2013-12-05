@@ -5,23 +5,24 @@
         <? endforeach; ?>
     </ul>
 <? endif; ?>
-<? if (isset($hotdeal)): ?>
-    <ul id="hotdeal">
-        <? foreach ($hotdeal as $deal): ?>
-            <li><?= $deal ?></li>
-        <? endforeach; ?>
-    </ul>
+<? if (isset($sHotDealList) && $sHotDealList != ""): ?>
+    <div class="articlebox">
+        <div class="cattitle"><?=$this->lang->line('dealname')?> HOT</div>
+        <div class="articlecontent homedealhot" id="">
+            <?=$sHotDealList?>
+        </div>
+    </div>
 <? endif; ?>
 <? if (isset($catsdeal)): ?>
     <? foreach ($catsdeal as $catdeal): ?>
-        <div class="catdeal">
+        <? if($catdeal[2] != ""):?>
+        <div class="articlebox">
             <div class="cattitle"><a href="?s=<?=$catdeal[1]?>"><?=$catdeal[0]?></a></div>
-            <ul>
-            <? foreach($catdeal[2] as $deal):?>
-                 <li><?=$deal?></li>
-            <? endforeach;?>
-            </ul>
+            <div class="articlecontent homecatdeal" id="">
+                <?=$catdeal[2]?>
+            </div>
         </div>
+         <? endif;?>
     <? endforeach; ?>
 <? endif; ?>
 <div id="articlebox">
@@ -35,7 +36,8 @@
                             <li>
                                 <a href="<?=$this->mylibs->makePlaceUrl($place)?>">
                                 <img src="<?=base_url()?>main/makethumb/?f=<?=$place->dapic?>&w=320&h=200"
-                                title="<?=$place->dalong_name.'<br>'.$place->provincename?>">
+                                     title="<?=$place->dalong_name.'<br>'.$place->streetname.', '.$place->wardname.', '.$place->districtname?>">
+
                                 </a>
                             </li>
                         <? endforeach;?>
@@ -56,7 +58,7 @@
                             <li>
                                 <a href="<?=$this->mylibs->makePlaceUrl($place)?>">
                                     <img src="<?=base_url()?>main/makethumb/?f=<?=$place->dapic?>&w=320&h=200"
-                                         title="<?=$place->dalong_name.'<br>'.$place->provincename?>">
+                                         title="<?=$place->dalong_name.'<br>'.$place->streetname.', '.$place->wardname.', '.$place->districtname?>">
                                 </a>
                             </li>
                         <? endforeach;?>

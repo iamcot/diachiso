@@ -221,6 +221,7 @@ class Admin extends CI_Controller
             'dainfo' => $this->input->post("dainfo"),
             'damap' => $this->input->post("damap"),
             'daorder' => $this->input->post("daorder"),
+            'daprefix' => $this->input->post("daprefix"),
         );
         if ($this->input->post("edit") != "") //update
         {
@@ -262,6 +263,7 @@ class Admin extends CI_Controller
             'dainfo' => $this->input->post("dainfo"),
             'damap' => $this->input->post("damap"),
             'daprovince_id' => $this->input->post("daprovince_id"),
+            'daprefix' => $this->input->post("daprefix"),
         );
         if ($this->input->post("edit") != "") //update
         {
@@ -303,6 +305,7 @@ class Admin extends CI_Controller
             'damap' => $this->input->post("damap"),
             'dadistrict_id' => $this->input->post("dadistrict_id"),
             'daprovince_id' => $this->input->post("daprovince_id"),
+            'daprefix' => $this->input->post("daprefix"),
         );
         if ($this->input->post("edit") != "") //update
         {
@@ -410,6 +413,9 @@ class Admin extends CI_Controller
             'daserviceplace_id' => $this->input->post("daserviceplace_id"),
             'daspecial' => $this->input->post("daspecial"),
             'dacondition' => $this->input->post("dacondition"),
+            'daoldprice' => $this->input->post("daoldprice"),
+            'dainfo' => $this->input->post("dainfo"),
+            'dapic' => $this->input->post("dapic"),
             'dacreate' => date("Y-m-d H:i:s"),
             'dauser_id' => $this->session->userdata('dauser_id'),
 
@@ -434,6 +440,7 @@ class Admin extends CI_Controller
             'daward_id' => $this->input->post("daward_id"),
             'daprovince_id' => $this->input->post("daprovince_id"),
             'dadistrict_id' => $this->input->post("dadistrict_id"),
+            'daprefix' => $this->input->post("daprefix"),
         );
         if ($this->input->post("edit") != "") //update
         {
@@ -567,6 +574,9 @@ class Admin extends CI_Controller
                 'daserviceplace_id' => $row->daserviceplace_id,
                 'daspecial' => $row->daspecial,
                 'dacondition' => $row->dacondition,
+                'daoldprice' => $row->daoldprice,
+                'dapic' => $row->dapic,
+                'dainfo' => $row->dainfo,
 
             ));
         } else echo '0';
@@ -599,7 +609,8 @@ class Admin extends CI_Controller
                 'daurl' => $row->daurl,
                 'dainfo' => $row->dainfo,
                 'daorder' => $row->daorder,
-                'damap' => $row->damap
+                'damap' => $row->damap,
+                'daprefix' => $row->daprefix,
             ));
         } else echo '0';
     }
@@ -616,7 +627,8 @@ class Admin extends CI_Controller
                 'daurl' => $row->daurl,
                 'dainfo' => $row->dainfo,
                 'damap' => $row->damap,
-                'daprovince_id' => $row->daprovince_id
+                'daprovince_id' => $row->daprovince_id,
+                'daprefix' => $row->daprefix,
             ));
         } else echo '0';
     }
@@ -635,6 +647,7 @@ class Admin extends CI_Controller
                 'damap' => $row->damap,
                 'dadistrict_id' => $row->dadistrict_id,
                 'daprovince_id' => $row->daprovince_id,
+                'daprefix' => $row->daprefix,
             ));
         } else echo '0';
     }
@@ -677,6 +690,7 @@ class Admin extends CI_Controller
                 'daward_id' => $row->daward_id,
                 'daprovince_id' => $row->daprovince_id,
                 'dadistrict_id' => $row->dadistrict_id,
+                'daprefix' => $row->daprefix,
             ));
         } else echo '0';
     }

@@ -91,15 +91,22 @@ input[type=button],
 input[type=submit] {
     -webkit-box-shadow: none;
     box-shadow: none;
-    background-color: #357ae8;
-    background-image: -webkit-linear-gradient(top, #4d90fe, #357ae8);
-    background-image: linear-gradient(top, #4d90fe, #357ae8);
-    border: 1px solid #2f5bb7;
-    border-bottom-color: #2f5bb7;
+    background-color: #1d9d74;
+    background-image: -ms-linear-gradient(bottom, #1d9d74 0%, #20c792 100%);
+    background-image: -ms-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: -moz-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: -o-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #1d9d74 ), color-stop(1, #20c792));
+    background-image: -webkit-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: linear-gradient(to top,  #1d9d74 0%, #20c792 100%);
+    -moz-border-radius: 3px !important;
+    -webkit-border-radius: 3px !important;
+    -o-border-radius: 3px !important;
+    -ms-border-radius: 3px !important;
+    border-radius: 3px !important;
+    border: none;
     margin: 6px 2px;
     vertical-align: middle;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
     cursor: pointer;
     font-weight: bold;
     text-align: center;
@@ -339,23 +346,23 @@ a:hover .subcatshow{
 }
 
 .smalltext9 {
-    font-size: 1em;
-}
-
-.smalltext8 {
-    font-size: .95em;
-}
-
-.smalltext7 {
     font-size: .9em;
 }
 
+.smalltext8 {
+    font-size: .8em;
+}
+
+.smalltext7 {
+    font-size: .7em;
+}
+
 .smalltext6 {
-    font-size: .85em;
+    font-size: .7em;
 }
 
 .smalltext5 {
-    font-size: .85em;
+    font-size: .7em;
 }
 
 .ui-tabs-vertical {
@@ -727,12 +734,14 @@ footer {
 .placeinfo{
     float:left;
     width:60%;
-    padding: 15px;
+    padding: 0 15px;
     overflow: hidden;
 }
 .placeinfo li{
     margin-bottom: 5px;
 }
+.left i,
+.placemap i,
 .placeinfo i{
     min-width: 20px;
     text-align: center;
@@ -741,6 +750,13 @@ footer {
 .placeinfo h4{
     font-size: 1.2em !important;
     color: #da4f49;
+    text-align: left;
+}
+.colorred{
+    color: #da4f49;
+}
+.colorgreen{
+    color: #15694e;
 }
 .placeinfo span{
     font-size: .8em;
@@ -752,16 +768,131 @@ footer {
     display: block;
 
 }
+.placemap h4{
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    text-align: left;
+    color:#999;
+    font-weight: normal;
+}
 .placemap img{
     width: 100%;
+}
+.placemap #dealinfo{
+    float:left;
+    width: 50%;
+    padding: 5px;
+}
+.placemap #dealstatus{
+    float:left;
+    width: 40%;
+    padding: 5px;
 }
 .placepic{
     float:left;
     width: 30.76923076%;
     overflow: hidden;
 }
+li{
+    text-align: left;
+}
 .placepic img{
     width: 100%;
+}
+.listblock{
+    margin-bottom: 15px;
+    overflow: hidden;
+    padding: 5px;
+}
+.listblock:hover{
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.listblock:last-child{
+    border-bottom: none;
+}
+.listblock{
+    border-bottom: 1px solid #ddd;
+}
+#dealinfocontent{
+    overflow: hidden;
+}
+#dealinfocontent .left{
+    float:left;
+    width:47%;
+    overflow: hidden;
+}
+.left h4{
+   font-size: 1.2em;
+    font-weight:normal;
+}
+#supportdeal{
+}
+#supportdeal div{
+    padding: 5px;
+    font-size: .8em;
+}
+ hr{
+    border: 1px solid #ddd;
+
+}
+.dt-hightlight-saleoff {
+    position: absolute;
+    text-align: center;
+    z-index: 5;
+}
+.dt-hightlight-saleoff img {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    border: 0;
+}
+.dt-sale-bbb {
+    position: absolute;
+    top: -9px;
+    color: white;
+    right: 18px;
+    font-weight: bold;
+    font-size: 23px;
+}
+.left li{
+    margin-bottom: 10px;
+    text-wrap: normal;
+}
+.left img{
+    width: 100%;
+    margin-bottom: 15px;
+}
+.left .liicon{
+    display: block;
+}
+.left .liicon li{
+    text-align: justify;
+    background: url("img/list-arrow-black.png") no-repeat scroll left 5px transparent;
+    display: list-item;
+    margin-top: 6px;
+    padding-left: 20px;
+    line-height: 22px;
+    font-size: .9em;
+}
+.noticegetdeal div{
+    font-size: 0.7em;
+    font-style: italic;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+#countdown{
+    overflow: hidden;
+    width: 80%;
+}
+.margin15{
+    margin-right: 2%;
+}
+.size15{
+    font-size: 1.5em;
 }
 .cattabstitle ul{
     list-style: none;
@@ -906,9 +1037,92 @@ footer {
     text-align: center;
 }
 #placepics img{
-    width: 80%;
+    max-width: 100%;
     display: block;
     margin: 10px auto 10px;
+}
+#placepics .fa{
+    font-size: .6em !important ;
+}
+.homedealhot,
+.homecatdeal{
+    overflow: hidden;
+
+}
+.homedealhot ul li{
+    width: 30.5%;
+    float:left;
+    display: block;
+    padding: 0.666666669%;
+    margin:  0.666666669%;
+
+}
+.homecatdeal ul li{
+    width: 23%;
+    float:left;
+    display: block;
+    padding: 0.666666669%;
+    margin:  0.666666669%;
+}
+.homecatdeal ul li:hover,
+.homedealhot ul li:hover{
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.h-listtopdeal-title {
+    height: 40px;
+    padding: 10px 10px 5px 10px;
+    color: #333;
+    display: block;
+    font-weight: bold;
+    text-align: left;
+    text-transform: capitalize;
+    font-size: 14px;
+}
+.h-listtopdeal-info {
+    background-color: #F1F1F1;
+    padding: 10px 10px;
+    overflow: hidden;
+}
+.boxgetdeal{
+    float: right;
+}
+.homecatdeal .boxgetdeal a{
+   font-size: .8em;
+    padding: 5px;
+}
+.boxgetdeal a {
+    color: white !important;
+    font-size: 1em;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    padding: 10px 10px;
+    -moz-border-radius: 3px !important;
+    -webkit-border-radius: 3px !important;
+    -o-border-radius: 3px !important;
+    -ms-border-radius: 3px !important;
+    border-radius: 3px !important;
+    text-decoration: none;
+    background-color: #1d9d74;
+    background-image: -ms-linear-gradient(bottom, #1d9d74 0%, #20c792 100%);
+    background-image: -ms-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: -moz-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: -o-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #1d9d74 ), color-stop(1, #20c792));
+    background-image: -webkit-linear-gradient(bottom,  #1d9d74 0%, #20c792 100%);
+    background-image: linear-gradient(to top,  #1d9d74 0%, #20c792 100%);
+}
+.homecatdeal .h-listtopdeal-info-left {
+    font-size: .7em;
+}
+.h-listtopdeal-info-left {
+    float: left;
+    width: 55%;
+    font-size: .9em;
+    color: #555;
 }
 @media all and (max-width:600px) {
     .headeruser {
