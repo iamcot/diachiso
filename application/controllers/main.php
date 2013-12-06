@@ -307,26 +307,29 @@ class Main extends CI_Controller {
         $currentplaceid = $oCurrentProvince->id;
         $currenttable = $this->tbprovince;
         $currentobject = $oCurrentProvince;
-        $data['currentLevel'] = "";
-        if($oCurrentStreet != null){
-            $currentplaceid = $oCurrentStreet->id;
-            $currenttable = $this->tbstreet;
-            $currentobject = $oCurrentStreet;
-            $data['currentLevel'] .= $oCurrentStreet->dalong_name.", ";
-        }
-        if($oCurrentWard != null){
-            $currentplaceid = $oCurrentWard->id;
-            $currenttable = $this->tbward;
-            $currentobject = $oCurrentWard;
-            $data['currentLevel'] .= $oCurrentWard->dalong_name.", ";
-        }
+
+        $data['currentLevel'] = $oCurrentProvince->dalong_name;
         if($oCurrentDistrict != null){
             $currentplaceid = $oCurrentDistrict->id;
             $currenttable = $this->tbdistrict;
             $currentobject = $oCurrentDistrict;
-            $data['currentLevel'] .= $oCurrentDistrict->dalong_name.", ";
+            $data['currentLevel'] = $oCurrentDistrict->dalong_name.", ".$data['currentLevel'];
         }
-        $data['currentLevel'] .= $oCurrentProvince->dalong_name;
+
+        if($oCurrentWard != null){
+            $currentplaceid = $oCurrentWard->id;
+            $currenttable = $this->tbward;
+            $currentobject = $oCurrentWard;
+            $data['currentLevel'] = $oCurrentWard->dalong_name.", ".$data['currentLevel'];
+        }
+        if($oCurrentStreet != null){
+            $currentplaceid = $oCurrentStreet->id;
+            $currenttable = $this->tbstreet;
+            $currentobject = $oCurrentStreet;
+            $data['currentLevel'] = $oCurrentStreet->dalong_name.", ".$data['currentLevel'];
+        }
+
+
         $data['currentobject'] = $currentobject;
         $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$currenttable."_id","v"=>$currentplaceid));
         $data =  $this->processCurrentTreeForService($data);
@@ -367,26 +370,26 @@ class Main extends CI_Controller {
         $currentplaceid = $oCurrentProvince->id;
         $currenttable = $this->tbprovince;
         $currentobject = $oCurrentProvince;
-        $data['currentLevel'] = "";
-        if($oCurrentStreet != null){
-            $currentplaceid = $oCurrentStreet->id;
-            $currenttable = $this->tbstreet;
-            $currentobject = $oCurrentStreet;
-            $data['currentLevel'] .= $oCurrentStreet->dalong_name.", ";
-        }
-        if($oCurrentWard != null){
-            $currentplaceid = $oCurrentWard->id;
-            $currenttable = $this->tbward;
-            $currentobject = $oCurrentWard;
-            $data['currentLevel'] .= $oCurrentWard->dalong_name.", ";
-        }
+        $data['currentLevel'] = $oCurrentProvince->dalong_name;
         if($oCurrentDistrict != null){
             $currentplaceid = $oCurrentDistrict->id;
             $currenttable = $this->tbdistrict;
             $currentobject = $oCurrentDistrict;
-            $data['currentLevel'] .= $oCurrentDistrict->dalong_name.", ";
+            $data['currentLevel'] = $oCurrentDistrict->dalong_name.", ".$data['currentLevel'];
         }
-        $data['currentLevel'] .= $oCurrentProvince->dalong_name;
+
+        if($oCurrentWard != null){
+            $currentplaceid = $oCurrentWard->id;
+            $currenttable = $this->tbward;
+            $currentobject = $oCurrentWard;
+            $data['currentLevel'] = $oCurrentWard->dalong_name.", ".$data['currentLevel'];
+        }
+        if($oCurrentStreet != null){
+            $currentplaceid = $oCurrentStreet->id;
+            $currenttable = $this->tbstreet;
+            $currentobject = $oCurrentStreet;
+            $data['currentLevel'] = $oCurrentStreet->dalong_name.", ".$data['currentLevel'];
+        }
 
 
         $data['currentobject'] = $currentobject;

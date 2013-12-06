@@ -2,9 +2,10 @@
     <div id="leftside">
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-cogs"></i> <?=$sTitle?> tại <?=$currentLevel?></div>
+            <? if($aService != null):?>
             <ul class="articlecontent" id="servicelist">
 
-                <? if($aService != null):?>
+
                 <? foreach($aService as $oCurrentPlace):?>
                 <li class="serviceitem">
                     <div class="placeleft">
@@ -30,7 +31,7 @@
                     </div>
                     <div class="placemap"><?= $oCurrentPlace->damap ?></div>
                 </li>
-                <? endforeach; endif;?>
+                <? endforeach; ?>
             </ul>
 
             <div class="pagination">
@@ -43,6 +44,7 @@
 
             <br>
             <input type="hidden" name="currpage" value="0">
+
             <script>
                 $('.pagination').jqPagination({
                     paged: function(page) {
@@ -54,7 +56,11 @@
                     console.log($(location).attr('href'));
                     $("#servicelist").load("?page=" + page);
                 }
+
             </script>
+                <? else:?>
+                <p style="margin:15px">Chưa có dữ liệu về dịch vụ này</p>
+            <? endif;?>
         </div>
 
     </div>
