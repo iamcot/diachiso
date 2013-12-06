@@ -5,3 +5,6 @@ $lang['SERVICE_MANA'] = 'Quản lý dịch vụ';
 $lang['slogan'] = 'Thổ địa online';
 
 $lang['dealname'] = 'Deal';
+$lang['about'] = 'Giới thiệu';
+$lang['help'] = 'Hướng dẫn';
+$lang['news'] = 'Tin tức';

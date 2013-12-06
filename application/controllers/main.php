@@ -33,6 +33,7 @@ class Main extends CI_Controller {
     public function index($sCurrentProvince="")//seourl
     {
         $oCurrentProvince = $this->main_m->getProvince($sCurrentProvince);
+        $this->session->set_userdata("province",$oCurrentProvince->daurl);
         $data['sTitle'] = $oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         $data['sCat'] = 'start';
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/';
@@ -60,6 +61,7 @@ class Main extends CI_Controller {
         $data['aHotDealList'] = $this->main_m->getDealList($oCurrentProvince->id, "promo",2);
         $data['sPromoDealList'] = $this->load->view("front/homedealitem_v",$data,true);
         $data['aBanner'] = $this->main_m->getBanner();
+
         $this->render($data);
     }
     public function district($province,$daseorul){
@@ -128,6 +130,7 @@ class Main extends CI_Controller {
     }
     public function serviceplace($province,$district,$ward,$daseorul,$seourl){
         $oCurrentProvince = $this->main_m->getProvince($province);
+        $this->session->set_userdata("province",$oCurrentProvince->daurl);
         $oCurrentDistrict = $this->main_m->getDistrict($oCurrentProvince->id,$district);
         $oCurrentWard = $this->main_m->getWard($oCurrentDistrict->id,$ward);
         $oCurrentStreet = $this->main_m->getStreet($oCurrentProvince->id,$oCurrentDistrict->id,$oCurrentWard->id,$daseorul);
@@ -153,10 +156,11 @@ class Main extends CI_Controller {
             $data['sTabContent'] = $this->load->view('front/dealinfo_v',$data,true);
             $data['sDealcontent'] = $data['oDealInfo']->dainfo;
         }
-        if($this->input->get("news")){
-//            $data['placetab'] == 'dealinfo'
-//            $data['aDeal'] = $this->main_m->getDealInfo($oCurrentPlace->id);
-//            $data['sTabContent'] = $this->load->view('front/dealinfo_v',$data,true);
+        if($this->input->get("newsinfo") && is_numeric($this->input->get("newsinfo"))){
+            $data['placetab'] = 'newsinfo';
+            $this->main_m->updateItemView($this->tbnews,$this->input->get("newsinfo"));
+            $data['oNews'] = $this->main_m->getNewsInfo($this->input->get("newsinfo"));
+            $data['sTabContent'] = $this->load->view('front/newsinfo_v',$data,true);
         }
         if($data['placetab'] == "info"){
             $this->main_m->updateItemView($this->tbservice_place,$oCurrentPlace->id);
@@ -170,8 +174,8 @@ class Main extends CI_Controller {
             $data['sTabContent'] = $this->load->view('front/listpics_v',$data,true);
         }
         else if($data['placetab'] == 'news'){
-            $data['aPics'] = $this->main_m->getPlacePics($oCurrentPlace->id);
-            $data['sTabContent'] = $this->load->view('front/listpics_v',$data,true);
+            $data['aNews'] = $this->main_m->getPlaceNews($oCurrentPlace->id);
+            $data['sTabContent'] = $this->load->view('front/listplacenews_v',$data,true);
         }
         $data['aNewDeal'] = $this->main_m->getDealList($oCurrentProvince->id, "new",$this->config->item('iHomeServicePlae'));
         $data['sNewDeal'] = $this->load->view("front/sidelistdeal_v",$data,true);
@@ -197,6 +201,7 @@ class Main extends CI_Controller {
     public $tbdapic = 'dapic';
     public $tbuser = 'dauser';
     public $tbdeal = 'dadeal';
+    public $tbnews = 'danews';
     public $crrlang = '';
 
     public function render($data = array())
@@ -204,6 +209,7 @@ class Main extends CI_Controller {
         //get navigator service group
         $data['aNavService'] = $this->main_m->getNavService();
         $data['sTitle'] = $data['sTitle'].' - '.$this->config->item('sufix_title');
+        $data['aTopMenu'] = $this->main_m->getconfig("toplink");
         $this->load->view('container_v', $data);
     }
     public function loadsubcat(){
@@ -213,8 +219,30 @@ class Main extends CI_Controller {
         $arr = $this->main_m->getsubcat($parentname,$parentid,$current);
         $this->mylibs->echojson($arr);
     }
-    public function news($cat,$id){
-        echo 'hellonews';
+    public function news($cat="help",$id=0){
+
+        if($cat == "help")
+            $data['aCat']= $this->main_m->getNewsCat(array("about","help")," dacat  ", 0);
+        else $data['aCat']= $this->main_m->getNewsCat(array("news")," id DESC  ", 10);
+        $data['sType'] = $cat;
+        $data['sTitle'] = $this->lang->line($cat);
+        $news_id = $this->mylibs->getIdFromSeourl($id);
+        if(is_numeric($news_id)){
+            $this->main_m->updateItemView($this->tbnews,$news_id);
+         $data['oNews'] = $this->main_m->getNews($news_id);
+        }
+        else $data['oNews'] = null;
+
+        $data['sBody'] = $this->load->view("front/news_v",$data,true);
+
+        if($this->session->userdata("province")) $province = $this->session->userdata("province");
+        else $province = "";
+        $oCurrentProvince = $this->main_m->getProvince($province);
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbprovince,array($this->tbprovince=>$oCurrentProvince));
+        if($cat == "help")
+            $data['addNavAddr'] = "Trợ giúp";
+        else $data['addNavAddr'] = 'Tin tức';
+        $this->render($data);
     }
     public function makethumb(){
         $filename = $this->input->get("f");
@@ -226,6 +254,7 @@ class Main extends CI_Controller {
         imagejpeg($thumb,null,80);
         imagedestroy($thumb);
     }
+
 }
 
 /* End of file welcome.php */

@@ -7,7 +7,7 @@
                <tr class="<?=(($i%2==0))?'odd':''?> <?=($row->dadeleted==0?'':'trdelete')?>"
                    id="tr<?=$row->id?>"><td><?=$row->id?></td>
                    <td><a href="javascript:editnews(<?=$row->id?>)"><?=$row->dalong_name?></a></td>
-                   <td><?=$row->daurl?></td>
+                   <td><?=$row->daurl.'-'.$row->id.'.html'?></td>
                    <td><?=date("d/m/Y H:i",strtotime($row->daedit))?></td>
                    <td><?=$row->daview?></td>
                    <td><?=$row->dacomment?></td>

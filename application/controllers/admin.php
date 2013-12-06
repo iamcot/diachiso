@@ -1116,6 +1116,26 @@ class Admin extends CI_Controller
             echo 0;
         }
     }
+    function saveconfig(){
+        $daname= $this->input->post("daname");
+        $davalue= $this->input->post("davalue");
+        $dacomment= $this->input->post("dacomment");
+        $sql="INSERT INTO ".$this->tbconfig." (daname,davalue,dacomment)  VALUES ('$daname','$davalue','$dacomment')";
+        echo $this->db->query($sql);
+    }
+    function loadconfig(){
+        $daname= $this->input->post("daname");
+        $sql="SELECT * FROM ".$this->tbconfig." WHERE daname='$daname'";
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $this->mylibs->echojson($qr->result_array());
+        else return "";
+    }
+    function deltoplink(){
+        $id = $this->input->post("id");
+        $sql="DELETE FROM ".$this->tbconfig." WHERE id=".$id;
+        echo $this->db->query($sql);
+    }
 }
 
 /* End of file welcome.php */

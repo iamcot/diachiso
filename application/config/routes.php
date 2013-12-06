@@ -64,6 +64,8 @@ $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/street/$1/
 $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/(:any)'] = 'main/serviceplace/$1/$2/$3/$4/$5';
 
 
+$route['help'] = 'main/news/help';
+$route['news'] = 'main/news/news';
 $route['help/(:any)'] = 'main/news/help/$1';
 $route['news/(:any)'] = 'main/news/news/$1';
 

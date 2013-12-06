@@ -65,8 +65,9 @@
         <div id="newsforhome" style="display: none">
             <lable>Chuyên mục</lable>
             <select name="dacats">
+                <option value="about">Giới thiệu</option>
                 <option value="help">Giúp đỡ, hướng dẫn</option>
-                <option value="site">Tin tức chung của site</option>
+                <option value="news">Tin tức chung của site</option>
             </select>
 
         </div>

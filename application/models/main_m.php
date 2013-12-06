@@ -16,6 +16,7 @@ class Main_m extends CI_Model
     public $vserviceplace = 'daview_serviceplace';
     public $vdeal = 'daview_deal';
     public $tbconfig = 'daconfig';
+    public $tbnews = 'danews';
 
     public function getProvince($sCurrProvince = "")
     {
@@ -190,8 +191,23 @@ class Main_m extends CI_Model
             return $qr->result();
         else return null;
     }
+    function getPlaceNews($sPlace_id){
+        $sql="SELECT * FROM ".$this->tbnews." WHERE dadeleted=0 AND daserviceplace_id=$sPlace_id ORDER BY id DESC";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->result();
+        else return null;
+
+    }
     function getDealInfo($id){
         $sql="SELECT * FROM ".$this->tbdeal." WHERE dadeleted=0 AND id='$id' LIMIT 0,1";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->row();
+        else return null;
+    }
+    function getNewsInfo($id){
+        $sql="SELECT * FROM ".$this->tbnews." WHERE dadeleted=0 AND id='$id' LIMIT 0,1";
         $qr = $this->db->query($sql);
         if($qr->num_rows()>0)
             return $qr->row();
@@ -229,5 +245,59 @@ class Main_m extends CI_Model
             return $qr->result();
         }
         else return null;
+    }
+    function getNews($id=0){
+        $sql="SELECT * FROM ".$this->tbnews." WHERE id=$id AND dadeleted=0";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0){
+            return $qr->row();
+        }
+        else return null;
+    }
+    function getNewsCat($aCat = array(),$order="",$limit=0){
+        $where = "";
+        if($order != "")
+            $sorder = " ORDER BY $order ";
+        else $sorder = "";
+
+        $slimit = "";
+        if($limit>0) $slimit = " LIMIT 0, $limit";
+        if(count($aCat)>0){
+            $i=0;
+            foreach($aCat as $cat){
+                if($i==0) $where.=" AND ( ";
+                else if ($i>0) $where .= " OR ";
+                $where .= " dacat = '$cat' ";
+                if($i == (count($aCat)-1)) $where .= " ) ";
+                $i++;
+            }
+        }
+        $sql="SELECT * FROM ".$this->tbnews ." WHERE dadeleted=0 $where $sorder $slimit";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0){
+            $rs = $qr->result();
+            $anews = array();
+            $currentcat = "";
+            foreach($rs as $news){
+                if($news->dacat != $currentcat)
+                {
+                    $currentcat = $news->dacat;
+                }
+                $anews[$currentcat][] = $news;
+            }
+            return $anews;
+        }
+        else return null;
+
+    }
+    public function getconfig($name){
+         $sql="SELECT * FROM ".$this->tbconfig." WHERE daname='$name'";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->result();
+        else return null;
+    }
+    public function getServiceList($page=0){
+        $sql="";
     }
 }

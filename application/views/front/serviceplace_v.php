@@ -7,7 +7,7 @@
                     Khuyến mãi</a></li>
             <li><a href="?tab=pics" class="<?= ($placetab == 'pics') ? 'select' : '' ?>"><i class="fa fa-picture-o"></i>
                     Thư viện ảnh</a></li>
-            <li><a href="?tab=news" class="<?= ($placetab == 'news') ? 'select' : '' ?>"><i
+            <li><a href="?tab=news" class="<?= ($placetab == 'news'| $placetab == 'newsinfo') ? 'select' : '' ?>"><i
                         class="fa fa-rss-square"></i> Tin tức</a></li>
         </ul>
     </div>
@@ -49,6 +49,8 @@
                     case "pics": $content = $sTabContent; break;
                     case "deal": $content = $sTabContent; break;
                     case "dealinfo": $content = $sTabContent;break;
+                    case "news": $content = $sTabContent;break;
+                    case "newsinfo": $content = $sTabContent;break;
                     default: $content=""; break;
                 }
                 if($content != "")

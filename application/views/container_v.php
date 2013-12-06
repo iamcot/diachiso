@@ -41,10 +41,13 @@
 <div id="allpage">
 <div id="topmenu">
     <div class="wrap">
+        <? if(count($aTopMenu)>0):?>
         <ul>
-        <li><a href="">DigiAddr là gì?</a></li><li><a href="">Tuyển dụng</a></li>
-            <li><a href="">Hợp tác với DigiAddr</a></li><li><a href="">Liên hệ</a></li>
+         <? foreach($aTopMenu as $menu):?>
+        <li><a href="<?=$menu->davalue?>"><?=$menu->dacomment?></a></li>
+                <? endforeach;?>
         </ul>
+        <? endif;?>
         <div class="headeruser">
             <? if ($this->session->userdata('dauser_id')): ?>
                 <? if($this->session->userdata('daavatar')!="") echo '<img class="navavatar" src="'.base_url().'thumbnails/'.$this->session->userdata('daavatar').'">';?>
@@ -75,6 +78,7 @@
     <div class="wrap">
         <ul id="navaddr">
          <?=$aNavAddr?>
+            <? if(isset($addNavAddr)) echo '<li><a href="/'.$sType.'">'.$addNavAddr.'</a></li>';?>
         </ul>
 
         <ul id="navservice">

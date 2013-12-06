@@ -177,7 +177,7 @@ a:hover {
 .nav {
     background: #fcfcfc;
     border-bottom: 1px solid #f2f2f2;
-    margin: 0 0 15px;
+    margin: 0;
     min-height: 36px;
     padding: 0 12px;
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -648,6 +648,7 @@ Pagination
 
 #content {
     padding-bottom: 100px;
+    margin-top:15px;
 }
 
 #allpage {
@@ -1054,8 +1055,6 @@ li{
 }
 #promotedeal{
     background: #fff;
-    margin-top:-15px;
-    margin-bottom: 15px;
 }
 #promotedeal img{
     max-height: 300px;
@@ -1154,19 +1153,38 @@ li{
 
 }
 .articlecontent .bx-pager{
+    /*
     position: absolute;
     z-index: 99;
     top:180px;
     right:0px;
+    */
+    display: none;
 }
 .bannerwrapper .bx-pager {
-    position: absolute;
-    z-index: 99;
-    top:160px;
-    right:0px
+   display:none;
 }
 .bx-wrapper .bx-pager{
     bottom: 0 !important;
+}
+.newsfolder ul{
+    margin-left:25px;
+}
+.newsfolder li{
+    line-height: 1.5em;
+}
+.newscat img{
+     float:left;
+    width: 50px;
+    display: block;
+    margin-right: 10px;
+}
+.newscat ul li{
+    margin-bottom: 10px;
+}
+.newscat li ul li{
+   line-height: 1.5em;
+    margin-bottom: 0;
 }
 @media all and (max-width:600px) {
     .headeruser {
