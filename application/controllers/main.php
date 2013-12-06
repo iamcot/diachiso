@@ -33,10 +33,12 @@ class Main extends CI_Controller {
     public function index($sCurrentProvince="")//seourl
     {
         $oCurrentProvince = $this->main_m->getProvince($sCurrentProvince);
+        $data['oCurrentProvince'] = $oCurrentProvince;
         $this->session->set_userdata("province",$oCurrentProvince->daurl);
         $data['sTitle'] = $oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         $data['sCat'] = 'start';
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/';
+        $data = $this->processCurrentTreeForService($data);
         $data['aDistrict'] = $this->main_m->getsubcat($this->tbprovince, $oCurrentProvince->id, $this->tbdistrict);
         $aServiceHome = $this->main_m->getNavService();
         $catsdeal = array();
@@ -73,6 +75,8 @@ class Main extends CI_Controller {
         $data['sTitle'] = $oCurrentDistrict->daprefix.' '.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$this->tbdistrict."_id","v"=>$oCurrentDistrict->id));
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/';
+        $data =  $this->processCurrentTreeForService($data);
+
         //$data['sCat'] = 'start';
         $data['aStreet'] = $this->main_m->getStreet($oCurrentProvince->id,$oCurrentDistrict->id,0);
         $data['sBody'] = $this->load->view("front/district_v",$data,true);
@@ -96,6 +100,7 @@ class Main extends CI_Controller {
         $data['sTitle'] = $oCurrentWard->daprefix.' '.$oCurrentWard->dalong_name.', '.$oCurrentDistrict->daprefix.' '.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$this->tbward."_id","v"=>$oCurrentWard->id));
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/';
+        $data = $this->processCurrentTreeForService($data);
         //$data['sCat'] = 'start';
         $data['sBody'] = $this->load->view("front/ward_v",$data,true);
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
@@ -118,6 +123,7 @@ class Main extends CI_Controller {
         $data['sTitle'] = $oCurrentStreet->daprefix.' '.$oCurrentStreet->dalong_name.', '.$oCurrentWard->daprefix.' '.$oCurrentWard->dalong_name.', '.$oCurrentDistrict->daprefix.' '.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$this->tbstreet."_id","v"=>$oCurrentStreet->id));
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/'.$oCurrentWard->daurl.'/';
+        $data =  $this->processCurrentTreeForService($data);
         //$data['sCat'] = 'start';
         $data['sBody'] = $this->load->view("front/street_v",$data,true);
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
@@ -128,14 +134,14 @@ class Main extends CI_Controller {
         $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbstreet,$aNavAddr);
         $this->render($data);
     }
-    public function serviceplace($province,$district,$ward,$daseorul,$seourl){
+    public function serviceplace($province,$district,$ward,$daseorul,$place_id){
         $oCurrentProvince = $this->main_m->getProvince($province);
         $this->session->set_userdata("province",$oCurrentProvince->daurl);
         $oCurrentDistrict = $this->main_m->getDistrict($oCurrentProvince->id,$district);
         $oCurrentWard = $this->main_m->getWard($oCurrentDistrict->id,$ward);
         $oCurrentStreet = $this->main_m->getStreet($oCurrentProvince->id,$oCurrentDistrict->id,$oCurrentWard->id,$daseorul);
         if($oCurrentStreet != null) $oCurrentStreet = $oCurrentStreet[0];
-        $place_id = $this->mylibs->getIdFromSeourl($seourl);
+       // $place_id = $this->mylibs->getIdFromSeourl($seourl);
         $oCurrentPlace = $this->main_m->getServicePlace($place_id);
         $data['oCurrentDistrict'] = $oCurrentDistrict;
         $data['oCurrentProvince'] = $oCurrentProvince;
@@ -146,6 +152,7 @@ class Main extends CI_Controller {
         $data['placeAddres'] = $oCurrentPlace->daaddr.', '.$oCurrentStreet->daprefix.' '.$oCurrentStreet->dalong_name.', '.$oCurrentWard->daprefix.' '.$oCurrentWard->dalong_name.', '.$oCurrentDistrict->daprefix.' '.$oCurrentDistrict->dalong_name.', '.$oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         $data['aServiceTree'] = $this->main_m->getFullServiceTree();
         $data['sCurrentTree'] = '/'.$oCurrentProvince->daurl.'/'.$oCurrentDistrict->daurl.'/'.$oCurrentWard->daurl.'/'.$oCurrentStreet->daurl.'/';
+        $data =  $this->processCurrentTreeForService($data);
         //$data['sCat'] = 'start';
         $data['page']= 'serviceplace';
         $data['placetab'] = (($this->input->get("tab"))?$this->input->get("tab"):"info");
@@ -204,12 +211,28 @@ class Main extends CI_Controller {
     public $tbnews = 'danews';
     public $crrlang = '';
 
+    protected function processCurrentTreeForService($data = array()){
+        if(!isset($data['sCurrentTreeForService']) || $data['sCurrentTreeForService']==""){
+            $data['sCurrentTreeForService']="";
+            if(isset($data['oCurrentStreet']) && $data['oCurrentStreet'] != null )
+                $data['sCurrentTreeForService'] =  $data['oCurrentStreet']->daurl.'/';
+            if(isset($data['oCurrentWard']) && $data['oCurrentWard'] != null )
+                $data['sCurrentTreeForService'] =  $data['oCurrentWard']->daurl.'/'.$data['sCurrentTreeForService'];
+            if(isset($data['oCurrentDistrict']) && $data['oCurrentDistrict'] != null )
+                $data['sCurrentTreeForService'] =  $data['oCurrentDistrict']->daurl.'/'.$data['sCurrentTreeForService'];
+            if(isset($data['oCurrentProvince']) && $data['oCurrentProvince'] != null )
+                $data['sCurrentTreeForService'] =  '/'.$data['oCurrentProvince']->daurl.'/'.$data['sCurrentTreeForService'];
+        }
+        return $data;
+    }
     public function render($data = array())
     {
         //get navigator service group
         $data['aNavService'] = $this->main_m->getNavService();
         $data['sTitle'] = $data['sTitle'].' - '.$this->config->item('sufix_title');
         $data['aTopMenu'] = $this->main_m->getconfig("toplink");
+
+        $data = $this->processCurrentTreeForService($data);
         $this->load->view('container_v', $data);
     }
     public function loadsubcat(){
@@ -219,14 +242,14 @@ class Main extends CI_Controller {
         $arr = $this->main_m->getsubcat($parentname,$parentid,$current);
         $this->mylibs->echojson($arr);
     }
-    public function news($cat="help",$id=0){
+    public function news($cat="help",$news_id=0){
 
         if($cat == "help")
             $data['aCat']= $this->main_m->getNewsCat(array("about","help")," dacat  ", 0);
         else $data['aCat']= $this->main_m->getNewsCat(array("news")," id DESC  ", 10);
         $data['sType'] = $cat;
         $data['sTitle'] = $this->lang->line($cat);
-        $news_id = $this->mylibs->getIdFromSeourl($id);
+       // $news_id = $this->mylibs->getIdFromSeourl($id);
         if(is_numeric($news_id)){
             $this->main_m->updateItemView($this->tbnews,$news_id);
          $data['oNews'] = $this->main_m->getNews($news_id);
@@ -253,6 +276,133 @@ class Main extends CI_Controller {
         header('Content-Type: image/jpeg');
         imagejpeg($thumb,null,80);
         imagedestroy($thumb);
+    }
+    public function servicegroup($url,$servicegroup_id,$province_url,$district_url = "",$ward_url="",$street_url=""){
+        if($this->input->get('page')) $page= ($this->input->get('page')-1)*$this->config->item('num_servicegroup');
+        else $page = 0;
+        $data['aService'] = $this->main_m->getPlaceFromServiceGroup($servicegroup_id,$province_url,null,$page,$district_url,$ward_url,$street_url);
+        if($this->input->get('page')){
+            echo $this->load->view("front/serviceli_v",$data,true);
+            return;
+        }
+        $data['sumpage'] = $this->main_m->getSumPage($this->tbservice_group,$servicegroup_id,$province_url,$district_url,$ward_url,$street_url);
+
+        $oCurrentProvince = $this->main_m->getProvince($province_url);
+        $this->session->set_userdata("province",$oCurrentProvince->daurl);
+        $oCurrentDistrict = $this->main_m->getDistrict($oCurrentProvince->id,$district_url);
+        if($oCurrentDistrict != null)
+            $oCurrentWard = $this->main_m->getWard($oCurrentDistrict->id,$ward_url);
+        else $oCurrentWard = null;
+        if($oCurrentWard != null)
+            $oCurrentStreet = $this->main_m->get1street($oCurrentWard->id,$street_url);
+        else $oCurrentStreet = null;
+
+        $data['oCurrentDistrict'] = $oCurrentDistrict;
+        $data['oCurrentProvince'] = $oCurrentProvince;
+        $data['oCurrentWard'] = $oCurrentWard;
+        $data['oCurrentStreet'] = $oCurrentStreet;
+        if($data['aService'] != null)
+            $data['sTitle'] =  $data['aService'][0]->servicegroupname;
+        else $data['sTitle'] = $this->main_m->getServiceNameFromId($this->tbservice_group,$servicegroup_id);
+        $currentplaceid = $oCurrentProvince->id;
+        $currenttable = $this->tbprovince;
+        $currentobject = $oCurrentProvince;
+        $data['currentLevel'] = "";
+        if($oCurrentStreet != null){
+            $currentplaceid = $oCurrentStreet->id;
+            $currenttable = $this->tbstreet;
+            $currentobject = $oCurrentStreet;
+            $data['currentLevel'] .= $oCurrentStreet->dalong_name.", ";
+        }
+        if($oCurrentWard != null){
+            $currentplaceid = $oCurrentWard->id;
+            $currenttable = $this->tbward;
+            $currentobject = $oCurrentWard;
+            $data['currentLevel'] .= $oCurrentWard->dalong_name.", ";
+        }
+        if($oCurrentDistrict != null){
+            $currentplaceid = $oCurrentDistrict->id;
+            $currenttable = $this->tbdistrict;
+            $currentobject = $oCurrentDistrict;
+            $data['currentLevel'] .= $oCurrentDistrict->dalong_name.", ";
+        }
+        $data['currentLevel'] .= $oCurrentProvince->dalong_name;
+        $data['currentobject'] = $currentobject;
+        $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$currenttable."_id","v"=>$currentplaceid));
+        $data =  $this->processCurrentTreeForService($data);
+        $data['sBody'] = $this->load->view("front/service_v",$data,true);
+        $aNavAddr[$this->tbprovince] = $oCurrentProvince;
+        $aNavAddr[$this->tbdistrict] = $oCurrentDistrict;
+        $aNavAddr[$this->tbward] = $oCurrentWard;
+        $aNavAddr[$this->tbstreet] = $oCurrentStreet;
+
+
+
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($currenttable,$aNavAddr,$currentplaceid);
+        $this->render($data);
+    }
+    public function service($url,$service_id,$province_url,$district_url = "",$ward_url="",$street_url=""){
+        //$data['currentUrl'] = base_url()
+        if($this->input->get('page')) $page= ($this->input->get('page')-1)*$this->config->item('num_servicegroup');
+        else $page = 0;
+        $data['aService'] = $this->main_m->getPlaceFromService($service_id,$province_url,null,$page,$district_url,$ward_url,$street_url);
+        $data['sumpage'] = $this->main_m->getSumPage($this->tbservice_item,$service_id,$province_url,$district_url,$ward_url,$street_url);
+        $oCurrentProvince = $this->main_m->getProvince($province_url);
+        $this->session->set_userdata("province",$oCurrentProvince->daurl);
+        $oCurrentDistrict = $this->main_m->getDistrict($oCurrentProvince->id,$district_url);
+        if($oCurrentDistrict != null)
+            $oCurrentWard = $this->main_m->getWard($oCurrentDistrict->id,$ward_url);
+        else $oCurrentWard = null;
+        if($oCurrentWard != null)
+            $oCurrentStreet = $this->main_m->get1street($oCurrentWard->id,$street_url);
+        else $oCurrentStreet = null;
+
+        $data['oCurrentDistrict'] = $oCurrentDistrict;
+        $data['oCurrentProvince'] = $oCurrentProvince;
+        $data['oCurrentWard'] = $oCurrentWard;
+        $data['oCurrentStreet'] = $oCurrentStreet;
+        if($data['aService'] != null)
+            $data['sTitle'] =  $data['aService'][0]->servicename;
+        else $data['sTitle'] = $this->main_m->getServiceNameFromId($this->tbservice_item,$service_id);
+        $currentplaceid = $oCurrentProvince->id;
+        $currenttable = $this->tbprovince;
+        $currentobject = $oCurrentProvince;
+        $data['currentLevel'] = "";
+        if($oCurrentStreet != null){
+            $currentplaceid = $oCurrentStreet->id;
+            $currenttable = $this->tbstreet;
+            $currentobject = $oCurrentStreet;
+            $data['currentLevel'] .= $oCurrentStreet->dalong_name.", ";
+        }
+        if($oCurrentWard != null){
+            $currentplaceid = $oCurrentWard->id;
+            $currenttable = $this->tbward;
+            $currentobject = $oCurrentWard;
+            $data['currentLevel'] .= $oCurrentWard->dalong_name.", ";
+        }
+        if($oCurrentDistrict != null){
+            $currentplaceid = $oCurrentDistrict->id;
+            $currenttable = $this->tbdistrict;
+            $currentobject = $oCurrentDistrict;
+            $data['currentLevel'] .= $oCurrentDistrict->dalong_name.", ";
+        }
+        $data['currentLevel'] .= $oCurrentProvince->dalong_name;
+
+
+        $data['currentobject'] = $currentobject;
+        $data['aServiceTree'] = $this->main_m->getFullServiceTree(array("k"=>$currenttable."_id","v"=>$currentplaceid));
+        $data = $this->processCurrentTreeForService($data);
+
+        $data['sBody'] = $this->load->view("front/service_v",$data,true);
+        $aNavAddr[$this->tbprovince] = $oCurrentProvince;
+        $aNavAddr[$this->tbdistrict] = $oCurrentDistrict;
+        $aNavAddr[$this->tbward] = $oCurrentWard;
+        $aNavAddr[$this->tbstreet] = $oCurrentStreet;
+
+
+
+        $data['aNavAddr'] = $this->mylibs->makeNavAddr($currenttable,$aNavAddr,$currentplaceid);
+        $this->render($data);
     }
 
 }

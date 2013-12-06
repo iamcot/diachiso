@@ -54,7 +54,7 @@
                             <div>
                                 <ul>
                                     <? foreach ($aServiceGroup[1] as $oService): ?>
-                                        <li><a href="?s=<?= $oService->daurl ?>"><i class="fa fa-caret-right"></i>  <?= $oService->dalong_name ?> (<?=$oService->numplace?>)</a></li>
+                                        <li><a href="<?= $sCurrentTreeForService.$oService->id.'-'.$oService->daurl.'.htm' ?>"><i class="fa fa-caret-right"></i>  <?= $oService->dalong_name ?> (<?=$oService->numplace?>)</a></li>
                                     <? endforeach; ?>
                                 </ul>
                             </div>

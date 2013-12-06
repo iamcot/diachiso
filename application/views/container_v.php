@@ -83,7 +83,7 @@
 
         <ul id="navservice">
             <? foreach($aNavService as $row):?>
-                <li><a><?=$row->dalong_name?></a></li>
+                <li><a href="<?=$sCurrentTreeForService.$row->daurl.'-'.$row->id.'.htm'?>"><?=$row->dalong_name?></a></li>
             <? endforeach;?>
         </ul>
     </div>

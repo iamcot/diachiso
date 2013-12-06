@@ -17,6 +17,7 @@ $config['aAddrTree'] = array(  // table,parenttable)
 
 $config['iHomeServicePlae'] = 10;
 $config['num_dealhot'] = 9;
+$config['num_servicegroup'] = 1;
 
 $config['iHomeCatDeal'] = 6;
 $config['shipfee'] = '10.000';

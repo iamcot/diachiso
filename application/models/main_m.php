@@ -59,6 +59,15 @@ class Main_m extends CI_Model
         }
         else return null;
     }
+    public function get1street($wardid, $daseorul)
+    {
+        $sql = "SELECT * FROM " . $this->tbstreet . " WHERE dadeleted = 0 AND daurl='$daseorul' AND daward_id = '$wardid' LIMIT 0,1";
+        $qr = $this->db->query($sql);
+        if ($qr->num_rows() > 0) {
+            return $qr->row();
+        }
+        else return null;
+    }
 
     public function getStreet($province_id, $district_id, $ward_id, $daurl = "")
     {
@@ -297,7 +306,70 @@ class Main_m extends CI_Model
             return $qr->result();
         else return null;
     }
-    public function getServiceList($page=0){
-        $sql="";
+    public function getPlaceFromServiceGroup($sgid,$province_url,$order=array(),$page=0,$district_url = "",$ward_url="",$street_url=""){
+        $sorder = " ORDER BY sp.servicename ";
+        $i=0;
+        if($order != null)
+        foreach($order as $k=>$v){
+            if($i>0) $sorder .= ",";
+            $sorder .= " sp.$k $v ";
+        }
+        $whereaddr = " AND sp.provinceurl='$province_url' ";
+        if($district_url != "") $whereaddr .= " AND sp.districturl='$district_url' ";
+        if($ward_url != "") $whereaddr .= " AND sp.wardurl='$ward_url' ";
+        if($street_url != "") $whereaddr .= " AND sp.streeturl='$street_url' ";
+        $sql="SELECT sp.* FROM ".$this->vserviceplace." sp
+        WHERE sp.daservicegroup_id  = $sgid $whereaddr $sorder LIMIT $page,".$this->config->item("num_servicegroup");
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0){
+            return $qr->result();
+        }
+        else return null;
     }
+    public function getPlaceFromService($sid,$province_url,$order=array(),$page=0,$district_url = "",$ward_url="",$street_url=""){
+        $sorder = "";
+        $i=0;
+        if($order != null)
+        foreach($order as $k=>$v){
+            if($i==0) $sorder = " ORDER BY ";
+            else if($i>0) $sorder .= ",";
+            $sorder .= " sp.$k $v ";
+        }
+        $whereaddr = " AND sp.provinceurl='$province_url' ";
+        if($district_url != "") $whereaddr .= " AND sp.districturl='$district_url' ";
+        if($ward_url != "") $whereaddr .= " AND sp.wardurl='$ward_url' ";
+        if($street_url != "") $whereaddr .= " AND sp.streeturl='$street_url' ";
+        $sql="SELECT sp.* FROM ".$this->vserviceplace." sp
+        WHERE sp.daservice_id  = $sid $whereaddr $sorder LIMIT $page,".$this->config->item("num_servicegroup");
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0){
+            return $qr->result();
+        }
+        else return null;
+    }
+    public function getSumPage($type,$sid,$province_url,$district_url = "",$ward_url="",$street_url=""){
+        $whereaddr = " AND sp.provinceurl='$province_url' ";
+        if($district_url != "") $whereaddr .= " AND sp.districturl='$district_url' ";
+        if($ward_url != "") $whereaddr .= " AND sp.wardurl='$ward_url' ";
+        if($street_url != "") $whereaddr .= " AND sp.streeturl='$street_url' ";
+        $sql="SELECT count(sp.id) numrow FROM ".$this->vserviceplace." sp ";
+        if($type==$this->tbservice_item) $sql.=" WHERE sp.daservice_id  = $sid $whereaddr";
+        else if($type == $this->tbservice_group) $sql.=" WHERE sp.daservicegroup_id  = $sid $whereaddr";
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0){
+            $sumrow = $qr->row()->numrow;
+            return ceil($sumrow/$this->config->item("num_servicegroup"));
+        }
+        else return 0;
+    }
+    public function getServiceNameFromId($table,$id){
+        $sql="SELECT dalong_name FROM ".$table." WHERE id=$id LIMIT 0,1";
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+        {
+            return $qr->row()->dalong_name;
+        }
+        return "Dịch vụ ";
+    }
+
 }

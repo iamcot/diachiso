@@ -806,6 +806,16 @@ li{
     overflow: hidden;
     padding: 5px;
 }
+.serviceitem{
+    overflow: hidden;
+    padding: 5px;
+}
+.serviceitem:hover{
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
 .listblock:hover{
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -946,6 +956,9 @@ li{
 }
 #articlebox{
     overflow: hidden;
+}
+.articlebox .pagination{
+    margin: 0 0 15px 15px;
 }
 .nobodercorner{
     border-radius: 0 !important;

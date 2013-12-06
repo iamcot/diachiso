@@ -55,19 +55,31 @@ $route['admin/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5';
 $route['admin/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5/$6';
 $route['admin/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5/$6/$7';
 
+//$route['([a-z0-9-]+)/g'] = 'main/servicegroup';
+$route['([a-z0-9-]+)/([a-z0-9-]+)-(:num).htm'] = 'main/servicegroup/$2/$3/$1';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)-(:num).htm'] = 'main/servicegroup/$3/$4/$1/$2';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)-(:num).htm'] = 'main/servicegroup/$4/$5/$1/$2/$3';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)-(:num).htm'] = 'main/servicegroup/$5/$6/$1/$2/$3/$4';
+
+$route['([a-z0-9-]+)/(:num)-([a-z0-9-]+).htm'] = 'main/service/$3/$2/$1';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/(:num)-([a-z0-9-]+).htm'] = 'main/service/$4/$3/$1/$2';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/(:num)-([a-z0-9-]+).htm'] = 'main/service/$5/$4/$1/$2/$3';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/(:num)-([a-z0-9-]+).htm'] = 'main/service/$6/$5/$1/$2/$3/$4';
 
 $route['([a-z0-9-]+)'] = 'main/index/$1';
 $route['main/(:any)'] = 'main/$1';
 $route['([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/district/$1/$2';
 $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/ward/$1/$2/$3';
 $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/street/$1/$2/$3/$4';
-$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/(:any)'] = 'main/serviceplace/$1/$2/$3/$4/$5';
+$route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)-(:num).html'] = 'main/serviceplace/$1/$2/$3/$4/$6';
+
+
 
 
 $route['help'] = 'main/news/help';
 $route['news'] = 'main/news/news';
-$route['help/(:any)'] = 'main/news/help/$1';
-$route['news/(:any)'] = 'main/news/news/$1';
+$route['help/([a-z0-9-]+)-(:num).html'] = 'main/news/help/$2';
+$route['news/([a-z0-9-]+)-(:num).html'] = 'main/news/news/$2';
 
 
 
