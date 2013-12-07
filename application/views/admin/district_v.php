@@ -5,7 +5,7 @@
              <option value="<?=$prov->id?>"><?=$prov->dalong_name?></option>
         <? endforeach;?>
     </select>
-    <input type="text" name="daprefix" placeholder="Tiền tố Quận/Huyện">
+    <input type="text" name="daprefix" placeholder="Tiền tố Quận/Huyện" value="Quận">
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
     <input type="text" id="daurl" name="daurl" placeholder="Seo URL">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>

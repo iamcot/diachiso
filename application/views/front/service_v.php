@@ -66,7 +66,7 @@
     </div>
     <div id="rightside">
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $currentobject->dalong_name ?></div>
+            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $currentobject->daprefix ?> <?= $currentobject->dalong_name ?></div>
             <div class="articlecontent" id="accordion">
                 <? if (isset($aServiceTree) && count($aServiceTree) > 0): ?>
                     <? foreach ($aServiceTree as $aServiceGroup): ?>

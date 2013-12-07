@@ -14,7 +14,7 @@
     <select name="daward_id">
             <option value="0">Chọn Phường </option>
     </select>
-    <input type="text" name="daprefix" placeholder="Tiền tố Đường/Phố">
+    <input type="text" name="daprefix" placeholder="Tiền tố Đường/Phố" value="Đường">
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
     <input type="text" name="daurl" placeholder="Seo URL" id="daurl">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>

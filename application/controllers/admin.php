@@ -322,6 +322,43 @@ class Admin extends CI_Controller
         else echo 0;
 
     }
+    public function saveplaceward()
+    {
+        $param = array(
+            'dalong_name' => $this->input->post("dalong_name"),
+            'daurl' => $this->input->post("daurl"),
+            'dadistrict_id' => $this->input->post("dadistrict_id"),
+            'daprovince_id' => $this->input->post("daprovince_id"),
+            'daprefix' => $this->input->post("daprefix"),
+        );
+       //insert
+            $str = $this->db->insert_string($this->tbward, $param);
+
+        if ($this->db->query($str)) {
+            $this->loadselectward($this->input->post("dadistrict_id"), $this->db->insert_id());
+        }
+        else echo 0;
+
+    }
+    public function saveplacestreet()
+    {
+        $param = array(
+            'dalong_name' => $this->input->post("dalong_name"),
+            'daurl' => $this->input->post("daurl"),
+            'dadistrict_id' => $this->input->post("dadistrict_id"),
+            'daprovince_id' => $this->input->post("daprovince_id"),
+            'daward_id' => $this->input->post("daward_id"),
+            'daprefix' => $this->input->post("daprefix"),
+        );
+       //insert
+            $str = $this->db->insert_string($this->tbstreet, $param);
+
+        if ($this->db->query($str)) {
+            $this->loadselectstreet($this->input->post("daward_id"), $this->db->insert_id());
+        }
+        else echo 0;
+
+    }
 
     public function saveserviceplace()
     {
@@ -793,7 +830,7 @@ class Admin extends CI_Controller
 
     public function loadselectward($daprovince_id = 0, $id = 0)
     {
-        $options = "<option value='0'>Chọn Phường</option>";
+        $options = "<option value='0'>Chọn Phường</option><option value='-1'>Tạo Phường mới</option>";
         if (($rs = $this->getAddress($this->tbward, array("dadistrict_id" => $daprovince_id), -1)) != null) {
             foreach ($rs as $row) {
                 $options .= "<option value='" . $row->id . "' " . (($row->id == $id) ? 'selected=true' : '') . ">" . $row->dalong_name . "</option>";
@@ -804,7 +841,7 @@ class Admin extends CI_Controller
 
     public function loadselectstreet($daprovince_id = 0, $id = 0)
     {
-        $options = "<option value='0'>Chọn Đường/Phố</option>";
+        $options = "<option value='0'>Chọn Đường/Phố</option><option value='-1'>Tạo Đường/Phố mới</option>";
         if (($rs = $this->getAddress($this->tbstreet, array("daward_id" => $daprovince_id), -1)) != null) {
             foreach ($rs as $row) {
                 $options .= "<option value='" . $row->id . "' " . (($row->id == $id) ? 'selected=true' : '') . ">" . $row->dalong_name . "</option>";

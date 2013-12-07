@@ -308,25 +308,25 @@ class Main extends CI_Controller {
         $currenttable = $this->tbprovince;
         $currentobject = $oCurrentProvince;
 
-        $data['currentLevel'] = $oCurrentProvince->dalong_name;
+        $data['currentLevel'] =  $oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         if($oCurrentDistrict != null){
             $currentplaceid = $oCurrentDistrict->id;
             $currenttable = $this->tbdistrict;
             $currentobject = $oCurrentDistrict;
-            $data['currentLevel'] = $oCurrentDistrict->dalong_name.", ".$data['currentLevel'];
+            $data['currentLevel'] = $oCurrentDistrict->daprefix.' '.$oCurrentDistrict->dalong_name.", ".$data['currentLevel'];
         }
 
         if($oCurrentWard != null){
             $currentplaceid = $oCurrentWard->id;
             $currenttable = $this->tbward;
             $currentobject = $oCurrentWard;
-            $data['currentLevel'] = $oCurrentWard->dalong_name.", ".$data['currentLevel'];
+            $data['currentLevel'] = $oCurrentWard->daprefix.' '.$oCurrentWard->dalong_name.", ".$data['currentLevel'];
         }
         if($oCurrentStreet != null){
             $currentplaceid = $oCurrentStreet->id;
             $currenttable = $this->tbstreet;
             $currentobject = $oCurrentStreet;
-            $data['currentLevel'] = $oCurrentStreet->dalong_name.", ".$data['currentLevel'];
+            $data['currentLevel'] = $oCurrentStreet->daprefix.' '.$oCurrentStreet->dalong_name.", ".$data['currentLevel'];
         }
 
 
@@ -349,6 +349,10 @@ class Main extends CI_Controller {
         if($this->input->get('page')) $page= ($this->input->get('page')-1)*$this->config->item('num_servicegroup');
         else $page = 0;
         $data['aService'] = $this->main_m->getPlaceFromService($service_id,$province_url,null,$page,$district_url,$ward_url,$street_url);
+        if($this->input->get('page')){
+            echo $this->load->view("front/serviceli_v",$data,true);
+            return;
+        }
         $data['sumpage'] = $this->main_m->getSumPage($this->tbservice_item,$service_id,$province_url,$district_url,$ward_url,$street_url);
         $oCurrentProvince = $this->main_m->getProvince($province_url);
         $this->session->set_userdata("province",$oCurrentProvince->daurl);
@@ -370,25 +374,25 @@ class Main extends CI_Controller {
         $currentplaceid = $oCurrentProvince->id;
         $currenttable = $this->tbprovince;
         $currentobject = $oCurrentProvince;
-        $data['currentLevel'] = $oCurrentProvince->dalong_name;
+        $data['currentLevel'] =  $oCurrentProvince->daprefix.' '.$oCurrentProvince->dalong_name;
         if($oCurrentDistrict != null){
             $currentplaceid = $oCurrentDistrict->id;
             $currenttable = $this->tbdistrict;
             $currentobject = $oCurrentDistrict;
-            $data['currentLevel'] = $oCurrentDistrict->dalong_name.", ".$data['currentLevel'];
+            $data['currentLevel'] = $oCurrentDistrict->daprefix.' '.$oCurrentDistrict->dalong_name.", ".$data['currentLevel'];
         }
 
         if($oCurrentWard != null){
             $currentplaceid = $oCurrentWard->id;
             $currenttable = $this->tbward;
             $currentobject = $oCurrentWard;
-            $data['currentLevel'] = $oCurrentWard->dalong_name.", ".$data['currentLevel'];
+            $data['currentLevel'] = $oCurrentWard->daprefix.' '.$oCurrentWard->dalong_name.", ".$data['currentLevel'];
         }
         if($oCurrentStreet != null){
             $currentplaceid = $oCurrentStreet->id;
             $currenttable = $this->tbstreet;
             $currentobject = $oCurrentStreet;
-            $data['currentLevel'] = $oCurrentStreet->dalong_name.", ".$data['currentLevel'];
+            $data['currentLevel'] = $oCurrentStreet->daprefix.' '.$oCurrentStreet->dalong_name.", ".$data['currentLevel'];
         }
 
 

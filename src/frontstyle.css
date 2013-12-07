@@ -11,6 +11,7 @@ html, body {
     background: #e7e7e7;
 }
 
+
 @font-face {
     font-family: 'museo_sans_500';
     src: url('MuseoSans_500-webfont.eot');
@@ -28,6 +29,15 @@ a {
     color: #1b926c;
     text-decoration: none;
     cursor: pointer;
+}
+
+::selection {
+    background: #1b926c; /* Safari */
+    color: #fff;
+}
+::-moz-selection {
+    background: #1b926c; /* Firefox */
+    color:#fff;
 }
 
 h3 {

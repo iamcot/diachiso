@@ -10,7 +10,7 @@
             <option value="<?=$dist->id?>"><?=$dist->dalong_name?></option>
         <? endforeach;?>
     </select>
-    <input type="text" name="daprefix" placeholder="Tiền tố Phường/Xã">
+    <input type="text" name="daprefix" placeholder="Tiền tố Phường/Xã" value="Phường">
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
     <input type="text" id="daurl" name="daurl" placeholder="Seo URL">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>

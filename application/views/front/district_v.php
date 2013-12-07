@@ -1,8 +1,8 @@
 <div id="articlebox">
     <div id="leftside">
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-map-marker"></i> <?= $oCurrentDistrict->dalong_name ?>
-                , <?= $oCurrentProvince->dalong_name ?></div>
+            <div class="cattitle"><i class="fa fa-map-marker"></i> <?= $oCurrentDistrict->daprefix ?> <?= $oCurrentDistrict->dalong_name ?>
+                , <?= $oCurrentProvince->daprefix ?> <?= $oCurrentProvince->dalong_name ?></div>
             <div class="articlecontent">
                 <? if ($oCurrentDistrict->dainfo != ""): ?>
                     <div class="articleinfo">
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-map-marker"></i> Phường/Xã trong <?= $oCurrentDistrict->dalong_name ?>
+            <div class="cattitle"><i class="fa fa-map-marker"></i> Phường/Xã trong <?= $oCurrentDistrict->daprefix ?> <?= $oCurrentDistrict->dalong_name ?>
             </div>
             <div class="articlecontent licolor">
 
@@ -30,7 +30,7 @@
         </div>
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-map-marker"></i> Các tuyến đường phố
-                trong <?= $oCurrentDistrict->dalong_name ?></div>
+                trong <?= $oCurrentDistrict->daprefix ?> <?= $oCurrentDistrict->dalong_name ?></div>
             <div class="articlecontent licolor">
                 <? if(isset($aStreet) && count($aStreet)>0):?>
                     <ul >
@@ -44,7 +44,7 @@
     </div>
     <div id="rightside">
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $oCurrentDistrict->dalong_name ?></div>
+            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $oCurrentDistrict->daprefix ?> <?= $oCurrentDistrict->dalong_name ?></div>
             <div class="articlecontent" id="accordion">
                 <? if (isset($aServiceTree) && count($aServiceTree) > 0): ?>
                     <? foreach ($aServiceTree as $aServiceGroup): ?>

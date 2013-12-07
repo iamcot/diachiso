@@ -21,10 +21,26 @@
         <tr>
             <td><select name="daward_id" onchange="loadStreet(0)">
                     <option value="0">Chọn Phường/Xã</option>
-                </select></td>
-            <td><select name="dastreet_id">
+                    <option value="-1">Tạo Phường/Xã mới</option>
+                </select>
+                <div id="createward"  style="display: none">
+                    <input name="newwardprefix" type="text" value="Phường">
+                    <input name="newwardname" type="text" placeholder="Tên Phường">
+                    <input name="newwardurl" id="newwardurl" type="text" readonly=true placeholder="seo url">
+                    <input type="button" value="Lưu" onclick="savenewward()">
+                </div>
+            </td>
+            <td><select name="dastreet_id" onchange="selectStreet()" >
                     <option value="0">Chọn Đường/Phố</option>
-                </select></td>
+                    <option value="-1">Tạo Đường/phố mới</option>
+                </select>
+                <div id="createstreet" style="display: none">
+                    <input name="newstreetprefix" type="text" value="Đường">
+                    <input name="newstreetname" type="text"  placeholder="Tên Đường">
+                    <input name="newstreeturl" id="newstreeturl" type="text" readonly=true  placeholder="seo url">
+                    <input type="button" value="Lưu" onclick="savenewstreet()">
+                </div>
+            </td>
         </tr>
         <tr>
             <td>
@@ -182,10 +198,9 @@
             alert("Vui lòng chọn dịch vụ");
             return;
         }
-        if (dadistrict_id != 0 && (daward_id == 0 || dastreet_id == 0 )) {
-            if (!confirm("Có chắc là muốn lưu điểm dịch vụ mà không có phường hoặc đường?")) {
+        if ( daward_id == 0 || daward_id == -1 ||  dastreet_id == 0||  dastreet_id == -1 ) {
+            alert("Chưa chọn phường hoặc đường?");
                 return;
-            }
         }
         else if(dadistrict_id == 0){
             alert("Vui lòng nhập Quận/Huyện.");
@@ -259,9 +274,22 @@
         addloadgif("#loadstatus");
         $("select[name=daward_id]").load("<?=base_url()?>admin/loadselectward/" + $("select[name=dadistrict_id]").val()+"/"+id,function (){removeloadgif("#loadstatus");});
     }
+    function selectStreet(){
+        if($("select[name=dastreet_id]").val() == -1){
+            $("#createstreet").show("");
+        }
+        else{
+            $("#createstreet").hide("");
+        }
+    }
     function loadStreet(id) {
+        if($("select[name=daward_id]").val() == -1){
+            $("#createward").show("");
+        }   else{
+            $("#createward").hide("");
         addloadgif("#loadstatus");
         $("select[name=dastreet_id]").load("<?=base_url()?>admin/loadselectstreet/" + $("select[name=daward_id]").val()+"/"+id,function (){removeloadgif("#loadstatus");});
+        }
     }
     function loadService(id) {
         addloadgif("#loadstatus");
@@ -343,6 +371,8 @@
     }
     $(function () {
         $('input[name=dalong_name]').friendurl({id : 'daurl'});
+        $('input[name=newwardname]').friendurl({id : 'newwardurl'});
+        $('input[name=newstreetname]').friendurl({id : 'newstreeturl'});
         $( '.ckeditor' ).ckeditor();
         $('#picupload').fileupload({
             dataType: 'json',
@@ -355,4 +385,81 @@
             }
         });
     });
+function savenewward(){
+
+        var dadistrict_id =  $("select[name=dadistrict_id]").val();
+        var daprovince_id =  $("select[name=daprovince_id]").val();
+        var dalong_name = $("input[name=newwardname]").val();
+        var daurl = $("input[name=newwardurl]").val();
+        var daprefix = $("input[name=newwardprefix]").val();
+        if (dalong_name.trim() != "" && daurl.trim() != "" && dadistrict_id > 0) {
+            $.ajax({
+                type: "post",
+                url: "<?=base_url()?>admin/saveplaceward",
+                data: "dalong_name=" + dalong_name
+                    + "&daurl=" + daurl
+                    + "&dadistrict_id=" + dadistrict_id
+                    + "&daprefix=" + daprefix
+                    + "&daprovince_id=" + daprovince_id,
+                success: function (msg) {
+                    switch (msg) {
+                        case "0":
+                            alert("Không thể lưu");
+                            loadWard(0);
+                            break;
+                        default :
+                            $("input[name=newwardname]").val("");
+                            $("input[name=newwardurl]").val("");
+                            $("#createward").hide();
+                            $("select[name=daward_id]").html(msg);
+                            break;
+                    }
+
+                }
+            });
+        }
+        else {
+            alert("Vui lòng nhập tối thiểu Tên đầy đủ, Seo URL va chọn Quận/Huyện");
+        }
+
+}
+function savenewstreet(){
+    var dadistrict_id =  $("select[name=dadistrict_id]").val();
+    var daprovince_id =  $("select[name=daprovince_id]").val();
+    var daward_id =  $("select[name=daward_id]").val();
+    var dalong_name = $("input[name=newstreetname]").val();
+    var daurl = $("input[name=newstreeturl]").val();
+    var daprefix = $("input[name=newstreetprefix]").val();
+    if (dalong_name.trim() != "" && daurl.trim() != "" && dadistrict_id > 0 && daward_id > 0) {
+        $.ajax({
+            type: "post",
+            url: "<?=base_url()?>admin/saveplacestreet",
+            data: "dalong_name=" + dalong_name
+                + "&daurl=" + daurl
+                + "&dadistrict_id=" + dadistrict_id
+                + "&daprefix=" + daprefix
+                + "&daward_id=" + daward_id
+                + "&daprovince_id=" + daprovince_id,
+            success: function (msg) {
+                switch (msg) {
+                    case "0":
+                        alert("Không thể lưu");
+                        loadStreet(0);
+                        break;
+                    default :
+                        $("input[name=newstreetname]").val("");
+                        $("input[name=newstreeturl]").val("");
+                        $("#createstreet").hide();
+                        $("select[name=dastreet_id]").html(msg);
+
+                        break;
+                }
+
+            }
+        });
+    }
+    else {
+        alert("Vui lòng nhập tối thiểu Tên đầy đủ, Seo URL va chọn Quận/Huyện, Phường/Xã");
+    }
+}
 </script>

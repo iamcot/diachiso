@@ -1,8 +1,8 @@
 <div id="articlebox">
     <div id="leftside">
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-map-marker"></i>  <?= $oCurrentStreet->dalong_name ?>, <?= $oCurrentWard->dalong_name ?>,
-                <?= $oCurrentDistrict->dalong_name ?>, <?= $oCurrentProvince->dalong_name ?></div>
+            <div class="cattitle"><i class="fa fa-map-marker"></i>  <?= $oCurrentStreet->daprefix ?> <?= $oCurrentStreet->dalong_name ?>, <?= $oCurrentWard->daprefix ?> <?= $oCurrentWard->dalong_name ?>,
+                <?= $oCurrentDistrict->daprefix ?>  <?= $oCurrentDistrict->dalong_name ?>, <?= $oCurrentProvince->daprefix ?> <?= $oCurrentProvince->dalong_name ?></div>
             <div class="articlecontent">
                 <? if ($oCurrentStreet->dainfo != ""): ?>
                     <div class="articleinfo">
@@ -25,7 +25,7 @@
     </div>
     <div id="rightside">
         <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $oCurrentStreet->dalong_name ?></div>
+            <div class="cattitle"><i class="fa fa-book"></i> Dịch vụ tại <?= $oCurrentStreet->daprefix ?> <?= $oCurrentStreet->dalong_name ?></div>
             <div class="articlecontent" id="accordion">
                 <? if (isset($aServiceTree) && count($aServiceTree) > 0): ?>
                     <? foreach ($aServiceTree as $aServiceGroup): ?>
