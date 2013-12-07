@@ -26,7 +26,7 @@
                 <div id="createward"  style="display: none">
                     <input name="newwardprefix" type="text" value="Phường">
                     <input name="newwardname" type="text" placeholder="Tên Phường">
-                    <input name="newwardurl" id="newwardurl" type="text" readonly=true placeholder="seo url">
+                    <input name="newwardurl" id="newwardurl" type="text" placeholder="seo url">
                     <input type="button" value="Lưu" onclick="savenewward()">
                 </div>
             </td>
@@ -37,7 +37,7 @@
                 <div id="createstreet" style="display: none">
                     <input name="newstreetprefix" type="text" value="Đường">
                     <input name="newstreetname" type="text"  placeholder="Tên Đường">
-                    <input name="newstreeturl" id="newstreeturl" type="text" readonly=true  placeholder="seo url">
+                    <input name="newstreeturl" id="newstreeturl" type="text"   placeholder="seo url">
                     <input type="button" value="Lưu" onclick="savenewstreet()">
                 </div>
             </td>
