@@ -68,6 +68,7 @@ $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/(:num)-([a-z0-9-]+).
 
 $route['([a-z0-9-]+)'] = 'main/index/$1';
 $route['main/(:any)'] = 'main/$1';
+$route['main/(:any)/(:any)'] = 'main/$1/$2';
 $route['([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/district/$1/$2';
 $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/ward/$1/$2/$3';
 $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/street/$1/$2/$3/$4';

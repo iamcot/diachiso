@@ -371,5 +371,12 @@ class Main_m extends CI_Model
         }
         return "Dịch vụ ";
     }
+    public function getUser($user_id){
+        $sql="SELECT * FROM ".$this->tbuser." WHERE id=$user_id AND dadeleted=0 LIMIT 1";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->row();
+        else return null;
+    }
 
 }

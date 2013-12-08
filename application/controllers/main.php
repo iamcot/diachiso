@@ -209,6 +209,8 @@ class Main extends CI_Controller {
     public $tbuser = 'dauser';
     public $tbdeal = 'dadeal';
     public $tbnews = 'danews';
+    public $tbdealuser = "dadeal_user";
+    public $tbcomment = "dacomment";
     public $crrlang = '';
 
     protected function processCurrentTreeForService($data = array()){
@@ -410,6 +412,34 @@ class Main extends CI_Controller {
 
         $data['aNavAddr'] = $this->mylibs->makeNavAddr($currenttable,$aNavAddr,$currentplaceid);
         $this->render($data);
+    }
+    public function loadSubmitDealForm($dealid){
+        $user_id = (($this->session->userdata("dauser_id"))?$this->session->userdata("dauser_id"):0);
+        $data['oUser'] = $this->main_m->getUser($user_id);
+        $data['user_id'] = $user_id;
+        $data['deal_id'] = $dealid;
+        echo $this->load->view("front/form_submitdeal_v",$data,true);
+    }
+
+
+    public function savedealuser(){
+        $param = array(
+            "dadeal_id"=>$this->input->post("dadeal_id"),
+            "dauser_id"=>$this->input->post("dauser_id"),
+            "daname"=>$this->input->post("daname"),
+            "datel"=>$this->input->post("datel"),
+            "daaddr"=>$this->input->post("daaddr"),
+            "daemail"=>$this->input->post("daemail"),
+            "daamount"=>$this->input->post("daamount"),
+            "dacomment"=>$this->input->post("dacomment"),
+            "dastatus"=>"wait",
+        );
+        $sql = $this->db->insert_string($this->tbdealuser, $param);
+        if($this->db->query($sql)){
+            $param['dadealuser_id'] = $this->db->insert_id();
+            $this->mylibs->echojson($param);
+        }
+        else echo 0;
     }
 
 }

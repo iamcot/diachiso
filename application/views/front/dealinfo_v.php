@@ -40,7 +40,7 @@
                     <? elseif($now > $oDealInfo->dato):?>
                         <b  class="colorred">Khuyến mãi đã hết hạn</b>
                         <? else:?>
-                            <input type="button" value="Nhận <?=$this->lang->line('dealname')?>" style="height:50px;padding: 10px 20px 10px 20px;font-size:1.7em">
+                            <input type="button" value="Nhận <?=$this->lang->line('dealname')?>" style="height:50px;padding: 10px 20px 10px 20px;font-size:1.7em" onclick="opendealsubmit(<?=$oDealInfo->id?>)">
 
                         <? endif;?>
                 </li>
@@ -84,10 +84,80 @@
     </div>
     <script>
     $(function () {
-
+        $( "#dialog" ).dialog({
+            autoOpen: false,
+            minWidth: 500,
+            position: { my: "right top", at: "right top", of: window },
+            buttons:null,
+            modal: true
+        });
        // var dsince = new Date(<?=date("Y",$oDealInfo->dafrom)?>, <?=date("m",$oDealInfo->dafrom)?> - 1, <?=date("d",$oDealInfo->dafrom)?>);
         var duntil = new Date(<?=date("Y",$oDealInfo->dato)?>, <?=date("m",$oDealInfo->dato)?> - 1, <?=date("d",$oDealInfo->dato)?>);
         $('#countdown').countdown({until: duntil});
     });
+        function opendealsubmit(id){
+            //loadSubmitDealForm
+<!--            $("#dialog").load("--><?//=base_url()?><!--main/loadSubmitDealForm/"+id,$("#dialog").parent().css('position', 'Fixed').end().dialog('open'));-->
+            $("#dialog").html("").load("<?=base_url()?>main/loadSubmitDealForm/"+id,$("#dialog").dialog({
+                position: { my: "right top", at: "right top", of: window },
+                title: "Thông tin người nhận <?=$this->lang->line('dealname')?> <?=$oDealInfo->dalong_name?>",
+                buttons: null
+            }).dialog('open'));
+        }
+        function closedealform(){
+            $("#dialog").html("").dialog("close");
+        }
+        function savedealform(){
+          //  alert(document.URL);
+            var dadeal_id   = $("input[name=deal_id]").val();
+            var dauser_id   = $("input[name=dealuser_id]").val();
+            var daname      = $("input[name=dealusername]").val();
+            var datel       = $("input[name=dealtel]").val();
+            var daaddr      = $("input[name=dealaddr]").val();
+            var daemail     = $("input[name=dealemail]").val();
+            var daamount    = $("input[name=dealamout]").val();
+            var dacomment   = $("textarea[name=dealcomment]").val();
+            $.ajax({
+                type:"post",
+                url: "<?=base_url()?>main/savedealuser",
+                data:"dadeal_id="+dadeal_id
+                    +"&dauser_id="+dauser_id
+                    +"&daname="+daname
+                    +"&datel="+datel
+                    +"&daaddr="+daaddr
+                    +"&daemail="+daemail
+                    +"&daamount="+daamount
+                    +"&dacomment="+dacomment,
+                success: function(msg){
+                    if(msg==0){
+                        alert("Lưu <?=$this->lang->line("dealname")?> thất bại, vui lòng thử lại hoặc liên hệ với nhóm hỗ trợ.");
+                    }
+                    else{
+                        var bill = eval(msg);
+                        console.log(bill);
+                        $("#dialog").dialog("close");
+                        $("#dialog").html("" +
+                            "Mã đơn hàng: <b>" + bill.dadealuser_id+"</b> <br>"+
+                            "Tên người nhận: <b>"+ bill.daname+"</b><br>"+
+                            "Địa chỉ nhận <?=$this->lang->line("dealname")?>: <b>"+ bill.daaddr+ "</b><br>"+
+                            "Thông tin hóa đơn đã gửi tới email: <b>"+ bill.daemail+ "</b>"+
+                            "<br><br><hr><br>"+
+                            "<h4  class='smalltext8'>HỖ TRỢ </h4>"+
+                            '<div class="smalltext8"><i class="fa fa-phone-square"></i> Hotline: <?=$this->config->item('hotline')?></div>'+
+                            '<div  class="smalltext8"><i class="fa fa-skype"></i> Skype: <?=$this->config->item('skype')?></div>'+
+                            '<div  class="smalltext8"><i class="fa fa-skype"></i> Yahoo: <?=$this->config->item('yahoo')?></div>').dialog({
+                                title:"Thông tin Hóa Đơn",
+                                position: { my: "center", at: "center", of: window },
+                                buttons:[{
+                                    text:"Đóng",
+                                    click: function(){$(this).dialog("close");}
+                                }]
+                            }).dialog("open");
+                    }
+                }
+            });
+        }
     </script>
 <? endif; ?>
+<div id="dialog" title="Thông tin người nhận <?=$this->lang->line('dealname')?> <?=$oDealInfo->dalong_name?>">
+</div>

@@ -764,7 +764,7 @@ footer {
     text-align: left;
 }
 .colorred{
-    color: #da4f49;
+    color: #da4f49 !important;
 }
 .colorgreen{
     color: #15694e;
@@ -1208,6 +1208,22 @@ li{
 .newscat li ul li{
    line-height: 1.5em;
     margin-bottom: 0;
+}
+#form_submitdeal ul{
+    margin-top:10px;
+    list-style: none;
+}
+#form_submitdeal input[type=text],
+#form_submitdeal textarea{
+    width:100%;
+    color:#da4f49;
+}
+#form_submitdeal label{
+    font-size: .85em !important;
+}
+#form_submitdeal p{
+    line-height: 1.5em;
+    text-align: justify;
 }
 @media all and (max-width:600px) {
     .headeruser {
