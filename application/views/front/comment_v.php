@@ -47,6 +47,7 @@ function savecomment() {
     var daavatar = $("input[name=commentavatar").val();
 
     if (dacontent != "" && daname != "") {
+        $("textarea[name=dacontent").val("");
         $.ajax({
             type: "post",
             url: "<?=base_url()?>main/savecomment",
