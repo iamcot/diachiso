@@ -57,6 +57,9 @@ class Admin extends CI_Controller
     public $tbnews = 'danews';
     public $crrlang = '';
     public $tbconfig = 'daconfig';
+    public $tbdealuser = "dadeal_user";
+    public $tbcomment = "dacomment";
+    public $tbdealuserlog = "dadealuser_log";
 
     public function render($data = array())
     {
@@ -1172,6 +1175,69 @@ class Admin extends CI_Controller
         $id = $this->input->post("id");
         $sql="DELETE FROM ".$this->tbconfig." WHERE id=".$id;
         echo $this->db->query($sql);
+    }
+    public function loaddealuserlist($page=1){
+        $page -= 1;
+        $where = "";
+        $dealid = $this->input->post("dealid");
+        $username = $this->input->post("username");
+        $dealuserid = $this->input->post("dealuserid");
+        $dastatus = $this->input->post("dastatus");
+        if($dealid > 0) $where .= " AND dadeal_id = $dealid ";
+        if($dealuserid > 0) $where .= " AND id = $dealuserid ";
+        if($username !="") $where .= " AND daname LIKE '%$username%' ";
+        if($dastatus != "all") $where .= " AND dastatus = '$dastatus' ";
+        $sql=" SELECT * FROM ".$this->tbdealuser."
+        WHERE  dadeleted=0 $where
+        ORDER BY id DESC LIMIT ".($page * $this->config->item("num_admindealuserlist")).", ".$this->config->item("num_admindealuserlist");
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0){
+            $data['aDeal'] = $qr->result();
+            $sql=" SELECT count(id) numrow FROM ".$this->tbdealuser."
+        WHERE  dadeleted=0 $where";
+            $qr = $this->db->query($sql);
+            $data['sumpage'] = ceil($qr->row()->numrow/$this->config->item("num_admindealuserlist"));
+            $data['page'] = $page;
+            echo $this->load->view("admin/dealuserlist_v",$data,true);
+        }
+        else echo "<tr><td colspan='10'>Hện tại không có đơn hàng nào thỏa yêu cầu tìm kiếm </td></tr>";
+    }
+    function changedealstatus(){
+        $aold = explode("-",$this->input->post("oldstatus"));
+        $anew = explode("-",$this->input->post("newstatus"));
+
+        $sql="UPDATE ".$this->tbdealuser." SET dastatus='$anew[1]' WHERE id=$anew[0]";
+        $this->db->query($sql);
+        $param = array(
+        "dadealuser_id" => $anew[0],
+        "danewstatus" => $anew[1],
+        "daoldstatus" => $aold[1],
+        "dauser_id" => $this->session->userdata("dauser_id"),
+    );
+        $sql= $this->db->insert_string($this->tbdealuserlog, $param);
+        echo $this->db->query($sql);
+    }
+    function loaddealuserlog($id){
+        $sql="SELECT d.*,u.dausername FROM ".$this->tbdealuserlog." d, ".$this->tbuser." u WHERE d.dadealuser_id=$id AND u.id=d.dauser_id ORDER BY id DESC";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0){
+            $str = "<table><tr style='font-weight:bold'><td>Nhân viên</td><td>Thay đổi</td><td>Thời gian</td></tr>";
+            $i=1;
+            $select = $this->config->item('dealuserstatus');
+
+            foreach($qr->result() as $row){
+                $str.='<tr class="'.(($i%2==0)?'odd':'').'">
+
+                <td>'.$row->dausername.'</td>
+                <td>'.$select[$row->daoldstatus].' => '.$select[$row->danewstatus].'</td>
+                <td>'.date("H:i d/m/Y",strtotime($row->dacreate)).'</td>
+                </tr>';
+                $i++;
+            }
+            $str .= '</table>';
+            echo $str;
+        }
+        else echo "Chưa có lịch sử nào với đơn hàng này.";
     }
 }
 

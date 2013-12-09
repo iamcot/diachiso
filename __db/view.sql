@@ -58,7 +58,8 @@ AS
      sp2.wardurl,
      sp2.daurl placeurl,
      sp2.dalong_name placename,
-     sp2.daaddr
+     sp2.daaddr,
+     (select count(du.id) from `dadeal_user` du WHERE du.`dadeal_id` = dl.id) numusersubmit
    FROM
        dadeal dl,
        daview_serviceplace sp2

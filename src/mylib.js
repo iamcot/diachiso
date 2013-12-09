@@ -1,5 +1,6 @@
 function addloadgif(eid) {
     if (eid == null || eid == "") eid = "#loadstatus";
+    //alert(eid);
     $(eid).html("<img src='/src/ajax-loader.gif' name='ajaxload'>");
 }
 function addsavegif(eid) {

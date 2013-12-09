@@ -28,6 +28,28 @@ ALTER TABLE `diachiso`.`dadeal_user` CHANGE `daname` `daname` VARCHAR(50) CHARSE
 /*[3:32:05 PM][317 ms]*/ ALTER TABLE `diachiso`.`dadeal_user` CHANGE `daamout` `daamount` INT(3) NOT NULL;
 
 
+/* 11:23:57 AM 9/12 localhost */ ALTER TABLE `dadeal_user` CHANGE `dadelete` `dadeleted` INT(11)  NOT NULL;
+/* 1:34:02 PM localhost 9/12*/
+CREATE TABLE `dadealuser_log` (id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT) DEFAULT CHARACTER SET `utf8`;
+/* 1:34:50 PM localhost */ ALTER TABLE `dadealuser_log` ADD `dacreate` TIMESTAMP  NOT NULL  AFTER `id`;
+/* 1:35:22 PM localhost */ ALTER TABLE `dadealuser_log` ADD `dadealuser_id` INT  NULL  DEFAULT NULL  AFTER `dacreate`;
+/* 1:35:34 PM localhost */ ALTER TABLE `dadealuser_log` ADD `daoldstatus` INT  NULL  DEFAULT NULL  AFTER `dadealuser_id`;
+/* 1:35:48 PM localhost */ ALTER TABLE `dadealuser_log` CHANGE `daoldstatus` `daoldstatus` VARCHAR(20)  NULL  DEFAULT NULL;
+/* 1:35:49 PM localhost */ ALTER TABLE `dadealuser_log` CHANGE `dadealuser_id` `dadealuser_id` INT(11)  NOT NULL;
+/* 1:35:50 PM localhost */ ALTER TABLE `dadealuser_log` CHANGE `daoldstatus` `daoldstatus` VARCHAR(20)  CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT '';
+/* 1:36:10 PM localhost */ ALTER TABLE `dadealuser_log` ADD `danewstatus` INT  NULL  DEFAULT NULL  AFTER `daoldstatus`;
+/* 1:36:33 PM localhost */ ALTER TABLE `dadealuser_log` ADD `dauser_id` INT  NULL  DEFAULT NULL  AFTER `danewstatus`;
+/* 1:36:33 PM localhost */ ALTER TABLE `dadealuser_log` CHANGE `danewstatus` `danewstatus` INT(11)  NOT NULL;
+/* 1:36:37 PM localhost */ ALTER TABLE `dadealuser_log` CHANGE `dauser_id` `dauser_id` INT(11)  NOT NULL;
+/* 2:23:00 PM localhost */ ALTER TABLE `dadealuser_log` CHANGE `danewstatus` `danewstatus` VARCHAR(20)  CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT '';
+/* 3:58:07 PM localhost */ ALTER TABLE `dacomment` ADD `daname` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `dacreate`;
+/* 3:58:19 PM localhost */ ALTER TABLE `dacomment` ADD `daemail` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `daname`;
+/* 3:58:27 PM localhost */ ALTER TABLE `dacomment` ADD `datel` VARCHAR(20)  NOT NULL  DEFAULT ''  AFTER `daemail`;
+/* 3:59:11 PM localhost */ ALTER TABLE `dacomment` ADD `daavatar` VARCHAR(50)  NOT NULL  DEFAULT ''  AFTER `datel`;
+
+
+
+
 
 
 

@@ -138,6 +138,25 @@ class MyLibs
         }
         return $acees;
     }
+    public function candeletecomment()
+    {
+        $acees = false;
+        switch ($this->CI->session->userdata("darole")) {
+            case "admin":
+                $acees = 2;
+                break;
+            case "author":
+                $acees = 2;
+                break;
+            case "member":
+                $acees = 1;
+                break;
+            default:
+                $acees = 0;
+                break;
+        }
+        return $acees;
+    }
 
     public function makePlaceUrl($place)
     {

@@ -43,8 +43,8 @@
                             <div style="color: #666">
 
                                 <a class="" title="Danh sách nhận <?= $this->lang->line('dealname') ?>"
-                                   href=""><i class="fa fa-trophy"></i>
-                                    <b>0</b> người đã nhận
+                                   href=""><i class="fa fa-user"></i>
+                                    <b><?=$deal->numusersubmit?></b> người đã đăng ký
                                 </a>
                             </div>
                         </div>

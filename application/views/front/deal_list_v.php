@@ -16,6 +16,8 @@
 
                         <li><i class="fa fa-rocket"></i>
                             <span>Lượt xem: <b><?= $deal->daview ?></b></span>
+                        <li><i class="fa fa-user"></i>
+                            <span>Đăng ký: <b><?= $deal->numusersubmit ?></b></span>
                             <!--<i class="fa fa-thumbs-up"></i>  <span>Like: <b><?=$oCurrentPlace->dalike?></b></span>-->
                         </li>
                     </ul>

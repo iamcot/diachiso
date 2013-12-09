@@ -80,7 +80,10 @@
         </div>
         <div class="articlebox">
             <div class="cattitle"><i class="fa fa-comments-o"></i> Đánh giá mới</div>
-            <div class="articlecontent"></div>
+            <div class="articlecontent" id="commentcontent">
+                <?=$sComment?>
+            </div>
+
         </div>
     </div>
 </div>

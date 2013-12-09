@@ -317,7 +317,7 @@ td img{
     display: inline-block;
 }
 .idinput{
-    width: 80px !important;
+    width: 100px !important;
     display: inline-block !important;
 }
 .mapoption{
@@ -357,4 +357,7 @@ footer{
     width: 200px !important;
     display: inline-block;
     float:left;
+}
+.pagination input{
+    width:auto !important;
 }

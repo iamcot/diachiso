@@ -130,7 +130,29 @@
         </fieldset>
     </div>
     <div id="tab-2">
+        <div>
+            <input type="text" name="dealusername" class="idinput" value="" placeholder="Tên khách hàng, tên tài khoản">
+            <input type="text" name="dealuserid" class="idinput" value="" placeholder="Mã đơn hàng">
+            <labe> Trạng thái </labe><select name="dastatus" class="idinput" >
+                <option value="all">Tất cả </option>
+                <? foreach($this->config->item('dealuserstatus') as $key=>$status):?>
+                    <option value="<?=$key?>"><?=$status?></option>
+                <? endforeach;?>
+            </select>
+            <input type="button" value="Load" onclick="loaddealuserlist(1)">
+            <input type="hidden" value="1" name="dealuser_currentpage">
+            <input type="hidden" value="1" name="dealuser_oldselect">
+        </div>
+        <table>
+            <thead>
+            <tr><td>STT</td><td>Mã ĐH</td><td>Mã Deal</td><td>Tên</td><td>Ngày ĐK</td>
+                <td>Email</td><td>SĐT</td><td>S/L</td><td>Địa chỉ</td><td>Ghi chú</td>
+                <td>Trạng thái</td><td>Log</td></tr>
+            </thead>
+            <tbody id="dealuserlist">
 
+            </tbody>
+        </table>
     </div>
 </div>
 <script>
@@ -268,6 +290,11 @@
     }
     function editProvince(id) {
 //        $("select[name=daprovince_id]").val(3);
+        console.log(id);
+        if(id=="" || isNaN(id)) {
+            alert("Vui lòng nhập vào Deal ID");
+            return;
+        }
         addloadgif("#loadstatus");
         $.ajax({
             type: "post",
@@ -322,4 +349,49 @@
             }
         });
     }
+function loaddealuserlist(page){
+    var dealid =  $('input[name=dldealid]').val();
+    var username = $('input[name=dealusername]').val();
+    var dealuserid = $('input[name=dealuserid]').val();
+    var dastatus = $('select[name=dastatus]').val();
+    addloadgif("#dlstatus");
+    $.ajax({
+        type: "post",
+        url: "<?=base_url()?>admin/loaddealuserlist/"+page,
+        data: "dealid="+dealid + "&username="+username+ "&dealuserid="+dealuserid+ "&dastatus="+dastatus,
+        success: function(msg){
+            $("#dealuserlist").html(msg);
+            $("input[name=dealuser_currentpage]").val(page);
+            removeloadgif("#dlstatus");
+        }
+    });
+}
+function changedealstatus(id,select){
+    var oldselect = $("input[name=dealuser_oldselect]").val();
+    console.log(oldselect+" =>" + $(select).val());
+    addsavegif("#dlstatus");
+<!--    $.ajax({-->
+<!--        type: "post",-->
+<!--        url: "--><?//=base_url()?><!--admin/changedealstatus/",-->
+<!--        data: "id="+id + "&dastatus="+$(select).val(),-->
+<!--        success: function(msg){-->
+<!--            if(msg==0) alert("Cập nhật thất bại");-->
+<!--            loaddealuserlist($("input[name=dealuser_currentpage]").val());-->
+<!--            removeloadgif("#dlstatus");-->
+<!--        }-->
+<!--    });-->
+}
+//function beforechangeselect(select){
+//    $("input[name=dealuser_oldselect]").val($(select).val());
+//}
+    $(function(){
+       $("#dealdialog").dialog({
+           autoOpen: false,
+           width: 600
+       });
+    });
+    function viewlogdeal(id){
+        $("#dealdialog").load("<?=base_url()?>admin/loaddealuserlog/"+id,$("#dealdialog").dialog("open"));
+    }
 </script>
+<div id="dealdialog" title="Lịch sử trạng thái của đơn hàng "></div>

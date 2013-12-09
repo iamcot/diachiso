@@ -140,7 +140,7 @@
                             "Mã đơn hàng: <b>" + bill.dadealuser_id+"</b> <br>"+
                             "Tên người nhận: <b>"+ bill.daname+"</b><br>"+
                             "Địa chỉ nhận <?=$this->lang->line("dealname")?>: <b>"+ bill.daaddr+ "</b><br>"+
-                            "Thông tin hóa đơn đã gửi tới email: <b>"+ bill.daemail+ "</b>"+
+                            <?if($this->config->item("submitdealsendemail")):?>"Thông tin hóa đơn đã gửi tới email: <b>"+ bill.daemail+ "</b>"+ <? endif;?>
                             "<br><br><hr><br>"+
                             "<h4  class='smalltext8'>HỖ TRỢ </h4>"+
                             '<div class="smalltext8"><i class="fa fa-phone-square"></i> Hotline: <?=$this->config->item('hotline')?></div>'+

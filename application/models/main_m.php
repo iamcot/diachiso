@@ -17,6 +17,9 @@ class Main_m extends CI_Model
     public $vdeal = 'daview_deal';
     public $tbconfig = 'daconfig';
     public $tbnews = 'danews';
+    public $tbcomment = "dacomment";
+    public $tbdealuserlog = "dadealuser_log";
+    public $tbdealuser = "dadeal_user";
 
     public function getProvince($sCurrProvince = "")
     {
@@ -194,7 +197,7 @@ class Main_m extends CI_Model
         else return null;
     }
     function getPlaceDeal($sPlace_id){
-        $sql="SELECT * FROM ".$this->tbdeal." WHERE dadeleted=0 AND daserviceplace_id=$sPlace_id ORDER BY id DESC";
+        $sql="SELECT * FROM ".$this->vdeal." WHERE dadeleted=0 AND daserviceplace_id=$sPlace_id ORDER BY id DESC";
         $qr = $this->db->query($sql);
         if($qr->num_rows()>0)
             return $qr->result();
@@ -377,6 +380,44 @@ class Main_m extends CI_Model
         if($qr->num_rows()>0)
             return $qr->row();
         else return null;
+    }
+    public function getDealUserList($dealid){
+        $sql="SELECT * FROM ".$this->tbdealuser." WHERE dadeal_id=$dealid";
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+        {
+            return $qr->result();
+        }
+        return null;
+    }
+    public function getComment($daserviceplace_id,$page){
+        $sql="SELECT * FROM ".$this->tbcomment." WHERE daserviceplace_id=$daserviceplace_id ORDER BY id DESC LIMIT ".(($page-1)*$this->config->item("num_comment")).",".$this->config->item("num_comment");
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+        {
+            return $qr->result();
+        }
+        return null;
+    }
+    public function getNewComment(){
+        $sql="SELECT c.id cmid, c.dacontent cmcontent, c.dacreate cmcreate, c.daname, c.dauser_id cmuserid,s.*
+        FROM ".$this->tbcomment." c,".$this->vserviceplace." s WHERE s.id = c.daserviceplace_id
+        ORDER BY c.id DESC LIMIT 0,".$this->config->item("num_comment");
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+        {
+            return $qr->result();
+        }
+        return null;
+    }
+    public function getSumComment($daserviceplace_id){
+        $sql="SELECT count(id) numrow FROM ".$this->tbcomment." WHERE daserviceplace_id=$daserviceplace_id";
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+        {
+            return ceil($qr->row()->numrow/$this->config->item("num_comment"));
+        }
+        return null;
     }
 
 }
