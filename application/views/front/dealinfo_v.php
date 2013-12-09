@@ -117,6 +117,7 @@
             var daemail     = $("input[name=dealemail]").val();
             var daamount    = $("input[name=dealamout]").val();
             var dacomment   = $("textarea[name=dealcomment]").val();
+            if(dadeal_id > 0 && daname != "" && datel != "" && daaddr !="" && daamount > 0){
             $.ajax({
                 type:"post",
                 url: "<?=base_url()?>main/savedealuser",
@@ -156,6 +157,10 @@
                     }
                 }
             });
+            }
+            else{
+                alert("Vui lòng nhập đủ các thông tin yêu cầu.");
+            }
         }
     </script>
 <? endif; ?>
