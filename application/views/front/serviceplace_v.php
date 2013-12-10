@@ -130,12 +130,7 @@
                 </div>
             </div>
         <? endif; ?>
-        <div class="articlebox">
-            <div class="cattitle"><i class="fa fa-comments-o"></i> Bình luận</div>
-            <div class="articlecontent">
-              <?=$commentbox?>
-            </div>
-        </div>
+
     </div>
     <div id="rightside">
         <? if ($placetab == "dealinfo" && count($aDealUser)>0): ?>
@@ -143,13 +138,20 @@
                 <div class="cattitle"><i class="fa fa-user"></i> Đã nhận <?=$this->lang->line("dealname")?></div>
                 <div class="articlecontent listplace">
                     <ul>
-                    <? $i=1; foreach($aDealUser as $user):?>
-                   <li class=""><i class="fa fa-caret-right"></i> <?=str_pad($i, 3, ' ', STR_PAD_LEFT)?>: <?=$user->daname?></li>
-                <? $i++; endforeach;?>
+                        <? $i=1; foreach($aDealUser as $user):?>
+                            <li class=""><i class="fa fa-caret-right"></i> <?=str_pad($i, 3, ' ', STR_PAD_LEFT)?>: <?=$user->daname?></li>
+                            <? $i++; endforeach;?>
                     </ul>
                 </div>
             </div>
         <? endif; ?>
+        <div class="articlebox">
+            <div class="cattitle"><i class="fa fa-comments-o"></i> Bình luận</div>
+            <div class="articlecontent">
+                <?=$commentbox?>
+            </div>
+        </div>
+
         <? if (count($aStreetPlaces) > 1): ?>
             <div class="articlebox">
                 <div class="cattitle"><i class="fa fa-map-marker"></i> Dịch vụ cùng đường này</div>

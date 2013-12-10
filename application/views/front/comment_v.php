@@ -28,6 +28,7 @@
         <? endif; ?>
         <textarea placeholder="Bình luận của bạn " name="dacontent"></textarea>
         <input type="button" value="Gửi" onclick="savecomment()">
+        <span id="commentloading"></span>
     </div>
     <div id="commentcontent"></div>
 
@@ -35,8 +36,8 @@
 <script>
 loadcomment(1);
 function loadcomment(page) {
-    addloadgif("commentcontent");
-    $("#commentcontent").load("<?=base_url()?>main/loadcomment/<?=$oCurrentPlace->id?>/" + page);
+    addloadgif("commentloading");
+    $("#commentcontent").load("<?=base_url()?>main/loadcomment/<?=$oCurrentPlace->id?>/" + page,removeloadgif("#commentloading"));
 }
 function savecomment() {
     var daserviceplace_id = <?=$oCurrentPlace->id?>;
