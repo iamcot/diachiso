@@ -105,7 +105,9 @@ class Admin extends CI_Controller
     {
         if (!$this->mylibs->accessservicepage())
             header("Location: " . base_url() . "admin");
+
         $data = array();
+        $data['province'] = $this->getAddress($this->tbprovince, null, -1, true);
         $data['body'] = $this->load->view('admin/service_v', $data, true);
         $data['cat'] = 'service';
         $data['title'] = lang("SERVICE_MANA");
@@ -179,6 +181,7 @@ class Admin extends CI_Controller
             'dacontent_short' => $this->input->post("dacontent_short"),
             'dacontent' => $this->input->post("dacontent"),
             'daserviceplace_id' => $this->input->post("daserviceplace_id"),
+            'daprovince_id' => $this->input->post("daprovince_id"),
             'dacat' => $this->input->post("dacat"),
             'datype' => $this->input->post("datype"),
             'dacreate' => date("Y-m-d H:i:s"),
@@ -589,6 +592,7 @@ class Admin extends CI_Controller
                 'datype' => $row->datype,
                 'dacat' => $row->dacat,
                 'daserviceplace_id' => $row->daserviceplace_id,
+                'daprovince_id' => $row->daprovince_id,
             ));
         } else echo '0';
     }
@@ -771,8 +775,20 @@ class Admin extends CI_Controller
         $where = "";
         if ($parent_id != null) {
             foreach ($parent_id as $k => $v) {
-                if ($v > 0 || strlen($v) >= 3)
-                    $where .= ($where != "" ? " AND " : " WHERE ") . $k . " = " . "'$v'";
+                if ($v > 0 || strlen($v) >= 3)    {
+                    if($where != ""){
+                        if(strpos("OR",$k) != false){
+                            $where .= $k . " = " . "'$v'";
+                        }
+                        else{
+                            $where .= " AND ". $k . " = " . "'$v'";
+                        }
+                    }
+                    else{
+                        $where .= " WHERE ". $k . " = " . "'$v'";
+                    }
+                }
+                   // $where .= ($where != "" ? ((strpos("OR",$k) != false)?" AND ":"") : " WHERE ") . $k . " = " . "'$v'";
             }
         }
         if ($page >= 0)
@@ -928,16 +944,22 @@ class Admin extends CI_Controller
         } else echo lang("NO_DATA");
     }
 
-    public function loadnews($type, $daserviceplace_id, $page = 1)
+    public function loadnews($type, $daserviceplace_id,$province_id, $page = 1)
     {
         $page -= 1;
         if ($type == "service") {
             $param = array(
-                "daserviceplace_id" => $daserviceplace_id,
+                " daserviceplace_id" => $daserviceplace_id,
             );
         } else if ($type == "home") {
+            if($province_id == 0)
             $param = array(
-                "dacat" => $daserviceplace_id,
+                " dacat" => $daserviceplace_id,
+                " OR daprovince_id" => $province_id,
+            );
+            else $param = array(
+                " dacat" => $daserviceplace_id,
+                " daprovince_id" => $province_id,
             );
         }
 

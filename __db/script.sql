@@ -49,6 +49,8 @@ CREATE TABLE `dadealuser_log` (id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT) 
 
 /* 4:11:49 PM localhost */ ALTER TABLE `dacomment` ADD `dauser_id` INT  NOT NULL  AFTER `daavatar`;
 
+/* 10/12 3:02:16 PM localhost */ ALTER TABLE `danews` ADD `daprovince_id` INT  NOT NULL  AFTER `dalike`;
+
 
 
 

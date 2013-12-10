@@ -57,6 +57,14 @@ $route['admin/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5';
 $route['admin/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5/$6';
 $route['admin/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'admin/$1/$2/$3/$4/$5/$6/$7';
 
+$route['help'] = 'main/news/help';
+$route['news'] = 'main/news/news';
+$route['goi-y-dia-chi'] = 'main/news/goi-y-dia-chi';
+$route['help/([a-z0-9-]+)/([a-z0-9-]+)-(:num).html'] = 'main/news/help/$1/$3';
+$route['news/([a-z0-9-]+)/([a-z0-9-]+)-(:num).html'] = 'main/news/news/$1/$3';
+$route['goi-y-dia-chi/([a-z0-9-]+)/([a-z0-9-]+)-(:num).html'] = 'main/news/goi-y-dia-chi/$1/$3';
+$route['goi-y-dia-chi/([a-z0-9-]+)/([a-z0-9-]+)'] = 'main/news/goi-y-dia-chi/$1/$2';
+
 //$route['([a-z0-9-]+)/g'] = 'main/servicegroup';
 $route['([a-z0-9-]+)/([a-z0-9-]+)-(:num).htm'] = 'main/servicegroup/$2/$3/$1';
 $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)-(:num).htm'] = 'main/servicegroup/$3/$4/$1/$2';
@@ -80,10 +88,7 @@ $route['([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)/([a-z0-9-]+)-(:num).
 
 
 
-$route['help'] = 'main/news/help';
-$route['news'] = 'main/news/news';
-$route['help/([a-z0-9-]+)-(:num).html'] = 'main/news/help/$2';
-$route['news/([a-z0-9-]+)-(:num).html'] = 'main/news/news/$2';
+
 
 
 

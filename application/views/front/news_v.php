@@ -1,10 +1,11 @@
-<div id="leftside" class="<? if ($oNews == null) echo 'width100' ?>">
+<div id="leftside" class="<? if ($oNews == null && $sType != $this->config->item('suggest')) echo 'width100' ?>">
     <div class="articlebox ">
 
 
-            <? if ($oNews != null): ?>
+            <? if ($oNews != null && $cattype == ""): ?>
                 <div class="cattitle"><i
-                        class="fa fa-info-circle"></i> <? if ($oNews != null): ?><?= $oNews->dalong_name ?>
+                        class="fa fa-info-circle"></i>
+                    <? if ($oNews != null): ?><?= $oNews->dalong_name ?>
                         <div>
                 <span style="font-size:.7em;"><i
                         class="fa fa-calendar"></i>
@@ -14,8 +15,9 @@
                 <span style="font-size:.7em;padding-left: 10px;"><i class="fa fa-rocket"></i>
                     <span>Lượt xem: <b><?= $oNews->daview ?></b></span> </span>
                         </div>
-                    <? endif; ?>
+
                 </div>
+                <? endif; ?>
         <div class="articlecontent">
                 <ul>
 
@@ -48,7 +50,7 @@
                                                 <? foreach ($cat as $item): ?>
                                                     <li>
                                                         <i class="fa fa-caret-right"></i>
-                                                        <a href="/help/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a>
+                                                        <a href="/help/<?=$oCurrentProvince->daurl?>/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a>
                                                     </li>
                                                 <? endforeach; ?>
                                             </ul>
@@ -57,7 +59,26 @@
                                 </ul>
                             <? endif; ?>
                         </div>
+                    <? elseif ($sType == $this->config->item('suggest')): ?>
+        <div class="articlecontent suggestcat">
+            <ul>
+                    <? foreach ($aCat as $cat):
+                        foreach ($cat as $item):?>
+                        <li>
+                            <? if ($item->dapic != ""): ?>
+                                <img
+                                    src="<?= base_url() ?>thumbnails/<?= $item->dapic ?>"
+                                   >
 
+                            <? endif?>
+                            <ul>
+                                <li><a href="/<?=$sType?>/<?=$oCurrentProvince->daurl?>/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a></li>
+                                <li class="smalltext8"><i class="fa fa-calendar"></i> <?= date("H:i d/m/Y", strtotime($item->dacreate)) ?></li>
+                            </ul>
+                        </li>
+                    <? endforeach;endforeach; ?>
+                </ul>
+            </div>
                 <? else: ?>
 
                     <? if (count($aCat) > 0): ?>
@@ -76,7 +97,7 @@
 
                                             <? endif?>
                                             <ul>
-                                                <li><a href="/news/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a></li>
+                                                <li><a href="/news/<?=$oCurrentProvince->daurl?>/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a></li>
                                                 <li class="smalltext8"><i class="fa fa-calendar"></i> <?= date("H:i d/m/Y", strtotime($item->dacreate)) ?></li>
                                             </ul>
                                         </li>
@@ -90,15 +111,16 @@
             <? endif; ?>
 
     </div>
-
+    <? if($showcomment):?>
     <div class="articlebox">
         <div class="cattitle"><i class="fa fa-comments-o"></i> Bình luận</div>
         <div class="articlecontent">
 
         </div>
     </div>
+    <? endif;?>
 </div>
-<? if($oNews != null):?>
+<? if($oNews != null || $sType == $this->config->item('suggest')):?>
 <div id="rightside">
     <? if ($sType == "help"): ?>
         <div class="articlebox">
@@ -116,7 +138,7 @@
                                     <? foreach ($cat as $item): ?>
                                         <li>
                                             <i class="fa fa-caret-right"></i>
-                                            <a href="/help/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a>
+                                            <a href="/help/<?=$oCurrentProvince->daurl?>/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a>
                                         </li>
                                     <? endforeach; ?>
                                 </ul>
@@ -124,6 +146,20 @@
                             <? $i++; endforeach; ?>
                     </ul>
                 <? endif; ?>
+            </div>
+        </div>
+        <? elseif($sType == $this->config->item('suggest')):?>
+    <div class="articlebox">
+        <div class="cattitle"><i class="fa fa-folder"></i></div>
+        <div class="articlecontent newssuggestcat">
+            <ul>
+            <? foreach($this->config->item('aNewsSuggest') as $k=>$v):?>
+                <li>
+
+                    <a href="/<?=$sType?>/<?=$oCurrentProvince->daurl?>/<?=$k?>"><i class="fa fa-<?=$v[1]?>"></i> <?= $v[0] ?></a>
+                </li>
+            <? endforeach;?>
+            </ul>
             </div>
         </div>
     <? else: ?>
@@ -144,7 +180,7 @@
 
                             <? endif?>
                             <ul>
-                                <li><a href="/news/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a></li>
+                                <li><a href="/<?=$sType?>/<?=$oCurrentProvince->daurl?>/<?= $item->daurl . '-' . $item->id . '.html' ?>"><?= $item->dalong_name ?></a></li>
                                 <li class="smalltext8"><i class="fa fa-calendar"></i> <?= date("H:i d/m/Y", strtotime($item->dacreate)) ?></li>
                             </ul>
                         </li>

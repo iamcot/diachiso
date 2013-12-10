@@ -4,18 +4,20 @@
              <li><? if($comment->daavatar!=""):?>
                      <img src="/thumbnails/<?=$comment->daavatar?>">
                      <? else:?>
-                     <i class="fa fa-user fa-2x"></i>
+                     <i class="fa fa-user fa-2x img"></i>
                  <? endif;?>
+                 <div class="commenttext">
                  <b class="colorgreen">
                      <? if($comment->dauser_id > 0):?><a href="/user/<?=$comment->dauser_id?>">
                      <?=$comment->daname?></a>
                     <? else:?>
                      <?=$comment->daname?>
             <? endif;?>
-            </b> <span class="content"><?=$comment->dacontent?></span><br><div class="smalltext6 colorgray" style="text-align: right"><i class="fa fa-calendar"></i> <?=date("H:i d/m/Y",strtotime($comment->dacreate))?>
+            </b> <span class="content"><?=$comment->dacontent?></span><br><div class="smalltext6 colorgray" style="text-align: left"><i class="fa fa-calendar"></i> <?=date("H:i d/m/Y",strtotime($comment->dacreate))?>
                  <? if($this->mylibs->candeletecomment() == 2 || ( $this->mylibs->candeletecomment() == 1 && $comment->dauser_id== $this->session->userdata("dauser_id"))):?>
                  [<a href="javascript:deletecomment(<?=$comment->id?>)">Xóa</a>]
                  <? endif;?>
+                 </div>
                  </div></li>
         <? endforeach; ?>
         <li>

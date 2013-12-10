@@ -50,7 +50,7 @@ class Main extends CI_Controller
             $catsdeal[$servicegroup->id][1] = $servicegroup->daurl;
             $catsdeal[$servicegroup->id][2] = $sServiceCat;
         }
-        $data['aComment'] = $this->main_m->getNewComment();
+        $data['aComment'] = $this->main_m->getNewComment($oCurrentProvince->id);
 
         $data['sComment'] = $this->load->view("/front/homecommentcontent_v",$data,true);
         $data['catsdeal'] = $catsdeal;
@@ -58,6 +58,15 @@ class Main extends CI_Controller
         $data['sServicePlace_new'] = $this->main_m->getHomeServicePlace("new", $oCurrentProvince->id);
         $data['aHotDealList'] = $this->main_m->getDealList($oCurrentProvince->id, "hot", $this->config->item('num_dealhot'));
         $data['sHotDealList'] = $this->load->view("front/homedealitem_v", $data, true);
+        $data['aPopularService'] = $this->main_m->getPopularService($oCurrentProvince->id);
+        $data['aNewsSuggest'] = $this->main_m->getNewsSuggest($this->config->item("aNewsSuggest"),$oCurrentProvince->id,5,0);
+        if($data['aNewsSuggest'] != null)
+        do{
+            $data['sSuggestRandom'] = array_rand($this->config->item("aNewsSuggest"),1);
+        }while(!isset($data['aNewsSuggest'][($data['sSuggestRandom'])]));
+        else{
+            $data['sSuggestRandom'] = 'event';//
+        }
 
         $data['sBody'] = $this->load->view("front/start_v", $data, true);
         $aNavAddr[$this->tbprovince] = $oCurrentProvince;
@@ -263,26 +272,53 @@ class Main extends CI_Controller
         $this->mylibs->echojson($arr);
     }
 
-    public function news($cat = "help", $news_id = 0)
+    public function news($cat = "help",$province="", $news_id = 0)
     {
+        $oCurrentProvince = $this->main_m->getProvince($province);
+        $data['oCurrentProvince'] = $oCurrentProvince;
+        $data['showcomment'] = true;
+        if ($cat == "help"){
 
-        if ($cat == "help")
-            $data['aCat'] = $this->main_m->getNewsCat(array("about", "help"), " dacat  ", 0);
-        else $data['aCat'] = $this->main_m->getNewsCat(array("news"), " id DESC  ", 10);
+            $asugess =  array();
+            foreach($this->config->item("aNewsHelp") as $k=>$v)
+                $asugess[] = $k;
+            $data['aCat'] = $this->main_m->getNewsCat($asugess,$oCurrentProvince->id, " dacat  ", 0);
+        }
+        else if($cat == $this->config->item('suggest')){
+            //$data['aCat'] =  array();
+            //foreach($this->config->item("aNewsSuggest") as $k=>$v)
+            //$data['aCat'] = $k;
+            //$data['aCat'] = $this->main_m->getNewsCat($asugess,$oCurrentProvince->id, " id DESC  ", 10);
+            $data['aCat'] = null;
+        }
+        else
+        {
+            $asugess =  array();
+            foreach($this->config->item("aNewsCat") as $k=>$v)
+                $asugess[] = $k;
+            $data['aCat'] = $this->main_m->getNewsCat($asugess,$oCurrentProvince->id, " dacat  ", 10);
+        }
         $data['sType'] = $cat;
         $data['sTitle'] = $this->lang->line($cat);
         // $news_id = $this->mylibs->getIdFromSeourl($id);
+        $data['cattype'] = "";
         if (is_numeric($news_id)) {
             $this->main_m->updateItemView($this->tbnews, $news_id);
             $data['oNews'] = $this->main_m->getNews($news_id);
+            if($data['oNews']==null) $data['showcomment'] = false;
         }
-        else $data['oNews'] = null;
+        else {
+            $data['aCat'] = $this->main_m->getNewsCat(array($news_id),$oCurrentProvince->id, " dacat  ", 10,0);
+            $data['cattype'] = $this->config->item('suggest');
+            $data['oNews'] = null;
+            $data['showcomment'] = false;
+        }
 
         $data['sBody'] = $this->load->view("front/news_v", $data, true);
 
-        if ($this->session->userdata("province")) $province = $this->session->userdata("province");
-        else $province = "";
-        $oCurrentProvince = $this->main_m->getProvince($province);
+        //if ($this->session->userdata("province")) $province = $this->session->userdata("province");
+        //else $province = "";
+        //$oCurrentProvince = $this->main_m->getProvince($province);
         $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbprovince, array($this->tbprovince => $oCurrentProvince));
         if ($cat == "help")
             $data['addNavAddr'] = "Trợ giúp";

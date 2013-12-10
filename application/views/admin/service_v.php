@@ -63,12 +63,27 @@
         <br>
 
         <div id="newsforhome" style="display: none">
+            <select name="newsdaprovince_id">
+                <option value="0">Tất cả</option>
+                <? foreach($province as $prov):?>
+                    <option value="<?=$prov->id?>"><?=$prov->dalong_name?></option>
+                <? endforeach;?>
+            </select>
             <lable>Chuyên mục</lable>
             <select name="dacats">
-                <option value="about">Giới thiệu</option>
-                <option value="help">Giúp đỡ, hướng dẫn</option>
-                <option value="news">Tin tức chung của site</option>
+                <?
+                foreach ($this->config->item("aNewsHelp") as $k => $v) {
+                    echo '<option value="' . $k . '">' . $v . '</option>';
+                }
+                foreach ($this->config->item("aNewsCat") as $k => $v) {
+                    echo '<option value="' . $k . '">' . $v . '</option>';
+                }
+                foreach ($this->config->item("aNewsSuggest") as $k => $v) {
+                    echo '<option value="' . $k . '">' . $v[0] . '</option>';
+                }
+                ?>
             </select>
+
 
         </div>
         <div id="newsforservice">
@@ -157,17 +172,16 @@
         </fieldset>
         <fieldset>
             <legend>Danh sách bài viết</legend>
-        <div id="listnews"></div>
+            <div id="listnews"></div>
         </fieldset>
     </div>
 
 </div>
 <script>
-function newsclearinput(){
+function newsclearinput() {
     $("input[name=newsdalong_name]").val("");
     $("input[name=newsedit]").val("");
     $("input[name=newsdaurl]").val("");
-
 
     $("input[name=newsdapic]").val("");
     $("textarea[name=dacontent_short]").val("");
@@ -187,7 +201,7 @@ function editnews(id) {
                 $("input[name=newsdalong_name]").val(province.dalong_name);
                 $("input[name=newsedit]").val(province.id);
                 $("input[name=newsdaurl]").val(province.daurl);
-                if(province.datype == "service"){
+                if (province.datype == "service") {
                     $("input[name=datype]").filter('[value=service]').prop('checked', true);
 
                     $("input[name=newsdaserviceplace_id]").val(province.daserviceplace_id);
@@ -195,10 +209,11 @@ function editnews(id) {
                     $("#newsforservice").show();
 
                 }
-                else if(province.datype == "home"){
+                else if (province.datype == "home") {
                     $("input[name=datype]").filter('[value=home]').prop('checked', true);
 
                     $("select[name=dacats]").val(province.dacat);
+                    $("select[name=newsdaprovince_id]").val(province.daprovince_id);
                     $("#newsforservice").hide();
                     $("#newsforhome").show();
                 }
@@ -206,49 +221,53 @@ function editnews(id) {
                 $("input[name=newsdapic]").val(province.dapic);
                 $("textarea[name=dacontent_short]").val(province.dacontent_short);
                 $("textarea[name=dacontent]").val(province.dacontent);
-                $("#newspicdemo").html('<img src="<?=base_url()?>thumbnails/'+province.dapic+'">');
+                $("#newspicdemo").html('<img src="<?=base_url()?>thumbnails/' + province.dapic + '">');
                 removeloadgif("#newsstatus");
             }
         }
     });
 }
-function savenews(){
+function savenews() {
     var type = $("input[name=datype]:checked").val();
     var daserviceplace_id = "";
     var dacat = "";
-    if(type== "home"){
-        dacat=$("select[name=dacats]").val();
+    var daprovince_id = "";
+    if (type == "home") {
+        dacat = $("select[name=dacats]").val();
+        daprovince_id = $("select[name=newsdaprovince_id]").val();
     }
-    else if(type=="service"){
+    else if (type == "service") {
         daserviceplace_id = $("input[name=newsdaserviceplace_id]").val();
-        if(daserviceplace_id == ""){
-            alert("Chưa có ID Điểm dịch vụ."); return;
+        if (daserviceplace_id == "") {
+            alert("Chưa có ID Điểm dịch vụ.");
+            return;
         }
     }
-    var dalong_name     = $("input[name=newsdalong_name]").val();
-    var daurl           = $("input[name=newsdaurl]").val();
-    var dapic           = $("input[name=newsdapic]").val();
-    var edit            = $("input[name=newsedit]").val();
+    var dalong_name = $("input[name=newsdalong_name]").val();
+    var daurl = $("input[name=newsdaurl]").val();
+    var dapic = $("input[name=newsdapic]").val();
+    var edit = $("input[name=newsedit]").val();
     var dacontent_short = $("textarea[name=dacontent_short]").val();
-    var dacontent       = $("textarea[name=dacontent]").val();
+    var dacontent = $("textarea[name=dacontent]").val();
 
-    if(dalong_name.trim()=="" || daurl.trim()=="" || dacontent.trim()==""){
+    if (dalong_name.trim() == "" || daurl.trim() == "" || dacontent.trim() == "") {
         alert("Vui lòng nhập đủ các trường.");
         return;
     }
     $.ajax({
-       type:"post",
-        url:"<?=base_url()?>admin/savenews",
-        data:"dalong_name=" + dalong_name
-                 + "&daurl=" + daurl
-                 + "&dacontent=" + encodeURIComponent(dacontent)
-                 + "&dapic=" + dapic
-                 + "&dacontent_short=" + dacontent_short
-                 + "&daserviceplace_id=" + daserviceplace_id
-                 + "&dacat=" + dacat
-                 + "&edit=" + edit
-                 + "&datype=" + type,
-        success: function(msg){
+        type: "post",
+        url: "<?=base_url()?>admin/savenews",
+        data: "dalong_name=" + dalong_name
+                  + "&daurl=" + daurl
+                  + "&dacontent=" + encodeURIComponent(dacontent)
+                  + "&dapic=" + dapic
+                  + "&dacontent_short=" + dacontent_short
+                  + "&daserviceplace_id=" + daserviceplace_id
+                  + "&dacat=" + dacat
+                  + "&edit=" + edit
+                  + "&daprovince_id=" + daprovince_id
+                  + "&datype=" + type,
+        success: function (msg) {
             switch (msg) {
                 case "0":
                     alert("Không thể lưu");
@@ -271,23 +290,27 @@ function savenews(){
         }
     });
 }
-function loadnews(page){
+function loadnews(page) {
     var type = $("input[name=datype]:checked").val();
     var daserviceplace_id = "";
-    if(type== "home"){
-        daserviceplace_id=$("select[name=dacats]").val();
+    var daprovince_id = "";
+    if (type == "home") {
+        daserviceplace_id = $("select[name=dacats]").val();
+        daprovince_id = $("select[name=newsdaprovince_id]").val();
     }
-    else if(type=="service"){
+    else if (type == "service") {
         daserviceplace_id = $("input[name=newsdaserviceplace_id]").val();
-        if(daserviceplace_id == ""){
-            alert("Chưa có ID Điểm dịch vụ."); return;
+        if (daserviceplace_id == "") {
+            alert("Chưa có ID Điểm dịch vụ.");
+            return;
         }
     }
     addloadgif("#newsstatus");
     $("#listnews").load("<?=base_url()?>admin/loadnews/"
-                                 + type + "/"
-                                 + daserviceplace_id + "/"
-                                 + page, function(){removeloadgif("#newsstatus");});
+                            + type + "/"
+                            + daserviceplace_id + "/"
+                            + daprovince_id + "/"
+        + page, function () {removeloadgif("#newsstatus");});
     $("input[name=newscurrpage]").val(page);
 }
 function changenewstype() {
@@ -398,7 +421,7 @@ function tabloadService(
                 if (mod == "pic") {
                     loadoldpic();
                 }
-                else if(mod == "news"){
+                else if (mod == "news") {
                     loadnews(1);
                 }
             }

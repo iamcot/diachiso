@@ -26,50 +26,30 @@ class Main_m extends CI_Model
         $where = "";
         if ($sCurrProvince != "") $where = " AND daurl='$sCurrProvince' ";
         $sql = "SELECT * FROM " . $this->tbprovince . " WHERE dadeleted = 0 $where ORDER BY daorder DESC, dalong_name LIMIT 0,1";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->row();
-        }
-        else return null;
+        return $this->getRow($sql);
     }
 
     public function getDistrict($province, $daseorul)
     {
         $sql = "SELECT * FROM " . $this->tbdistrict . " WHERE dadeleted = 0 AND daurl='$daseorul' AND daprovince_id='$province' LIMIT 0,1";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->row();
-        }
-        else return null;
+        return $this->getRow($sql);
     }
 
     public function getOtherWard($district_id, $ward_id)
     {
         $sql = "SELECT * FROM " . $this->tbward . " WHERE dadeleted = 0 AND  id!='$ward_id' AND dadistrict_id = '$district_id' ORDER BY dalong_name";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
 
     public function getWard($district_id, $daseorul)
     {
         $sql = "SELECT * FROM " . $this->tbward . " WHERE dadeleted = 0 AND daurl='$daseorul' AND dadistrict_id = '$district_id' LIMIT 0,1";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->row();
-        }
-        else return null;
+        return $this->getRow($sql);
     }
     public function get1street($wardid, $daseorul)
     {
         $sql = "SELECT * FROM " . $this->tbstreet . " WHERE dadeleted = 0 AND daurl='$daseorul' AND daward_id = '$wardid' LIMIT 0,1";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->row();
-        }
-        else return null;
+        return $this->getRow($sql);
     }
 
     public function getStreet($province_id, $district_id, $ward_id, $daurl = "")
@@ -85,21 +65,13 @@ class Main_m extends CI_Model
             $limit = " LIMIT 0,1";
         }
         $sql = "SELECT s.*, w.daurl wardurl FROM " . $this->tbstreet . " s, " . $this->tbward . " w WHERE s.daward_id=w.id AND s.dadeleted=0 $where ORDER BY s.dalong_name $limit";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
 
     public function getNavService()
     {
         $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dadeleted=0 AND dashowhome=1  ORDER BY dalong_name";
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
 
     public function getsubcat($parentname, $parentid, $current)
@@ -171,59 +143,36 @@ class Main_m extends CI_Model
         $sql="SELECT * FROM ".$this->vserviceplace." sp
         WHERE sp.daprovince_id=$province_id
         ORDER BY $order LIMIT 0," . $this->config->item('iHomeServicePlae');
-        $qr = $this->db->query($sql);
-        if ($qr->num_rows() > 0) {
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
     function getServicePlace($place_id){
         $sql="SELECT * FROM ".$this->tbservice_place." WHERE id=$place_id AND dadeleted=0 limit 0,1";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0){
-            return $qr->row();
-        }
-        else return null;
+        return $this->getRow($sql);
     }
     function updateItemView($table,$id){
         $sql="UPDATE $table SET daview=(daview+1) WHERE id=$id";
-        $this->db->query($sql);
+        return $this->db->query($sql);
     }
     function getPlacePics($sPlace_id){
         $sql="SELECT * FROM ".$this->tbpic." WHERE daserviceplace_id=$sPlace_id";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->result();
-        else return null;
+        return $this->getResult($sql);
     }
     function getPlaceDeal($sPlace_id){
         $sql="SELECT * FROM ".$this->vdeal." WHERE dadeleted=0 AND daserviceplace_id=$sPlace_id ORDER BY id DESC";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->result();
-        else return null;
+        return $this->getResult($sql);
     }
     function getPlaceNews($sPlace_id){
         $sql="SELECT * FROM ".$this->tbnews." WHERE dadeleted=0 AND daserviceplace_id=$sPlace_id ORDER BY id DESC";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->result();
-        else return null;
+        return $this->getResult($sql);
 
     }
     function getDealInfo($id){
         $sql="SELECT * FROM ".$this->tbdeal." WHERE dadeleted=0 AND id='$id' LIMIT 0,1";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->row();
-        else return null;
+        return $this->getRow($sql);
     }
     function getNewsInfo($id){
         $sql="SELECT * FROM ".$this->tbnews." WHERE dadeleted=0 AND id='$id' LIMIT 0,1";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->row();
-        else return null;
+        return $this->getRow($sql);
     }
     function getDealList($provinceid, $typeorder,$limit=10,$servicegroup_id=0){
         $order = "";
@@ -243,37 +192,24 @@ class Main_m extends CI_Model
         }
         $sql="SELECT * FROM ".$this->vdeal." dl WHERE dl.dadeleted = 0 AND dl.dato > $now AND dl.provinceid=$provinceid $wheresg  $order LIMIT 0, $limit";
 
-        $qr = $this->db->query($sql);
-
-        if($qr->num_rows()>0)
-            return $qr->result();
-        else return null;
-        //AND $provinceid = (SELECT sp.daprovince_id FROM ".$this->tbservice_place." sp WHERE sp.id= d.daserviceplace_id )
+        return $this->getResult($sql);
     }
     function getBanner(){
         $sql="SELECT * FROM ".$this->tbconfig." WHERE daname='banner'";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0){
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
     function getNews($id=0){
         $sql="SELECT * FROM ".$this->tbnews." WHERE id=$id AND dadeleted=0";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0){
-            return $qr->row();
-        }
-        else return null;
+        return $this->getRow($sql);
     }
-    function getNewsCat($aCat = array(),$order="",$limit=0){
+    function getNewsCat($aCat = array(),$province_id,$order="",$limit=0,$page=0){
         $where = "";
         if($order != "")
             $sorder = " ORDER BY $order ";
         else $sorder = "";
 
         $slimit = "";
-        if($limit>0) $slimit = " LIMIT 0, $limit";
+        if($limit>0) $slimit = " LIMIT $page, $limit";
         if(count($aCat)>0){
             $i=0;
             foreach($aCat as $cat){
@@ -284,7 +220,7 @@ class Main_m extends CI_Model
                 $i++;
             }
         }
-        $sql="SELECT * FROM ".$this->tbnews ." WHERE dadeleted=0 $where $sorder $slimit";
+        $sql="SELECT * FROM ".$this->tbnews ." WHERE dadeleted=0 AND daprovince_id=$province_id $where $sorder $slimit";
         $qr = $this->db->query($sql);
         if($qr->num_rows()>0){
             $rs = $qr->result();
@@ -304,10 +240,7 @@ class Main_m extends CI_Model
     }
     public function getconfig($name){
          $sql="SELECT * FROM ".$this->tbconfig." WHERE daname='$name'";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->result();
-        else return null;
+        return $this->getResult($sql);
     }
     public function getPlaceFromServiceGroup($sgid,$province_url,$order=array(),$page=0,$district_url = "",$ward_url="",$street_url=""){
         $sorder = " ORDER BY sp.servicename ";
@@ -323,11 +256,7 @@ class Main_m extends CI_Model
         if($street_url != "") $whereaddr .= " AND sp.streeturl='$street_url' ";
         $sql="SELECT sp.* FROM ".$this->vserviceplace." sp
         WHERE sp.daservicegroup_id  = $sgid $whereaddr $sorder LIMIT $page,".$this->config->item("num_servicegroup");
-        $qr= $this->db->query($sql);
-        if($qr->num_rows()>0){
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
     public function getPlaceFromService($sid,$province_url,$order=array(),$page=0,$district_url = "",$ward_url="",$street_url=""){
         $sorder = "";
@@ -344,11 +273,7 @@ class Main_m extends CI_Model
         if($street_url != "") $whereaddr .= " AND sp.streeturl='$street_url' ";
         $sql="SELECT sp.* FROM ".$this->vserviceplace." sp
         WHERE sp.daservice_id  = $sid $whereaddr $sorder LIMIT $page,".$this->config->item("num_servicegroup");
-        $qr= $this->db->query($sql);
-        if($qr->num_rows()>0){
-            return $qr->result();
-        }
-        else return null;
+        return $this->getResult($sql);
     }
     public function getSumPage($type,$sid,$province_url,$district_url = "",$ward_url="",$street_url=""){
         $whereaddr = " AND sp.provinceurl='$province_url' ";
@@ -376,39 +301,21 @@ class Main_m extends CI_Model
     }
     public function getUser($user_id){
         $sql="SELECT * FROM ".$this->tbuser." WHERE id=$user_id AND dadeleted=0 LIMIT 1";
-        $qr = $this->db->query($sql);
-        if($qr->num_rows()>0)
-            return $qr->row();
-        else return null;
+        $this->getRow($sql);
     }
     public function getDealUserList($dealid){
         $sql="SELECT * FROM ".$this->tbdealuser." WHERE dadeal_id=$dealid";
-        $qr= $this->db->query($sql);
-        if($qr->num_rows()>0)
-        {
-            return $qr->result();
-        }
-        return null;
+        return $this->getResult($sql);
     }
     public function getComment($daserviceplace_id,$page){
         $sql="SELECT * FROM ".$this->tbcomment." WHERE daserviceplace_id=$daserviceplace_id ORDER BY id DESC LIMIT ".(($page-1)*$this->config->item("num_comment")).",".$this->config->item("num_comment");
-        $qr= $this->db->query($sql);
-        if($qr->num_rows()>0)
-        {
-            return $qr->result();
-        }
-        return null;
+        return $this->getResult($sql);
     }
-    public function getNewComment(){
+    public function getNewComment($province_id){
         $sql="SELECT c.id cmid, c.dacontent cmcontent, c.dacreate cmcreate, c.daname, c.dauser_id cmuserid,s.*
-        FROM ".$this->tbcomment." c,".$this->vserviceplace." s WHERE s.id = c.daserviceplace_id
+        FROM ".$this->tbcomment." c,".$this->vserviceplace." s WHERE s.id = c.daserviceplace_id AND s.daprovince_id = $province_id
         ORDER BY c.id DESC LIMIT 0,".$this->config->item("num_comment");
-        $qr= $this->db->query($sql);
-        if($qr->num_rows()>0)
-        {
-            return $qr->result();
-        }
-        return null;
+        return $this->getResult($sql);
     }
     public function getSumComment($daserviceplace_id){
         $sql="SELECT count(id) numrow FROM ".$this->tbcomment." WHERE daserviceplace_id=$daserviceplace_id";
@@ -418,6 +325,43 @@ class Main_m extends CI_Model
             return ceil($qr->row()->numrow/$this->config->item("num_comment"));
         }
         return null;
+    }
+    public function getPopularService($province_id){
+        $sql="SELECT sp.provinceurl,sp.servicename,sp.serviceurl,sp.daservice_id, count(sp.id) numserviceplace FROM ".$this->vserviceplace." sp
+        WHERE sp.daprovince_id = $province_id GROUP BY sp.daservice_id
+        ORDER BY numserviceplace DESC LIMIT 0,".$this->config->item("num_homeservicepopular");
+        return $this->getResult($sql);
+    }
+    public function getNewsSuggest($cats=array(),$province_id,$limit=5,$page=0){
+        $sql="";
+        $i=1;
+        foreach($cats as $k=>$v ){
+            $sql .=" SELECT a$i.* FROM (SELECT * FROM ".$this->tbnews." where datype = 'home' and dacat = '$k' AND daprovince_id=$province_id ORDER BY id  DESC limit $page,$limit) a$i ";
+            if ( $i<(count($cats))) $sql.=" union ";
+            $i++;
+        }
+        $rs = $this->getResult($sql);
+        $aNews = array();
+        if($rs != null){
+            foreach($rs as $row){
+                    $aNews[$row->dacat][] = $row;
+            }
+        }
+        return $aNews;
+    }
+    function getResult($sql){
+        $qr= $this->db->query($sql);
+        if($qr->num_rows()>0)
+        {
+            return $qr->result();
+        }
+        return null;
+    }
+    function getRow($sql){
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0)
+            return $qr->row();
+        else return null;
     }
 
 }

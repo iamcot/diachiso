@@ -6,16 +6,18 @@
                      <? else:?>
                      <i class="fa fa-tag fa-2x"></i>
                  <? endif;?>
+                 <div class="commenttext">
                  <b class="colorgreen">
                      <? if($comment->dauser_id > 0):?><a href="/user/<?=$comment->dauser_id?>">
                      <?=$comment->daname?></a>
                     <? else:?>
                      <?=$comment->daname?>
             <? endif;?>
-            </b> <span class="content"><i class="fa fa-quote-left"></i> <?=$comment->cmcontent?> <i class="fa fa-quote-right"></i></span><br>
-                 <div>Trong: <a href="<?=$this->mylibs->makePlaceUrl($comment)?>"><?=$comment->dalong_name?></a></div>
-                 <div class="smalltext6 colorgray" style="text-align: right"><i class="fa fa-calendar"></i> <?=date("H:i d/m/Y",strtotime($comment->cmcreate))?>
-                 </div></li>
+            </b> <span class="content"> <?=$comment->cmcontent?> </span><br>
+                 <div>Tại: <a href="<?=$this->mylibs->makePlaceUrl($comment)?>"><?=$comment->dalong_name?></a></div>
+                 <div class="smalltext6 colorgray" style="text-align: left"><i class="fa fa-calendar"></i> <?=date("H:i d/m/Y",strtotime($comment->cmcreate))?>
+                 </div>
+             </div></li>
         <? endforeach; ?>
         <li>
             <? if(!isset($sCat)):?>
