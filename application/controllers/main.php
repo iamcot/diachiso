@@ -276,40 +276,55 @@ class Main extends CI_Controller
     {
         $oCurrentProvince = $this->main_m->getProvince($province);
         $data['oCurrentProvince'] = $oCurrentProvince;
+        $data['sType'] = $cat;
+        if( $this->input->get("page") )
+        {
+            $data['crrpage'] = $this->input->get("page");
+            $data['sumpage'] = $this->main_m->getSumNewsCat(array($news_id),$oCurrentProvince->id);
+            $data['aCat'] = $this->main_m->getNewsCat(array($news_id),$oCurrentProvince->id, " dacat  ", $this->config->item("pp"),($data['crrpage']-1));
+            echo $this->load->view("front/suggestcat_v",$data,true);
+            return;
+        }
         $data['showcomment'] = true;
         if ($cat == "help"){
-
+            $data['sTitle'] = "Trợ giúp";
             $asugess =  array();
             foreach($this->config->item("aNewsHelp") as $k=>$v)
                 $asugess[] = $k;
             $data['aCat'] = $this->main_m->getNewsCat($asugess,$oCurrentProvince->id, " dacat  ", 0);
         }
         else if($cat == $this->config->item('suggest')){
-            //$data['aCat'] =  array();
-            //foreach($this->config->item("aNewsSuggest") as $k=>$v)
-            //$data['aCat'] = $k;
-            //$data['aCat'] = $this->main_m->getNewsCat($asugess,$oCurrentProvince->id, " id DESC  ", 10);
+            $data['sTitle'] = "Gợi ý địa chỉ";
             $data['aCat'] = null;
         }
         else
         {
+            $data['sTitle'] = "Tin tức";
             $asugess =  array();
             foreach($this->config->item("aNewsCat") as $k=>$v)
                 $asugess[] = $k;
             $data['aCat'] = $this->main_m->getNewsCat($asugess,$oCurrentProvince->id, " dacat  ", 10);
         }
-        $data['sType'] = $cat;
-        $data['sTitle'] = $this->lang->line($cat);
+
+        //$data['sTitle'] = $this->lang->line($cat);
         // $news_id = $this->mylibs->getIdFromSeourl($id);
         $data['cattype'] = "";
         if (is_numeric($news_id)) {
             $this->main_m->updateItemView($this->tbnews, $news_id);
             $data['oNews'] = $this->main_m->getNews($news_id);
-            if($data['oNews']==null) $data['showcomment'] = false;
+
+            if($data['oNews']==null){ $data['showcomment'] = false;
+            }
+            else{
+                $data['sTitle'] =  $data['oNews']->dalong_name;
+            }
         }
         else {
-            $data['aCat'] = $this->main_m->getNewsCat(array($news_id),$oCurrentProvince->id, " dacat  ", 10,0);
+            $data['aCat'] = $this->main_m->getNewsCat(array($news_id),$oCurrentProvince->id, " dacat  ", $this->config->item("pp"),0);
+            $data['sumpage'] = $this->main_m->getSumNewsCat(array($news_id),$oCurrentProvince->id);
+            $data['crrpage'] = 1;
             $data['cattype'] = $this->config->item('suggest');
+
             $data['oNews'] = null;
             $data['showcomment'] = false;
         }
@@ -322,6 +337,9 @@ class Main extends CI_Controller
         $data['aNavAddr'] = $this->mylibs->makeNavAddr($this->tbprovince, array($this->tbprovince => $oCurrentProvince));
         if ($cat == "help")
             $data['addNavAddr'] = "Trợ giúp";
+            else if($cat == $this->config->item('suggest')){
+                $data['addNavAddr'] = "Gợi ý địa chỉ";
+            }
         else $data['addNavAddr'] = 'Tin tức';
         $this->render($data);
     }

@@ -1220,13 +1220,28 @@ li{
 .suggestcat ul li{
     margin-bottom: 10px;
 }
+.suggestcat ul li{
+    display: block;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
 .newscat li ul li{
    line-height: 1.5em;
     margin-bottom: 0;
 }
+.newssuggestcat a{
+    display: block;
+    padding: 5px;
+}
+.newssuggestcat a:hover{
+    background: #1d9d74;
+    color: #fff !important;
+    border-radius: 5px;
+}
 .suggestcat ul li ul li{
    line-height: 1.5em;
     margin-bottom: 0;
+    overflow: hidden;
 }
 #form_submitdeal ul{
     margin-top:10px;

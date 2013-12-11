@@ -238,6 +238,29 @@ class Main_m extends CI_Model
         else return null;
 
     }
+    function getSumNewsCat($aCat = array(),$province_id){
+        $where = "";
+
+        if(count($aCat)>0){
+            $i=0;
+            foreach($aCat as $cat){
+                if($i==0) $where.=" AND ( ";
+                else if ($i>0) $where .= " OR ";
+                $where .= " dacat = '$cat' ";
+                if($i == (count($aCat)-1)) $where .= " ) ";
+                $i++;
+            }
+        }
+        $sql="SELECT count(id) numrow FROM ".$this->tbnews ." WHERE dadeleted=0 AND daprovince_id=$province_id $where ";
+        $qr = $this->db->query($sql);
+        if($qr->num_rows()>0){
+            $rs = $qr->row();
+
+            return ceil($rs->numrow/$this->config->item("pp"));
+        }
+        else return null;
+
+    }
     public function getconfig($name){
          $sql="SELECT * FROM ".$this->tbconfig." WHERE daname='$name'";
         return $this->getResult($sql);

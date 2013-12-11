@@ -111,6 +111,16 @@
         </tr>
         <tr>
             <td colspan="2">
+                <div>
+                    <input type="button" value="Tắt/Mở Upload hình ảnh" onclick="$('#serviceplaceuploadmorepic').toggle()"> <span id="serviceplaceuploadmorepicstatus"></span>
+                    <div id="serviceplaceuploadmorepic" style="display: none;min-height: 100px;border:1px solid #356635;margin:5px;">
+                        <input id="serviceplaceuploadmorepicbut"  type="file" name="files[]" data-url="<?=base_url()?>admin/calljupload" multiple>
+                         <table id="serviceplaceuploadmorepicshow" style="display: block;width:99%;">
+
+                         </table>
+
+                    </div>
+                </div>
                 <label>Thông tin</label>
                 <textarea class="ckeditor" name="dainfo" placeholder="Thông tin" title="Thông tin"></textarea></td>
         </tr>
@@ -384,7 +394,44 @@
                 });
             }
         });
+        $('#serviceplaceuploadmorepicbut').fileupload({
+            dataType: 'json',
+            start: function () {
+                console.log("start");
+                addloadgif("#serviceplaceuploadmorepicstatus");
+            },
+            done: function (e, data) {
+                $.each(data.result, function (index, file) {
+                    $("#serviceplaceuploadmorepicshow").append('' +
+                                              '<tr style="width:100%">' +
+                                              '<td style="width:70%;">' +
+                                              '[<a href="javascript:spdelpic(\'' + file.name + '\')">Xóa</a>]' +
+                                              '<input onclick="this.select()" datype="new" type="text" value="/images/' + file.name + '" readonly=true >' +
+                                              '<td><img src="<?=base_url()?>thumbnails/' + file.name + '"></td>' +
+                                              '</tr>' +
+                                              '');
+
+                });
+                removeloadgif("#serviceplaceuploadmorepicstatus");
+            }
+        });
+
     });
+    function spdelpic(filename) {
+        var deldb = 0;
+        $.ajax({
+            type: "post",
+            url: "<?=base_url()?>admin/delfile/" + filename + "/" + deldb,
+            success: function (msg) {
+                if (msg == 1) {
+                    $("input[value=\"/images/" + filename + "\"]").parent().parent().remove();
+                }
+                else {
+                    alert("Không thể xóa file, xin hãy kiểm tra lại");
+                }
+            }
+        });
+    }
 function savenewward(){
 
         var dadistrict_id =  $("select[name=dadistrict_id]").val();
