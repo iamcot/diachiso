@@ -2,6 +2,7 @@
     <legend>Thông tin</legend>
     <input type="text" name="dalong_name" placeholder="Tên đầy đủ">
     <input type="text" id="daurl" name="daurl" placeholder="Seo URL">
+    <input type="text" id="daorder" name="daorder" placeholder="Thứ tự">
     <textarea name="dainfo" placeholder="Thông tin"></textarea>
     <label> Hiển thị trang chủ </label><input type="checkbox" name="dashowhome" >
     <br>
@@ -28,6 +29,7 @@
         var daurl = $("input[name=daurl]").val();
         var dainfo = $("textarea[name=dainfo]").val();
         var edit = $("input[name=edit]").val();
+        var daorder = $("input[name=daorder]").val();
         var dashowhome = (($("input[name=dashowhome]").prop('checked'))?1:0);
 
         if (dalong_name.trim() != "" && daurl.trim() != "") {
@@ -38,6 +40,7 @@
                     + "&daurl=" + daurl
                     + "&dainfo=" + dainfo
                     + "&dashowhome=" + dashowhome
+                    + "&daorder=" + daorder
                     + "&edit=" + edit,
                 success: function (msg) {
                     switch (msg) {
@@ -76,6 +79,7 @@
         $("textarea[name=dainfo]").val("");
         $("input[name=dashowhome]").prop('checked',false);
         $("input[name=edit]").val("");
+        $("input[name=daorder]").val("");
     }
     function editProvince(id) {
         $.ajax({
@@ -87,6 +91,7 @@
                     var province = eval(msg);
                     $("input[name=dalong_name]").val(province.dalong_name);
                     $("input[name=edit]").val(province.id);
+                    $("input[name=daorder]").val(province.daorder);
                     $("input[name=daurl]").val(province.daurl);
                     $("textarea[name=dainfo]").val(province.dainfo);
                     $("input[name=dashowhome]").prop('checked',((province.dashowhome==1)?true:false));

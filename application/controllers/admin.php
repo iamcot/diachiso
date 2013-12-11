@@ -252,6 +252,7 @@ class Admin extends CI_Controller
             'daurl' => $this->input->post("daurl"),
             'dainfo' => $this->input->post("dainfo"),
             'dashowhome' => $this->input->post("dashowhome"),
+            'daorder' => $this->input->post("daorder"),
         );
         if ($this->input->post("edit") != "") //update
         {
@@ -609,6 +610,7 @@ class Admin extends CI_Controller
                 'daurl' => $row->daurl,
                 'dainfo' => $row->dainfo,
                 'dashowhome' => $row->dashowhome,
+                'daorder' => $row->daorder,
             ));
         } else echo '0';
     }
@@ -913,7 +915,7 @@ class Admin extends CI_Controller
     public function loadservicegroup($page = 1)
     {
         $page -= 1;
-        if (($rs = $this->getService($this->tbservice_group, null, $page)) != null) {
+        if (($rs = $this->getService($this->tbservice_group, null, $page, array("field"=>"daorder","type"=>"DESC"))) != null) {
             $data['province'] = $rs;
             $data['sumpage'] = $this->getSumPageAddress($this->tbservice_group, null);
             echo $this->load->view("admin/list_province_v", $data, true);

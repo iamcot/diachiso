@@ -51,6 +51,8 @@ CREATE TABLE `dadealuser_log` (id INT(11)  NOT NULL PRIMARY KEY AUTO_INCREMENT) 
 
 /* 10/12 3:02:16 PM localhost */ ALTER TABLE `danews` ADD `daprovince_id` INT  NOT NULL  AFTER `dalike`;
 
+/* home 12/12*/
+/*[10:51:14 PM][154 ms]*/ ALTER TABLE `daservice_group` ADD COLUMN `daorder` TINYINT(4) NOT NULL AFTER `dadeleted`;
 
 
 

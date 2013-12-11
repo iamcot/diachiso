@@ -70,7 +70,7 @@ class Main_m extends CI_Model
 
     public function getNavService()
     {
-        $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dadeleted=0 AND dashowhome=1  ORDER BY dalong_name";
+        $sql = "SELECT * FROM " . $this->tbservice_group . " WHERE dadeleted=0 AND dashowhome=1  ORDER BY daorder DESC";
         return $this->getResult($sql);
     }
 
