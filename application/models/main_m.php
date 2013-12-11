@@ -87,7 +87,7 @@ class Main_m extends CI_Model
         if ($parentid == 0 && ($parentname == "" || $parentname == null))
             $sql = "SELECT id,dalong_name,daurl $pic   FROM " . $current . " WHERE  dadeleted=0 ORDER BY dalong_name";
         else
-            $sql = "SELECT id,dalong_name,daurl $pic  FROM " . $current . " WHERE " . $parentname . "_id = " . $parentid . " AND dadeleted=0 ORDER BY $order  LIMIT 0,".$this->config->item('iHomeServicePlae');
+            $sql = "SELECT id,dalong_name,daurl $pic  FROM " . $current . " WHERE " . $parentname . "_id = " . $parentid . " AND dadeleted=0 ORDER BY $order ";
         $qr = $this->db->query($sql);
         if ($qr->num_rows() > 0) {
             return $qr->result_array();

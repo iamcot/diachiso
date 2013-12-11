@@ -25,7 +25,7 @@
                 </div>
                 <div class="placemap">
                     <div id="dealinfo">
-                        <h4>Thông tin <?=$this->lang->line('dealname')?></h4>
+                        <h4>Thông tin</h4>
                         <ul>
                             <li><i class="fa fa-tag"></i>
                                 <span><b class="colorred">- <?=number_format($deal->daamount,0,',','.')?></b> <span style="font-size: .8em"><?=(($deal->datype=="percent")?"%":"đ")?></span></span>
@@ -42,7 +42,7 @@
                         <h4>Trạng thái</h4>
                         <div class="boxgetdeal">
                             <a href="?dealinfo=<?=$deal->id?>">
-                                Nhận <?=$this->lang->line('dealname')?></a>
+                                Nhận</a>
                         </div>
                     </div>
                 </div>

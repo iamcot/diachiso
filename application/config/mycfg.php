@@ -1,7 +1,7 @@
 <?php
 $config['sitename'] = 'Sài Gòn - Hà Nội';
-$oonfig['slogan'] = 'Thổ đia online';
-$config['sufix_title'] = 'saigonhanoi.com.vn - Thổ địa online của bạn.';
+$oonfig['slogan'] = 'Cẩm nang tiêu dùng Việt';
+$config['sufix_title'] = 'saigonhanoi.com.vn - Cẩm nang tiêu dùng Việt.';
 $config['submitdealsendemail'] = false;
 $config['pp'] = 10;
 
