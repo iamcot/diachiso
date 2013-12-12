@@ -82,6 +82,7 @@
         </ul>
 
         <ul id="navservice">
+            <li><a href="<?=base_url()?><?=$oCurrentProvince->daurl?>"><i class="fa fa-home"></i></a></li>
             <? foreach($aNavService as $row):?>
                 <li><a href="<?=$sCurrentTreeForService.$row->daurl.'-'.$row->id.'.htm'?>"><?=$row->dalong_name?></a></li>
             <? endforeach;?>
